@@ -49,12 +49,9 @@
 ****************************************************************************/
 
 #include <QApplication>
-#include <QLabel>
 #include <QSurfaceFormat>
 
-#ifndef QT_NO_OPENGL
-#include "mainwidget.h"
-#endif
+#include "frame.h"
 
 int main(int argc, char *argv[])
 {
@@ -67,12 +64,11 @@ int main(int argc, char *argv[])
 
     app.setApplicationName("Template IN55");
     app.setApplicationVersion("1.0");
-#ifndef QT_NO_OPENGL
-    MainWidget widget;
-    widget.show();
-#else
-    QLabel note("OpenGL Support required");
-    note.show();
-#endif
+
+    Frame frame;
+    frame.setFixedSize(1000, 600);
+
+    frame.show();
+
     return app.exec();
 }

@@ -54,17 +54,21 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
+#include <iostream>
+
+using namespace std;
 
 class GeometryEngine : protected QOpenGLFunctions
 {
 public:
     GeometryEngine();
     virtual ~GeometryEngine();
+    void update();
+    void initGeometry();
 
     void drawGeometry(QOpenGLShaderProgram *program);
 
 private:
-    void initGeometry();
 
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;

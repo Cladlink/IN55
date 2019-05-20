@@ -195,3 +195,10 @@ void MainWidget::paintGL()
     // Draw cube geometry
     geometries->drawGeometry(&program);
 }
+
+void MainWidget::repaint(){
+    geometries->update();
+    geometries->initGeometry();
+//    this->paintGL();
+    this->update();
+}

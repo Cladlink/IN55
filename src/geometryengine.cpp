@@ -61,23 +61,34 @@ struct VertexData
 
 
 VertexData vertices[] = {
-    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(1.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 1.0f,0.0f)},
-    {QVector3D(0.0f, 1.0f, 0.0f), QVector3D(0.0f, 1.0f,0.0f)},
-    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 0.0f,1.0f)},
-    {QVector3D(0.0f, 0.0f, 1.0f), QVector3D(0.0f, 0.0f,1.0f)},
+    {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f)},
+    {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f)},
+    {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f)},
+    {QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f)},
+    {QVector3D(-0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f)},
+    {QVector3D(0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f)},
+    {QVector3D(0.5f, 0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f)},
+    {QVector3D(-0.5f, 0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f)},
 };
 
-const int nbrVertices = 6;
+const int nbrVertices = 8;
 
 GLushort indices[] = {
-    0,1,
-    2,3,
-    4,5
+    3,2,1,
+    3,1,0,
+    0,1,5,
+    0,5,4,
+    4,5,6,
+    4,6,7,
+    2,3,7,
+    2,7,6,
+    1,2,6,
+    1,6,5,
+    3,0,4,
+    3,4,7
 };
 
-const int nbrIndices = 6;
+const int nbrIndices = 36;
 
 
 //! [0]
@@ -121,7 +132,6 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program)
     arrayBuf.bind();
     indexBuf.bind();
 
-
     // Offset for position
     quintptr offset = 0;
 
@@ -139,6 +149,17 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program)
     program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_LINES, 6, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
+}
+
+void GeometryEngine::update(){
+        vertices[0] = {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
+        vertices[1] = {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
+        vertices[2] = {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
+        vertices[3] = {QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
+        vertices[4] = {QVector3D(-0.5f, 0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
+        vertices[5] = {QVector3D(0.5f, 0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
+        vertices[6] = {QVector3D(0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
+        vertices[7] = {QVector3D(-0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
 }
 //! [2]
