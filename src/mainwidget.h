@@ -73,6 +73,9 @@ public:
     ~MainWidget();
     void repaint();
 
+    float getValue();
+    void setValue(float _value);
+
 protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;

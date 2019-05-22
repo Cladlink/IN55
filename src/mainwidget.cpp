@@ -111,8 +111,9 @@ void MainWidget::timerEvent(QTimerEvent *)
         rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
 
         // Request an update
-        update();
     }
+
+    update();
 }
 //! [1]
 
@@ -190,6 +191,7 @@ void MainWidget::paintGL()
 
     // Set modelview-projection matrix
     program.setUniformValue("mvp", projection * matrix);
+    program.setUniformValue("homotethie", this->getValue());
 //! [6]
 
     // Draw cube geometry
@@ -199,6 +201,14 @@ void MainWidget::paintGL()
 void MainWidget::repaint(){
     geometries->update();
     geometries->initGeometry();
-//    this->paintGL();
-    this->update();
+}
+
+float value = 0.5;
+
+float MainWidget::getValue(){
+    return value;
+}
+
+void MainWidget::setValue(float _value){
+    value = _value;
 }

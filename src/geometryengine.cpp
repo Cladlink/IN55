@@ -90,7 +90,6 @@ GLushort indices[] = {
 
 const int nbrIndices = 36;
 
-
 //! [0]
 GeometryEngine::GeometryEngine()
     : indexBuf(QOpenGLBuffer::IndexBuffer)

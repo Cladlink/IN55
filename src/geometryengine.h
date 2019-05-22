@@ -69,7 +69,6 @@ public:
     void drawGeometry(QOpenGLShaderProgram *program);
 
 private:
-
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;
 };

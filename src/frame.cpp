@@ -11,13 +11,13 @@ Frame::Frame()
     QPushButton *bouton = new QPushButton("Test");
 
     QSlider *slider = new QSlider(Qt::Horizontal);
-    slider->setTickInterval(100);
+    slider->setMinimum(1);
+    slider->setMaximum(4);
 
     QLabel *label = new QLabel();
     label->setText("Entrez texte :");
     label->setFixedSize(100,30);
     edit->setFixedSize(100,30);
-    edit->setText("Coucou");
 
     QLabel *label2 = new QLabel();
     label2->setText("Entrez texte :");
@@ -51,8 +51,6 @@ Frame::Frame()
 
 void Frame::ouvrirMessageBox(int value) {
     edit->setText(QString::number(value));
-    scene3D->repaint();
-//    parameter::setValue(value);
-
+    scene3D->setValue(value/2.0f);
 };
 
