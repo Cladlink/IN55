@@ -75,10 +75,10 @@ void Frame::createPyramide() {
 };
 
 void Frame::changeTextureNintendo() {
-    scene3D->setPathTexture("C:/Users/rapha/Documents/UTBM - Semestre 04/IN55/Projet/IN55/ressources/nintendo.png");
+    scene3D->setPathTexture(":/nintendo.png");
 };
 
 void Frame::changeTextureMur() {
-    scene3D->setPathTexture("C:/Users/rapha/Documents/UTBM - Semestre 04/IN55/Projet/IN55/ressources/mur.png");
+    scene3D->setPathTexture(":/mur.png");
 };
 
