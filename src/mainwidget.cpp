@@ -215,7 +215,6 @@ void MainWidget::paintGL()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texId[0]);
-    program.setUniformValue("image", 0);
 
     launch = QDateTime::currentMSecsSinceEpoch();
 

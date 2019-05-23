@@ -8,55 +8,73 @@ Frame::Frame()
     scene3D->setFixedSize(700, 500);
 //    parameter::setGeometries(scene3D);
 
+    // Boutons
     QPushButton *boutonCube = new QPushButton("Cube");
     QPushButton *boutonPyramide = new QPushButton("Pyramide");
-    QPushButton *boutonTextureNintendo = new QPushButton("TextureNintendo");
-    QPushButton *boutonTextureMur = new QPushButton("TextureMur");
 
-    QSlider *slider = new QSlider(Qt::Horizontal);
-    slider->setMinimum(1);
-    slider->setMaximum(4);
+    // Homothétie
+    QSlider *sliderHomothetie = new QSlider(Qt::Horizontal);
+    sliderHomothetie->setMinimum(1);
+    sliderHomothetie->setMaximum(4);
 
-    QLabel *label = new QLabel();
-    label->setText("Entrez texte :");
-    label->setFixedSize(100,30);
+    QLabel *labelHomothetie = new QLabel("Entrez texte :");
+    labelHomothetie->setFixedSize(100,30);
     edit->setFixedSize(100,30);
 
-    QLabel *label2 = new QLabel();
-    label2->setText("Entrez texte :");
-    label2->setFixedSize(100,30);
-    QTextEdit *edit2 = new QTextEdit();
-    edit2->setFixedSize(100,30);
+    QHBoxLayout *layoutHomothetie = new QHBoxLayout;
+    layoutHomothetie->addWidget(labelHomothetie);
+    layoutHomothetie->addWidget(edit);
 
-    QHBoxLayout *test = new QHBoxLayout;
-    test->addWidget(label);
-    test->addWidget(edit);
+    // Couleurs
+    QRadioButton *rbRouge = new QRadioButton("Rouge", this);
+    QRadioButton *rbVert = new QRadioButton("Vert", this);
+    QRadioButton *rbBleu = new QRadioButton("Bleu", this);
+    QRadioButton *rbMulticolor = new QRadioButton("Multicolor", this);
+    QRadioButton *rbMur = new QRadioButton("Mur en briques", this);
+    rbMur->setChecked(true);
+    QRadioButton *rbNintendo = new QRadioButton("Nintendo", this);
+    QLabel *labelCouleur = new QLabel("Couleurs et textures :");
+    labelCouleur->setFixedSize(100,30);
 
-    QHBoxLayout *test2 = new QHBoxLayout;
-    test2->addWidget(label2);
-    test2->addWidget(edit2);
+    QVBoxLayout *layoutCouleur = new QVBoxLayout;
+    layoutCouleur->addWidget(labelCouleur);
+    layoutCouleur->addWidget(rbRouge);
+    layoutCouleur->addWidget(rbVert);
+    layoutCouleur->addWidget(rbBleu);
+    layoutCouleur->addWidget(rbMulticolor);
+    layoutCouleur->addWidget(rbMur);
+    layoutCouleur->addWidget(rbNintendo);
 
+    // Formes
+    QHBoxLayout *layoutBoutonsForme = new QHBoxLayout;
+    layoutBoutonsForme->addWidget(boutonCube);
+    layoutBoutonsForme->addWidget(boutonPyramide);
+
+    // Général
     QHBoxLayout *mainLayout = new QHBoxLayout;
     QVBoxLayout *paramsLayout = new QVBoxLayout;
 
-    paramsLayout->addWidget(slider);
-    paramsLayout->addLayout(test);
-    paramsLayout->addLayout(test2);
-    paramsLayout->addWidget(boutonCube);
-    paramsLayout->addWidget(boutonPyramide);
-    paramsLayout->addWidget(boutonTextureNintendo);
-    paramsLayout->addWidget(boutonTextureMur);
+    // Ajout des éléments au layout des paramètres
+    paramsLayout->addWidget(sliderHomothetie);
+    paramsLayout->addLayout(layoutHomothetie);
+    paramsLayout->addLayout(layoutCouleur);
+    paramsLayout->addLayout(layoutBoutonsForme);
 
     mainLayout->addWidget(scene3D);
     mainLayout->addLayout(paramsLayout);
 
     this->setLayout(mainLayout);
 
-    QObject::connect(slider, SIGNAL(valueChanged(int)), this, SLOT(ouvrirMessageBox(int)));
+    // Listener des boutons
+    QObject::connect(sliderHomothetie, SIGNAL(valueChanged(int)), this, SLOT(ouvrirMessageBox(int)));
     QObject::connect(boutonCube, SIGNAL(clicked()), this, SLOT(createCube()));
     QObject::connect(boutonPyramide, SIGNAL(clicked()), this, SLOT(createPyramide()));
-    QObject::connect(boutonTextureNintendo, SIGNAL(clicked()), this, SLOT(changeTextureNintendo()));
-    QObject::connect(boutonTextureMur, SIGNAL(clicked()), this, SLOT(changeTextureMur()));
+    QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTextureNintendo()));
+    QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTextureMur()));
+
+    // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
+    createCube();
+    changeTextureMur();
 }
 
 void Frame::ouvrirMessageBox(int value) {

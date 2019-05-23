@@ -3,6 +3,8 @@
 
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QRadioButton>
+#include <QButtonGroup>
 #include <QSlider>
 #include <QStackedWidget>
 #include <QTextEdit>

@@ -9,6 +9,6 @@ uniform sampler2D image;
 
 void main()
 {
-    //fragColor = vec4( fColor, 1.0 );
+    //fragColor = vec4(fColor, 1.0);
     fragColor = vec4(texture2D(image, UV).rgb,1.0);
 }

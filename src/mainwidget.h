@@ -61,6 +61,7 @@
 #include <QMatrix4x4>
 #include <QQuaternion>
 #include <QVector2D>
+#include <QVector3D>
 #include <QBasicTimer>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
