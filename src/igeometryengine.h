@@ -55,22 +55,32 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <iostream>
+#include <QVector2D>
+#include <QVector3D>
 
 using namespace std;
 
-class GeometryEngine : protected QOpenGLFunctions
+class IGeometryEngine : protected QOpenGLFunctions
 {
 public:
-    GeometryEngine();
-    virtual ~GeometryEngine();
-    void update();
-    void initGeometry();
+    IGeometryEngine();
+    virtual ~IGeometryEngine();
+    virtual void update() = 0;
+    virtual void initGeometry() = 0;
 
-    void drawGeometry(QOpenGLShaderProgram *program);
+    virtual void drawGeometry(QOpenGLShaderProgram *program) = 0;
+    struct VertexData
+    {
+        QVector3D position;
+        QVector3D color;
+        QVector2D uv;
+    };
 
-private:
+protected :
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;
+    int nbrVertices;
+    int nbrIndices;
 };
 
 #endif // GEOMETRYENGINE_H

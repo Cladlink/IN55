@@ -51,14 +51,19 @@
 #include "mainwidget.h"
 
 #include <QMouseEvent>
+#include <QTime>
 
 #include <math.h>
 
+const int NBR_TEXTURES = 10;
+GLuint texId[NBR_TEXTURES];
+
 MainWidget::MainWidget(QWidget *parent) :
     QOpenGLWidget(parent),
-    geometries(0),
+    geometriesSquare(0),
     angularSpeed(0)
 {
+    beginning = QDateTime::currentMSecsSinceEpoch();
 }
 
 MainWidget::~MainWidget()
@@ -66,7 +71,7 @@ MainWidget::~MainWidget()
     // Make sure the context is current when deleting the texture
     // and the buffers.
     makeCurrent();
-    delete geometries;
+    delete geometriesSquare;
     doneCurrent();
 }
 
@@ -133,7 +138,10 @@ void MainWidget::initializeGL()
     glEnable(GL_CULL_FACE);
 //! [2]
 
-    geometries = new GeometryEngine;
+    //IGeometryEngine s = new Square;
+    geometriesSquare = new Cube;
+    geometriesPyramide = new Pyramide;
+    //geometries = new GeometryEngine;
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);
@@ -142,6 +150,8 @@ void MainWidget::initializeGL()
 //! [3]
 void MainWidget::initShaders()
 {
+
+
     // Compile vertex shader
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
         close();
@@ -180,6 +190,14 @@ void MainWidget::resizeGL(int w, int h)
 
 void MainWidget::paintGL()
 {
+    pixmap = QPixmap(pathTexture.c_str());
+    glGenTextures(NBR_TEXTURES, texId);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texId[0]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap.width(), pixmap.height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap.toImage().bits());
+
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -189,26 +207,68 @@ void MainWidget::paintGL()
     matrix.translate(0.0, 0.0, -5.0);
     matrix.rotate(rotation);
 
+    QVector4D homotethie = QVector4D(this->getValue(),this->getValue(),this->getValue(),1.);
+
     // Set modelview-projection matrix
     program.setUniformValue("mvp", projection * matrix);
-    program.setUniformValue("homotethie", this->getValue());
+    program.setUniformValue("homotethie", homotethie);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texId[0]);
+    program.setUniformValue("image", 0);
+
+    launch = QDateTime::currentMSecsSinceEpoch();
+
+    program.setUniformValue("time", (launch-beginning)/1000);
+
 //! [6]
 
-    // Draw cube geometry
-    geometries->drawGeometry(&program);
+    if (getObject() == "cube") {
+        geometriesSquare->drawGeometry(&program);
+    } else if (getObject() == "pyramide") {
+        geometriesPyramide->drawGeometry(&program);
+    }
+
 }
 
 void MainWidget::repaint(){
-    geometries->update();
-    geometries->initGeometry();
+    if (getObject() == "cube") {
+        geometriesSquare->update();
+        geometriesSquare->initGeometry();
+    } else if (getObject() == "pyramide") {
+        geometriesPyramide->update();
+        geometriesPyramide->initGeometry();
+    }
 }
 
-float value = 0.5;
-
 float MainWidget::getValue(){
-    return value;
+    return valueSlider;
 }
 
 void MainWidget::setValue(float _value){
-    value = _value;
+    valueSlider = _value;
+}
+
+string MainWidget::getObject(){
+    return object;
+}
+
+void MainWidget::setObject(string _object){
+    object = _object;
+}
+
+int MainWidget::getNbObjects(){
+    return nbObjects;
+}
+
+void MainWidget::setNbObjects(int _nbObject){
+    nbObjects = _nbObject;
+}
+
+string MainWidget::getPathTexture(){
+    return pathTexture;
+}
+
+void MainWidget::setPathTexture(string _pathTexture){
+    pathTexture = _pathTexture;
 }

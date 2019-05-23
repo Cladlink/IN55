@@ -29,6 +29,10 @@ private:
 
 private slots:
     void ouvrirMessageBox(int value);
+    void createCube();
+    void createPyramide();
+    void changeTextureNintendo();
+    void changeTextureMur();
 };
 
 #endif // FRAME_H

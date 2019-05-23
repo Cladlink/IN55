@@ -51,7 +51,10 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include "geometryengine.h"
+#include "igeometryengine.h"
+#include "cube.h"
+#include "pyramide.h"
+
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -75,6 +78,12 @@ public:
 
     float getValue();
     void setValue(float _value);
+    string getObject();
+    void setObject(string _object);
+    string getPathTexture();
+    void setPathTexture(string _pathTexture);
+    int getNbObjects();
+    void setNbObjects(int _nbObject);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -91,7 +100,19 @@ protected:
 private:
     QBasicTimer timer;
     QOpenGLShaderProgram program;
-    GeometryEngine *geometries;
+    QPixmap pixmap;
+    Cube *geometriesSquare;
+    Pyramide *geometriesPyramide;
+    float valueSlider = 0.5;
+    int nbObjects;
+    string object;
+    float beginning;
+    float launch;
+    string pathTexture;
+
+
+    /*IGeometryEngine *geometries;
+    IGeometryEngine *geometries;*/
 
     QMatrix4x4 projection;
 
