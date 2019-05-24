@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     format.setDepthBufferSize(24);
     QSurfaceFormat::setDefaultFormat(format);
 
-    app.setApplicationName("Template IN55");
+    app.setApplicationName("Objets paramétriques");
     app.setApplicationVersion("1.0");
 
     Frame frame;

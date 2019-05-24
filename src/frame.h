@@ -3,6 +3,8 @@
 
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QRadioButton>
+#include <QButtonGroup>
 #include <QSlider>
 #include <QStackedWidget>
 #include <QTextEdit>
@@ -33,6 +35,9 @@ private slots:
     void createPyramide();
     void changeTextureNintendo();
     void changeTextureMur();
+    void changeColorRed();
+    void changeColorGreen();
+    void changeColorBlue();
 };
 
 #endif // FRAME_H
