@@ -13,11 +13,11 @@ public:
 
     void drawGeometry(QOpenGLShaderProgram *program) override;
 
-    struct VertexData
-    {
-        QVector3D position;
-        QVector3D color;
-    };
+//    struct VertexData
+//    {
+//        QVector3D position;
+//        QVector3D color;
+//    };
 
 };
 
