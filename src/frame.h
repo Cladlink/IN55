@@ -35,6 +35,9 @@ private slots:
     void createPyramide();
     void changeTextureNintendo();
     void changeTextureMur();
+    void changeColorRed();
+    void changeColorGreen();
+    void changeColorBlue();
 };
 
 #endif // FRAME_H

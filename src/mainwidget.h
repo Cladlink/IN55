@@ -55,7 +55,6 @@
 #include "cube.h"
 #include "pyramide.h"
 
-
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QMatrix4x4>
@@ -85,6 +84,10 @@ public:
     void setPathTexture(string _pathTexture);
     int getNbObjects();
     void setNbObjects(int _nbObject);
+    QVector3D getColor();
+    void setColor(QVector3D _color);
+    int getIsColor();
+    void setIsColor(int _isColor);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -110,15 +113,14 @@ private:
     float beginning;
     float launch;
     string pathTexture;
-
-
-    /*IGeometryEngine *geometries;
-    IGeometryEngine *geometries;*/
+    int isColor;
 
     QMatrix4x4 projection;
 
     QVector2D mousePressPosition;
     QVector3D rotationAxis;
+    QVector3D color;
+
     qreal angularSpeed;
     QQuaternion rotation;
 };

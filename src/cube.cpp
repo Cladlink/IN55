@@ -1,9 +1,6 @@
 #include "cube.h"
 
-#include "igeometryengine.h"
-
-
-Cube::VertexData vertices[] = {
+Cube::VertexData verticesCube[] = {
     {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 1.0f)}, //0
     {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f), QVector2D(1.0f, 1.0f)}, //1
     {QVector3D(0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f,1.0f), QVector2D(1.0f, 0.0f)}, //2
@@ -35,7 +32,7 @@ Cube::VertexData vertices[] = {
     {QVector3D(-0.5f, 0.5f, -0.5f), QVector3D(1.0f, 1.0f,1.0f), QVector2D(1.0f, 0.0f)}, //7 -> 23
 };
 
-GLushort indices[] = {
+GLushort indicesCube[] = {
     0,1,2,
     0,2,3,
 
@@ -66,7 +63,6 @@ Cube::Cube()
     nbrIndices = 36;
     nbrVertices = 24;
     initGeometry();
-
 }
 
 Cube::~Cube()
@@ -81,11 +77,11 @@ void Cube::initGeometry()
 ////! [1]
     // Transfer vertex data to VBO 0
     arrayBuf.bind();
-    arrayBuf.allocate(vertices, nbrVertices * sizeof(VertexData));
+    arrayBuf.allocate(verticesCube, nbrVertices * sizeof(VertexData));
 
     // Transfer index data to VBO 1
     indexBuf.bind();
-    indexBuf.allocate(indices, nbrIndices * sizeof(GLushort));
+    indexBuf.allocate(indicesCube, nbrIndices * sizeof(GLushort));
 //! [1]
 }
 
@@ -122,15 +118,42 @@ void Cube::drawGeometry(QOpenGLShaderProgram *program)
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
 }
 
-void Cube::update(){
-        /*vertices[0] = {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[1] = {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[2] = {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[3] = {QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[4] = {QVector3D(-0.5f, 0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[5] = {QVector3D(0.5f, 0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[6] = {QVector3D(0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[7] = {QVector3D(-0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};*/
+void Cube::update(QOpenGLShaderProgram *program, QVector3D _color){
+
+    arrayBuf.bind();
+    for (int i=0; i<nbrVertices-1; i++) {
+        verticesCube[i].color = _color;
+    }
+
+    arrayBuf.allocate(verticesCube, nbrVertices * sizeof(VertexData));
+
+    indexBuf.bind();
+    indexBuf.allocate(indicesCube, nbrIndices * sizeof(GLushort));
+
+    // Offset for position
+    quintptr offset = 0;
+
+    // Tell OpenGL programmable pipeline how to locate vertex position data
+    int vertexLocation = program->attributeLocation("position");
+    program->enableAttributeArray(vertexLocation);
+    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+
+    // Offset for texture coordinate
+    offset += sizeof(QVector3D);
+
+    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
+    int colorLocation = program->attributeLocation("color");
+    program->enableAttributeArray(colorLocation);
+    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+
+    offset += sizeof(QVector3D);
+
+    int uvLocation = program->attributeLocation("vertexUV");
+    program->enableAttributeArray(uvLocation);
+    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
+
+    // Draw cube geometry using indices from VBO 1
+    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
 }
 //! [2]
 

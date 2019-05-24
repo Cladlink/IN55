@@ -71,7 +71,7 @@ MainWidget::~MainWidget()
     // Make sure the context is current when deleting the texture
     // and the buffers.
     makeCurrent();
-    delete geometriesSquare;
+    //delete geometriesSquare;
     doneCurrent();
 }
 
@@ -114,11 +114,12 @@ void MainWidget::timerEvent(QTimerEvent *)
     } else {
         // Update rotation
         rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
-
+        repaint();
         // Request an update
     }
 
     update();
+
 }
 //! [1]
 
@@ -150,8 +151,6 @@ void MainWidget::initializeGL()
 //! [3]
 void MainWidget::initShaders()
 {
-
-
     // Compile vertex shader
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
         close();
@@ -219,6 +218,7 @@ void MainWidget::paintGL()
     launch = QDateTime::currentMSecsSinceEpoch();
 
     program.setUniformValue("time", (launch-beginning)/1000);
+    program.setUniformValue("isColor",isColor);
 
 //! [6]
 
@@ -232,11 +232,11 @@ void MainWidget::paintGL()
 
 void MainWidget::repaint(){
     if (getObject() == "cube") {
-        geometriesSquare->update();
-        geometriesSquare->initGeometry();
+        geometriesSquare->update(&program,getColor());
+        //geometriesSquare->initGeometry();
     } else if (getObject() == "pyramide") {
-        geometriesPyramide->update();
-        geometriesPyramide->initGeometry();
+        geometriesPyramide->update(&program,getColor());
+       //geometriesPyramide->initGeometry();
     }
 }
 
@@ -270,4 +270,19 @@ string MainWidget::getPathTexture(){
 
 void MainWidget::setPathTexture(string _pathTexture){
     pathTexture = _pathTexture;
+}
+
+QVector3D MainWidget::getColor() {
+    return color;
+}
+
+void MainWidget::setColor(QVector3D _color) {
+    color = _color;
+}
+
+int MainWidget::getIsColor() {
+    return isColor;
+}
+void MainWidget::setIsColor(int _isColor) {
+    isColor = _isColor;
 }

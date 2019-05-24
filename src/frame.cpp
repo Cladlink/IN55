@@ -34,7 +34,7 @@ Frame::Frame()
     rbMur->setChecked(true);
     QRadioButton *rbNintendo = new QRadioButton("Nintendo", this);
     QLabel *labelCouleur = new QLabel("Couleurs et textures :");
-    labelCouleur->setFixedSize(100,30);
+    labelCouleur->setFixedSize(150,30);
 
     QVBoxLayout *layoutCouleur = new QVBoxLayout;
     layoutCouleur->addWidget(labelCouleur);
@@ -71,6 +71,9 @@ Frame::Frame()
     QObject::connect(boutonPyramide, SIGNAL(clicked()), this, SLOT(createPyramide()));
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTextureNintendo()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTextureMur()));
+    QObject::connect(rbRouge, SIGNAL(clicked()), this, SLOT(changeColorRed()));
+    QObject::connect(rbVert, SIGNAL(clicked()), this, SLOT(changeColorGreen()));
+    QObject::connect(rbBleu, SIGNAL(clicked()), this, SLOT(changeColorBlue()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
     createCube();
@@ -93,10 +96,27 @@ void Frame::createPyramide() {
 };
 
 void Frame::changeTextureNintendo() {
+    scene3D->setIsColor(0);
     scene3D->setPathTexture(":/nintendo.png");
 };
 
 void Frame::changeTextureMur() {
+    scene3D->setIsColor(0);
     scene3D->setPathTexture(":/mur.png");
 };
+
+void Frame::changeColorRed() {
+    scene3D->setIsColor(1);
+    scene3D->setColor(QVector3D(1.f,0.f,0.f));
+}
+
+void Frame::changeColorGreen() {
+    scene3D->setIsColor(1);
+    scene3D->setColor(QVector3D(0.f,1.f,0.f));
+}
+
+void Frame::changeColorBlue() {
+    scene3D->setIsColor(1);
+    scene3D->setColor(QVector3D(0.f,0.f,1.f));
+}
 
