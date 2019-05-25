@@ -17,19 +17,48 @@ Frame::Frame()
     sliderHomothetie->setMinimum(1);
     sliderHomothetie->setMaximum(4);
 
-    QLabel *labelHomothetie = new QLabel("Entrez texte :");
+    QLabel *labelHomothetie = new QLabel("Taille : ");
     labelHomothetie->setFixedSize(100,30);
-    edit->setFixedSize(100,30);
 
     QHBoxLayout *layoutHomothetie = new QHBoxLayout;
     layoutHomothetie->addWidget(labelHomothetie);
-    layoutHomothetie->addWidget(edit);
+    layoutHomothetie->addWidget(sliderHomothetie);
 
     // Couleurs
     rbColor = new QRadioButton("Couleur", this);
-    rouge = new colorTextEdit("255");
-    vert = new colorTextEdit("255");
-    bleu = new colorTextEdit("255");
+
+    QLabel *labelRouge = new QLabel("Rouge : ");
+    labelRouge->setFixedSize(100,30);
+    rouge = new QSlider(Qt::Horizontal);
+    rouge->setMinimum(0);
+    rouge->setMaximum(255);
+    rouge->setValue(255);
+    QHBoxLayout *layoutRouge = new QHBoxLayout;
+    layoutRouge->insertSpacing(0, 20);
+    layoutRouge->addWidget(labelRouge);
+    layoutRouge->addWidget(rouge);
+
+    QLabel *labelVert = new QLabel("Vert : ");
+    labelVert->setFixedSize(100,30);
+    vert = new QSlider(Qt::Horizontal);
+    vert->setMinimum(0);
+    vert->setMaximum(255);
+    vert->setValue(255);
+    QHBoxLayout *layoutVert = new QHBoxLayout;
+    layoutVert->insertSpacing(0, 20);
+    layoutVert->addWidget(labelVert);
+    layoutVert->addWidget(vert);
+
+    QLabel *labelBleu = new QLabel("Bleu : ");
+    labelBleu->setFixedSize(100,30);
+    bleu = new QSlider(Qt::Horizontal);
+    bleu->setMinimum(0);
+    bleu->setMaximum(255);
+    bleu->setValue(255);
+    QHBoxLayout *layoutBleu = new QHBoxLayout;
+    layoutBleu->insertSpacing(0, 20);
+    layoutBleu->addWidget(labelBleu);
+    layoutBleu->addWidget(bleu);
 
     rbMulticolorVertices = new QRadioButton("Multicolor vertices", this);
     rbMulticolorFragments = new QRadioButton("Multicolor fragments", this);
@@ -42,9 +71,9 @@ Frame::Frame()
     QVBoxLayout *layoutCouleur = new QVBoxLayout;
     layoutCouleur->addWidget(labelCouleur);
     layoutCouleur->addWidget(rbColor);
-    layoutCouleur->addWidget(rouge);
-    layoutCouleur->addWidget(vert);
-    layoutCouleur->addWidget(bleu);
+    layoutCouleur->addLayout(layoutRouge);
+    layoutCouleur->addLayout(layoutVert);
+    layoutCouleur->addLayout(layoutBleu);
     layoutCouleur->addWidget(rbMulticolorVertices);
     layoutCouleur->addWidget(rbMulticolorFragments);
     layoutCouleur->addWidget(rbMur);
@@ -73,7 +102,6 @@ Frame::Frame()
     QVBoxLayout *paramsLayout = new QVBoxLayout;
 
     // Ajout des éléments au layout des paramètres
-    paramsLayout->addWidget(sliderHomothetie);
     paramsLayout->addLayout(layoutHomothetie);
     paramsLayout->addLayout(layoutCouleur);
     paramsLayout->addLayout(layoutBoutonsForme);
@@ -96,9 +124,9 @@ Frame::Frame()
     QObject::connect(rbMulticolorVertices, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbMulticolorFragments, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbColor, SIGNAL(clicked()), this, SLOT(changeColor()));
-    QObject::connect(rouge, SIGNAL(textChanged()), this, SLOT(changeColor()));
-    QObject::connect(vert, SIGNAL(textChanged()), this, SLOT(changeColor()));
-    QObject::connect(bleu, SIGNAL(textChanged()), this, SLOT(changeColor()));
+    QObject::connect(rouge, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
+    QObject::connect(vert, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
+    QObject::connect(bleu, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
 
     QObject::connect(mouseRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
     QObject::connect(xRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
@@ -111,7 +139,6 @@ Frame::Frame()
 }
 
 void Frame::ouvrirMessageBox(int value) {
-    edit->setText(QString::number(value));
     scene3D->setValue(value/2.0f);
 };
 
@@ -155,9 +182,9 @@ void Frame::changeColorBlue() {
 void Frame::changeColor() {
     if(rbColor->isChecked()){
         scene3D->setIsColor(1);
-        float r = rouge->toPlainText().toFloat() / 255.0f;
-        float g = vert->toPlainText().toFloat() / 255.0f;
-        float b = bleu->toPlainText().toFloat() / 255.0f;
+        float r = rouge->value() / 255.0f;
+        float g = vert->value() / 255.0f;
+        float b = bleu->value() / 255.0f;
         scene3D->setColor(QVector3D(r,g,b));
     } else if(rbMulticolorVertices->isChecked()) {
         scene3D->setIsColor(2);

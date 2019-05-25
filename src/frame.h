@@ -27,11 +27,10 @@ public:
 
 private:
     MainWidget *scene3D;
-    QTextEdit *edit = new QTextEdit();
     QRadioButton *rbColor;
-    colorTextEdit *rouge;
-    colorTextEdit *vert;
-    colorTextEdit *bleu;
+    QSlider *rouge;
+    QSlider *vert;
+    QSlider *bleu;
     QRadioButton *rbMulticolorVertices;
     QRadioButton *rbMulticolorFragments;
     QRadioButton *rbMur;
