@@ -26,9 +26,11 @@ Frame::Frame()
     layoutHomothetie->addWidget(edit);
 
     // Couleurs
-    QRadioButton *rbRouge = new QRadioButton("Rouge", this);
-    QRadioButton *rbVert = new QRadioButton("Vert", this);
-    QRadioButton *rbBleu = new QRadioButton("Bleu", this);
+    rbColor = new QRadioButton("Couleur", this);
+    rouge = new colorTextEdit("255");
+    vert = new colorTextEdit("255");
+    bleu = new colorTextEdit("255");
+
     QRadioButton *rbMulticolor = new QRadioButton("Multicolor", this);
     QRadioButton *rbMur = new QRadioButton("Mur en briques", this);
     rbMur->setChecked(true);
@@ -38,9 +40,10 @@ Frame::Frame()
 
     QVBoxLayout *layoutCouleur = new QVBoxLayout;
     layoutCouleur->addWidget(labelCouleur);
-    layoutCouleur->addWidget(rbRouge);
-    layoutCouleur->addWidget(rbVert);
-    layoutCouleur->addWidget(rbBleu);
+    layoutCouleur->addWidget(rbColor);
+    layoutCouleur->addWidget(rouge);
+    layoutCouleur->addWidget(vert);
+    layoutCouleur->addWidget(bleu);
     layoutCouleur->addWidget(rbMulticolor);
     layoutCouleur->addWidget(rbMur);
     layoutCouleur->addWidget(rbNintendo);
@@ -71,9 +74,10 @@ Frame::Frame()
     QObject::connect(boutonPyramide, SIGNAL(clicked()), this, SLOT(createPyramide()));
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTextureNintendo()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTextureMur()));
-    QObject::connect(rbRouge, SIGNAL(clicked()), this, SLOT(changeColorRed()));
-    QObject::connect(rbVert, SIGNAL(clicked()), this, SLOT(changeColorGreen()));
-    QObject::connect(rbBleu, SIGNAL(clicked()), this, SLOT(changeColorBlue()));
+    QObject::connect(rbColor, SIGNAL(clicked()), this, SLOT(changeColor()));
+    QObject::connect(rouge, SIGNAL(textChanged()), this, SLOT(changeColor()));
+    QObject::connect(vert, SIGNAL(textChanged()), this, SLOT(changeColor()));
+    QObject::connect(bleu, SIGNAL(textChanged()), this, SLOT(changeColor()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
     createCube();
@@ -118,5 +122,15 @@ void Frame::changeColorGreen() {
 void Frame::changeColorBlue() {
     scene3D->setIsColor(1);
     scene3D->setColor(QVector3D(0.f,0.f,1.f));
+}
+
+void Frame::changeColor() {
+    if(rbColor->isChecked()){
+        scene3D->setIsColor(1);
+        float r = rouge->toPlainText().toFloat() / 255.0f;
+        float g = vert->toPlainText().toFloat() / 255.0f;
+        float b = bleu->toPlainText().toFloat() / 255.0f;
+        scene3D->setColor(QVector3D(r,g,b));
+    }
 }
 

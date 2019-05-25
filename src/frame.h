@@ -14,7 +14,7 @@
 #include <iostream>
 
 #include "mainwidget.h"
-//#include "parameter.h"
+#include "colortextedit.h"
 
 using namespace std;
 
@@ -28,6 +28,10 @@ public:
 private:
     MainWidget *scene3D;
     QTextEdit *edit = new QTextEdit();
+    QRadioButton *rbColor;
+    colorTextEdit *rouge;
+    colorTextEdit *vert;
+    colorTextEdit *bleu;
 
 private slots:
     void ouvrirMessageBox(int value);
@@ -38,6 +42,7 @@ private slots:
     void changeColorRed();
     void changeColorGreen();
     void changeColorBlue();
+    void changeColor();
 };
 
 #endif // FRAME_H

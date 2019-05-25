@@ -21,16 +21,6 @@ Pyramide::VertexData verticesPyramide[] = {
     {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(1.0f, 0.0f)}, //2 -> 13
     {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(1.0f, 1.0f)}, //3 -> 14
     {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 1.0f)}, //4 -> 15
-
-    /*{QVector3D(0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f)},*/
-
-
-    /*{QVector3D(-0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(0.5f, 0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(-0.5f, 0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f)},*/
 };
 
 GLushort indicesPyramide[] = {
