@@ -12,6 +12,7 @@
 #include <QSize>
 #include <QMessageBox>
 #include <iostream>
+#include <QDebug>
 
 #include "mainwidget.h"
 #include "colortextedit.h"

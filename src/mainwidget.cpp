@@ -132,7 +132,7 @@ void MainWidget::timerEvent(QTimerEvent *)
         rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
         // Request an update
     }
-//    repaint();
+    repaint();
     update();
 
 }
