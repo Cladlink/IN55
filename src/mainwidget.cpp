@@ -64,6 +64,8 @@ MainWidget::MainWidget(QWidget *parent) :
     angularSpeed(0)
 {
     beginning = QDateTime::currentMSecsSinceEpoch();
+    pixmap.append(QPixmap(":/mur.png"));
+    pixmap.append(QPixmap(":/nintendo.png"));
 }
 
 MainWidget::~MainWidget()
@@ -71,7 +73,7 @@ MainWidget::~MainWidget()
     // Make sure the context is current when deleting the texture
     // and the buffers.
     makeCurrent();
-    //delete geometriesSquare;
+
     doneCurrent();
 }
 
@@ -135,13 +137,11 @@ void MainWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     // Enable back face culling
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 //! [2]
 
-    //IGeometryEngine s = new Square;
     geometriesSquare = new Cube;
     geometriesPyramide = new Pyramide;
-    //geometries = new GeometryEngine;
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);
@@ -150,6 +150,14 @@ void MainWidget::initializeGL()
 //! [3]
 void MainWidget::initShaders()
 {
+    glGenTextures(NBR_TEXTURES, texId);
+    for (int i = 0; i < pixmap.size(); ++i) {
+        glBindTexture(GL_TEXTURE_2D, texId[i]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap[i].width(), pixmap[i].height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap[i].toImage().bits());
+    }
+
     // Compile vertex shader
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
         close();
@@ -188,13 +196,22 @@ void MainWidget::resizeGL(int w, int h)
 
 void MainWidget::paintGL()
 {
-    pixmap = QPixmap(pathTexture.c_str());
-    glGenTextures(NBR_TEXTURES, texId);
+    /*for (int i = 0; i < pixmap.size(); ++i) {
+        glGenTextures(NBR_TEXTURES, texId);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texId[i]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap[i].width(), pixmap[i].height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap[i].toImage().bits());
+
+    }*/
+
+    /*glGenTextures(NBR_TEXTURES, texId);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texId[0]);
+    glBindTexture(GL_TEXTURE_2D, texId[1]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap.width(), pixmap.height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap.toImage().bits());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap[1].width(), pixmap[1].height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap[1].toImage().bits());*/
 
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -212,7 +229,7 @@ void MainWidget::paintGL()
     program.setUniformValue("homotethie", homotethie);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texId[0]);
+    glBindTexture(GL_TEXTURE_2D, texId[getNumberBufferTexture()]);
 
     launch = QDateTime::currentMSecsSinceEpoch();
 
@@ -282,10 +299,19 @@ void MainWidget::setColor(QVector3D _color) {
 int MainWidget::getIsColor() {
     return isColor;
 }
+
 void MainWidget::setIsColor(int _isColor) {
     // 0 = texture;
     // 1 = couleur choisie par l'utilisateur;
     // 2 = multi color par rapport aux vertices;
     // 3 = multi color par rapport aux fragments;
     isColor = _isColor;
+}
+
+int MainWidget::getNumberBufferTexture() {
+    return indexBufferArrayTexture;
+}
+
+void MainWidget::setNumberBufferTexture(int _index) {
+    indexBufferArrayTexture = _index;
 }

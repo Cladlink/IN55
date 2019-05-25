@@ -88,6 +88,8 @@ public:
     void setColor(QVector3D _color);
     int getIsColor();
     void setIsColor(int _isColor);
+    int getNumberBufferTexture();
+    void setNumberBufferTexture(int _index);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -104,7 +106,7 @@ protected:
 private:
     QBasicTimer timer;
     QOpenGLShaderProgram program;
-    QPixmap pixmap;
+    QVector<QPixmap> pixmap;
     Cube *geometriesSquare;
     Pyramide *geometriesPyramide;
     float valueSlider = 0.5;
@@ -114,6 +116,7 @@ private:
     float launch;
     string pathTexture;
     int isColor;
+    int indexBufferArrayTexture;
 
     QMatrix4x4 projection;
 

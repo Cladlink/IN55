@@ -105,11 +105,13 @@ void Frame::createPyramide() {
 
 void Frame::changeTextureNintendo() {
     scene3D->setIsColor(0);
+    scene3D->setNumberBufferTexture(1);
     scene3D->setPathTexture(":/nintendo.png");
 };
 
 void Frame::changeTextureMur() {
     scene3D->setIsColor(0);
+    scene3D->setNumberBufferTexture(0);
     scene3D->setPathTexture(":/mur.png");
 };
 
