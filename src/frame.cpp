@@ -50,6 +50,19 @@ Frame::Frame()
     layoutCouleur->addWidget(rbMur);
     layoutCouleur->addWidget(rbNintendo);
 
+    // Rotation
+    QHBoxLayout *layoutRotation = new QHBoxLayout;
+
+    mouseRotation = new QRadioButton("Mouse");
+    xRotation = new QRadioButton("X");
+    yRotation = new QRadioButton("Y");
+    zRotation = new QRadioButton("Z");
+
+    layoutCouleur->addWidget(mouseRotation);
+    layoutCouleur->addWidget(xRotation);
+    layoutCouleur->addWidget(yRotation);
+    layoutCouleur->addWidget(zRotation);
+
     // Formes
     QHBoxLayout *layoutBoutonsForme = new QHBoxLayout;
     layoutBoutonsForme->addWidget(boutonCube);
@@ -64,6 +77,7 @@ Frame::Frame()
     paramsLayout->addLayout(layoutHomothetie);
     paramsLayout->addLayout(layoutCouleur);
     paramsLayout->addLayout(layoutBoutonsForme);
+    paramsLayout->addLayout(layoutRotation);
 
     mainLayout->addWidget(scene3D);
     mainLayout->addLayout(paramsLayout);
@@ -72,16 +86,24 @@ Frame::Frame()
 
     // Listener des boutons
     QObject::connect(sliderHomothetie, SIGNAL(valueChanged(int)), this, SLOT(ouvrirMessageBox(int)));
+
     QObject::connect(boutonCube, SIGNAL(clicked()), this, SLOT(createCube()));
     QObject::connect(boutonPyramide, SIGNAL(clicked()), this, SLOT(createPyramide()));
+
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTextureNintendo()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTextureMur()));
+
     QObject::connect(rbMulticolorVertices, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbMulticolorFragments, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbColor, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rouge, SIGNAL(textChanged()), this, SLOT(changeColor()));
     QObject::connect(vert, SIGNAL(textChanged()), this, SLOT(changeColor()));
     QObject::connect(bleu, SIGNAL(textChanged()), this, SLOT(changeColor()));
+
+    QObject::connect(mouseRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+    QObject::connect(xRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+    QObject::connect(yRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+    QObject::connect(zRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
     createCube();
@@ -144,3 +166,14 @@ void Frame::changeColor() {
     }
 }
 
+void Frame::changeRotation() {
+    if(mouseRotation->isChecked()){
+        scene3D->setAxeRotation(0);
+    } else if(xRotation->isChecked()){
+        scene3D->setAxeRotation(1);
+    } else if(yRotation->isChecked()){
+        scene3D->setAxeRotation(2);
+    } else if(zRotation->isChecked()){
+        scene3D->setAxeRotation(3);
+    }
+}

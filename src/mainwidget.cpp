@@ -86,29 +86,43 @@ void MainWidget::mousePressEvent(QMouseEvent *e)
 
 void MainWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    // Mouse release position - mouse press position
-    QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
+    if(getAxeRotation() == 0){
+        // Mouse release position - mouse press position
+        QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
 
-    // Rotation axis is perpendicular to the mouse position difference
-    // vector
-    QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+        // Rotation axis is perpendicular to the mouse position difference
+        // vector
+        QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
 
-    // Accelerate angular speed relative to the length of the mouse sweep
-    qreal acc = diff.length() / 100.0;
+        // Accelerate angular speed relative to the length of the mouse sweep
+        qreal acc = diff.length() / 100.0;
 
-    // Calculate new rotation axis as weighted sum
-    rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
+        // Calculate new rotation axis as weighted sum
+        rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
 
-    // Increase angular speed
-    angularSpeed += acc;
+        // Increase angular speed
+        angularSpeed += acc;
+    }
 }
 //! [0]
 
 //! [1]
 void MainWidget::timerEvent(QTimerEvent *)
 {
-    // Decrease angular speed (friction)
-    angularSpeed *= 0.99;
+    if(getAxeRotation() == 1){
+        rotationAxis = QVector3D(1.0, 0.0, 0.0).normalized();
+    } else if(getAxeRotation() == 2){
+        rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
+    } else if(getAxeRotation() == 3){
+        rotationAxis = QVector3D(0.0, 0.0, 1.0).normalized();
+    }
+
+    if(getAxeRotation() != 0){
+        angularSpeed = 5;
+    } else {
+        // Decrease angular speed (friction)
+        angularSpeed *= 0.99;
+    }
 
     // Stop rotation when speed goes below threshold
     if (angularSpeed < 0.01) {
@@ -118,7 +132,7 @@ void MainWidget::timerEvent(QTimerEvent *)
         rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
         // Request an update
     }
-    repaint();
+//    repaint();
     update();
 
 }
@@ -314,4 +328,13 @@ int MainWidget::getNumberBufferTexture() {
 
 void MainWidget::setNumberBufferTexture(int _index) {
     indexBufferArrayTexture = _index;
+}
+
+
+int MainWidget::getAxeRotation() {
+    return axeRotation;
+}
+
+void MainWidget::setAxeRotation(int _axeRotation) {
+    axeRotation = _axeRotation;
 }

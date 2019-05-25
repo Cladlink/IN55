@@ -39,6 +39,10 @@ private:
     QPushButton *boutonCube;
     QPushButton *boutonPyramide;
     QSlider *sliderHomothetie;
+    QRadioButton *mouseRotation;
+    QRadioButton *xRotation;
+    QRadioButton *yRotation;
+    QRadioButton *zRotation;
     //colorTextEdit *bleu;
 
 private slots:
@@ -51,6 +55,7 @@ private slots:
     void changeColorGreen();
     void changeColorBlue();
     void changeColor();
+    void changeRotation();
 };
 
 #endif // FRAME_H

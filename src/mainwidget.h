@@ -90,6 +90,8 @@ public:
     void setIsColor(int _isColor);
     int getNumberBufferTexture();
     void setNumberBufferTexture(int _index);
+    int getAxeRotation();
+    void setAxeRotation(int _axeRotation);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -117,6 +119,7 @@ private:
     string pathTexture;
     int isColor;
     int indexBufferArrayTexture;
+    int axeRotation;
 
     QMatrix4x4 projection;
 
