@@ -283,5 +283,9 @@ int MainWidget::getIsColor() {
     return isColor;
 }
 void MainWidget::setIsColor(int _isColor) {
+    // 0 = texture;
+    // 1 = couleur choisie par l'utilisateur;
+    // 2 = multi color par rapport aux vertices;
+    // 3 = multi color par rapport aux fragments;
     isColor = _isColor;
 }

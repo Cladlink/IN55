@@ -12,6 +12,7 @@ out vec3 fColor;
 out vec4 fPosition;
 out vec2 UV;
 flat out int fIsColor;
+out float fTime;
 
 float random (vec2 st) {
     return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
@@ -26,7 +27,11 @@ void main()
     fPosition = gl_Position;
     UV = vertexUV;
     fIsColor = isColor;
-    fColor = color;
-    //fColor = vec3(random((time)*gl_Position.xy),random((time+1.)*gl_Position.yz),random((time+1.)*gl_Position.zy));
+    fTime = time;
+    if (fIsColor == 1) {
+        fColor = color;
+    } else if (fIsColor == 2) {
+        fColor = vec3(random((fTime)*fPosition.xy),random((fTime+1.)*fPosition.yz),random((fTime+1.)*fPosition.zy));
+    }
 }
 //! [0]

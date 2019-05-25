@@ -9,11 +9,11 @@ Frame::Frame()
 //    parameter::setGeometries(scene3D);
 
     // Boutons
-    QPushButton *boutonCube = new QPushButton("Cube");
-    QPushButton *boutonPyramide = new QPushButton("Pyramide");
+    boutonCube = new QPushButton("Cube");
+    boutonPyramide = new QPushButton("Pyramide");
 
     // Homothétie
-    QSlider *sliderHomothetie = new QSlider(Qt::Horizontal);
+    sliderHomothetie = new QSlider(Qt::Horizontal);
     sliderHomothetie->setMinimum(1);
     sliderHomothetie->setMaximum(4);
 
@@ -31,10 +31,11 @@ Frame::Frame()
     vert = new colorTextEdit("255");
     bleu = new colorTextEdit("255");
 
-    QRadioButton *rbMulticolor = new QRadioButton("Multicolor", this);
-    QRadioButton *rbMur = new QRadioButton("Mur en briques", this);
+    rbMulticolorVertices = new QRadioButton("Multicolor vertices", this);
+    rbMulticolorFragments = new QRadioButton("Multicolor fragments", this);
+    rbMur = new QRadioButton("Mur en briques", this);
     rbMur->setChecked(true);
-    QRadioButton *rbNintendo = new QRadioButton("Nintendo", this);
+    rbNintendo = new QRadioButton("Nintendo", this);
     QLabel *labelCouleur = new QLabel("Couleurs et textures :");
     labelCouleur->setFixedSize(150,30);
 
@@ -44,7 +45,8 @@ Frame::Frame()
     layoutCouleur->addWidget(rouge);
     layoutCouleur->addWidget(vert);
     layoutCouleur->addWidget(bleu);
-    layoutCouleur->addWidget(rbMulticolor);
+    layoutCouleur->addWidget(rbMulticolorVertices);
+    layoutCouleur->addWidget(rbMulticolorFragments);
     layoutCouleur->addWidget(rbMur);
     layoutCouleur->addWidget(rbNintendo);
 
@@ -74,6 +76,8 @@ Frame::Frame()
     QObject::connect(boutonPyramide, SIGNAL(clicked()), this, SLOT(createPyramide()));
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTextureNintendo()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTextureMur()));
+    QObject::connect(rbMulticolorVertices, SIGNAL(clicked()), this, SLOT(changeColor()));
+    QObject::connect(rbMulticolorFragments, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbColor, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rouge, SIGNAL(textChanged()), this, SLOT(changeColor()));
     QObject::connect(vert, SIGNAL(textChanged()), this, SLOT(changeColor()));
@@ -131,6 +135,10 @@ void Frame::changeColor() {
         float g = vert->toPlainText().toFloat() / 255.0f;
         float b = bleu->toPlainText().toFloat() / 255.0f;
         scene3D->setColor(QVector3D(r,g,b));
+    } else if(rbMulticolorVertices->isChecked()) {
+        scene3D->setIsColor(2);
+    } else if(rbMulticolorFragments->isChecked()) {
+        scene3D->setIsColor(3);
     }
 }
 

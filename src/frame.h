@@ -32,6 +32,14 @@ private:
     colorTextEdit *rouge;
     colorTextEdit *vert;
     colorTextEdit *bleu;
+    QRadioButton *rbMulticolorVertices;
+    QRadioButton *rbMulticolorFragments;
+    QRadioButton *rbMur;
+    QRadioButton *rbNintendo;
+    QPushButton *boutonCube;
+    QPushButton *boutonPyramide;
+    QSlider *sliderHomothetie;
+    //colorTextEdit *bleu;
 
 private slots:
     void ouvrirMessageBox(int value);
