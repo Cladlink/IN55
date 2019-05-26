@@ -6,7 +6,6 @@ Frame::Frame()
 {
     scene3D = new MainWidget();
     scene3D->setFixedSize(700, 500);
-//    parameter::setGeometries(scene3D);
 
     // Boutons
     boutonCube = new QPushButton("Cube");
@@ -17,58 +16,59 @@ Frame::Frame()
     sliderHomothetie->setMinimum(1);
     sliderHomothetie->setMaximum(4);
 
-    QLabel *labelHomothetie = new QLabel("Taille : ");
+    labelHomothetie = new QLabel("Taille : ");
     labelHomothetie->setFixedSize(100,30);
 
-    QHBoxLayout *layoutHomothetie = new QHBoxLayout;
+    layoutHomothetie = new QHBoxLayout;
     layoutHomothetie->addWidget(labelHomothetie);
     layoutHomothetie->addWidget(sliderHomothetie);
 
     // Couleurs
     rbColor = new QRadioButton("Couleur", this);
 
-    QLabel *labelRouge = new QLabel("Rouge : ");
+    labelRouge = new QLabel("Rouge : ");
     labelRouge->setFixedSize(100,30);
-    rouge = new QSlider(Qt::Horizontal);
-    rouge->setMinimum(0);
-    rouge->setMaximum(255);
-    rouge->setValue(255);
-    QHBoxLayout *layoutRouge = new QHBoxLayout;
+    sliderRouge = new QSlider(Qt::Horizontal);
+    sliderRouge->setMinimum(0);
+    sliderRouge->setMaximum(255);
+    sliderRouge->setValue(255);
+    layoutRouge = new QHBoxLayout;
     layoutRouge->insertSpacing(0, 20);
     layoutRouge->addWidget(labelRouge);
-    layoutRouge->addWidget(rouge);
+    layoutRouge->addWidget(sliderRouge);
 
-    QLabel *labelVert = new QLabel("Vert : ");
+    labelVert = new QLabel("Vert : ");
     labelVert->setFixedSize(100,30);
-    vert = new QSlider(Qt::Horizontal);
-    vert->setMinimum(0);
-    vert->setMaximum(255);
-    vert->setValue(255);
-    QHBoxLayout *layoutVert = new QHBoxLayout;
+    sliderVert = new QSlider(Qt::Horizontal);
+    sliderVert->setMinimum(0);
+    sliderVert->setMaximum(255);
+    sliderVert->setValue(255);
+    layoutVert = new QHBoxLayout;
     layoutVert->insertSpacing(0, 20);
     layoutVert->addWidget(labelVert);
-    layoutVert->addWidget(vert);
+    layoutVert->addWidget(sliderVert);
 
-    QLabel *labelBleu = new QLabel("Bleu : ");
+    labelBleu = new QLabel("Bleu : ");
     labelBleu->setFixedSize(100,30);
-    bleu = new QSlider(Qt::Horizontal);
-    bleu->setMinimum(0);
-    bleu->setMaximum(255);
-    bleu->setValue(255);
-    QHBoxLayout *layoutBleu = new QHBoxLayout;
+    sliderBleu = new QSlider(Qt::Horizontal);
+    sliderBleu->setMinimum(0);
+    sliderBleu->setMaximum(255);
+    sliderBleu->setValue(255);
+    layoutBleu = new QHBoxLayout;
     layoutBleu->insertSpacing(0, 20);
     layoutBleu->addWidget(labelBleu);
-    layoutBleu->addWidget(bleu);
+    layoutBleu->addWidget(sliderBleu);
 
     rbMulticolorVertices = new QRadioButton("Multicolor vertices", this);
     rbMulticolorFragments = new QRadioButton("Multicolor fragments", this);
+    rbColorNormal = new QRadioButton("Couleur en fonction des normales", this);
     rbMur = new QRadioButton("Mur en briques", this);
     rbMur->setChecked(true);
     rbNintendo = new QRadioButton("Nintendo", this);
-    QLabel *labelCouleur = new QLabel("Couleurs et textures :");
+    labelCouleur = new QLabel("Couleurs et textures :");
     labelCouleur->setFixedSize(150,30);
 
-    QVBoxLayout *layoutCouleur = new QVBoxLayout;
+    layoutCouleur = new QVBoxLayout;
     layoutCouleur->addWidget(labelCouleur);
     layoutCouleur->addWidget(rbColor);
     layoutCouleur->addLayout(layoutRouge);
@@ -76,11 +76,60 @@ Frame::Frame()
     layoutCouleur->addLayout(layoutBleu);
     layoutCouleur->addWidget(rbMulticolorVertices);
     layoutCouleur->addWidget(rbMulticolorFragments);
+    layoutCouleur->addWidget(rbColorNormal);
     layoutCouleur->addWidget(rbMur);
     layoutCouleur->addWidget(rbNintendo);
 
+    // Translation
+    layoutTranslation = new QVBoxLayout;
+
+    rbTranslation = new QRadioButton("Translation", this);
+    rbTranslation->setChecked(true);
+
+    labelTranslationX = new QLabel("X : ");
+    labelTranslationX->setFixedSize(30,30);
+    sliderTranslationX = new QSlider(Qt::Horizontal);
+    sliderTranslationX->setMinimum(-5.0);
+    sliderTranslationX->setMaximum(5.0);
+    sliderTranslationX->setValue(0);
+    layoutTranslationX = new QHBoxLayout;
+    layoutTranslationX->insertSpacing(0, 10);
+    layoutTranslationX->addWidget(labelTranslationX);
+    layoutTranslationX->addWidget(sliderTranslationX);
+
+    labelTranslationY = new QLabel("Y : ");
+    labelTranslationY->setFixedSize(30,30);
+    sliderTranslationY = new QSlider(Qt::Horizontal);
+    sliderTranslationY->setMinimum(-5.0);
+    sliderTranslationY->setMaximum(5.0);
+    sliderTranslationY->setValue(0);
+    layoutTranslationY = new QHBoxLayout;
+    layoutTranslationY->insertSpacing(0, 10);
+    layoutTranslationY->addWidget(labelTranslationY);
+    layoutTranslationY->addWidget(sliderTranslationY);
+
+    labelTranslationZ = new QLabel("Z : ");
+    labelTranslationZ->setFixedSize(30,30);
+    sliderTranslationZ = new QSlider(Qt::Horizontal);
+    sliderTranslationZ->setMinimum(-5.0);
+    sliderTranslationZ->setMaximum(5.0);
+    sliderTranslationZ->setValue(0);
+    layoutTranslationZ = new QHBoxLayout;
+    layoutTranslationZ->insertSpacing(0, 10);
+    layoutTranslationZ->addWidget(labelTranslationZ);
+    layoutTranslationZ->addWidget(sliderTranslationZ);
+
+    labelTranslation = new QLabel("Translation :");
+    labelTranslation->setFixedSize(150,30);
+
+    layoutTranslation->addWidget(labelTranslation);
+    layoutTranslation->addWidget(rbTranslation);
+    layoutTranslation->addLayout(layoutTranslationX);
+    layoutTranslation->addLayout(layoutTranslationY);
+    layoutTranslation->addLayout(layoutTranslationZ);
+
     // Rotation
-    QHBoxLayout *layoutRotation = new QHBoxLayout;
+    layoutRotation = new QHBoxLayout;
 
     mouseRotation = new QRadioButton("Mouse");
     xRotation = new QRadioButton("X");
@@ -93,16 +142,17 @@ Frame::Frame()
     layoutCouleur->addWidget(zRotation);
 
     // Formes
-    QHBoxLayout *layoutBoutonsForme = new QHBoxLayout;
+    layoutBoutonsForme = new QHBoxLayout;
     layoutBoutonsForme->addWidget(boutonCube);
     layoutBoutonsForme->addWidget(boutonPyramide);
 
     // Général
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-    QVBoxLayout *paramsLayout = new QVBoxLayout;
+    mainLayout = new QHBoxLayout;
+    paramsLayout = new QVBoxLayout;
 
     // Ajout des éléments au layout des paramètres
     paramsLayout->addLayout(layoutHomothetie);
+    paramsLayout->addLayout(layoutTranslation);
     paramsLayout->addLayout(layoutCouleur);
     paramsLayout->addLayout(layoutBoutonsForme);
     paramsLayout->addLayout(layoutRotation);
@@ -113,20 +163,25 @@ Frame::Frame()
     this->setLayout(mainLayout);
 
     // Listener des boutons
-    QObject::connect(sliderHomothetie, SIGNAL(valueChanged(int)), this, SLOT(ouvrirMessageBox(int)));
+    QObject::connect(sliderHomothetie, SIGNAL(valueChanged(int)), this, SLOT(changeSize(int)));
 
     QObject::connect(boutonCube, SIGNAL(clicked()), this, SLOT(createCube()));
     QObject::connect(boutonPyramide, SIGNAL(clicked()), this, SLOT(createPyramide()));
 
-    QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTextureNintendo()));
-    QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTextureMur()));
+    QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTexture()));
+    QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTexture()));
 
     QObject::connect(rbMulticolorVertices, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbMulticolorFragments, SIGNAL(clicked()), this, SLOT(changeColor()));
+    QObject::connect(rbColorNormal, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbColor, SIGNAL(clicked()), this, SLOT(changeColor()));
-    QObject::connect(rouge, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
-    QObject::connect(vert, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
-    QObject::connect(bleu, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
+    QObject::connect(sliderRouge, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
+    QObject::connect(sliderVert, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
+    QObject::connect(sliderBleu, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
+
+    QObject::connect(sliderTranslationX, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
+    QObject::connect(sliderTranslationY, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
+    QObject::connect(sliderTranslationZ, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
 
     QObject::connect(mouseRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
     QObject::connect(xRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
@@ -135,11 +190,11 @@ Frame::Frame()
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
     createCube();
-    changeTextureMur();
+    changeTexture();
 }
 
-void Frame::ouvrirMessageBox(int value) {
-    scene3D->setValue(value/2.0f);
+void Frame::changeSize(int value) {
+    scene3D->setHomotethie(value/2.0f);
 };
 
 void Frame::createCube() {
@@ -152,44 +207,42 @@ void Frame::createPyramide() {
     scene3D->setNbObjects(1);
 };
 
-void Frame::changeTextureNintendo() {
+void Frame::changeTexture() {
     scene3D->setIsColor(0);
-    scene3D->setNumberBufferTexture(1);
-    scene3D->setPathTexture(":/nintendo.png");
+    if (rbMur->isChecked()) {
+        scene3D->setNumberBufferTexture(0);
+        scene3D->setPathTexture(":/mur.png");
+    } else if(rbNintendo->isChecked()) {
+        scene3D->setNumberBufferTexture(1);
+        scene3D->setPathTexture(":/nintendo.png");
+    } else {
+        scene3D->setNumberBufferTexture(0);
+        scene3D->setPathTexture(":/mur.png");
+    }
 };
-
-void Frame::changeTextureMur() {
-    scene3D->setIsColor(0);
-    scene3D->setNumberBufferTexture(0);
-    scene3D->setPathTexture(":/mur.png");
-};
-
-void Frame::changeColorRed() {
-    scene3D->setIsColor(1);
-    scene3D->setColor(QVector3D(1.f,0.f,0.f));
-}
-
-void Frame::changeColorGreen() {
-    scene3D->setIsColor(1);
-    scene3D->setColor(QVector3D(0.f,1.f,0.f));
-}
-
-void Frame::changeColorBlue() {
-    scene3D->setIsColor(1);
-    scene3D->setColor(QVector3D(0.f,0.f,1.f));
-}
 
 void Frame::changeColor() {
     if(rbColor->isChecked()){
         scene3D->setIsColor(1);
-        float r = rouge->value() / 255.0f;
-        float g = vert->value() / 255.0f;
-        float b = bleu->value() / 255.0f;
+        float r = sliderRouge->value() / 255.0f;
+        float g = sliderVert->value() / 255.0f;
+        float b = sliderBleu->value() / 255.0f;
         scene3D->setColor(QVector3D(r,g,b));
     } else if(rbMulticolorVertices->isChecked()) {
         scene3D->setIsColor(2);
     } else if(rbMulticolorFragments->isChecked()) {
         scene3D->setIsColor(3);
+    } else if(rbColorNormal->isChecked()) {
+        scene3D->setIsColor(4);
+    }
+}
+
+void Frame::changePosition() {
+    if(rbTranslation->isChecked()){
+        float x = sliderTranslationX->value();
+        float y = sliderTranslationY->value();
+        float z = sliderTranslationZ->value();
+        scene3D->setPosition(QVector3D(x,y,z));
     }
 }
 

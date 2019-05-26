@@ -28,34 +28,69 @@ public:
 
 private:
     MainWidget *scene3D;
+
+    //QRadiotButton
     QRadioButton *rbColor;
-    QSlider *rouge;
-    QSlider *vert;
-    QSlider *bleu;
     QRadioButton *rbMulticolorVertices;
     QRadioButton *rbMulticolorFragments;
+    QRadioButton *rbColorNormal;
     QRadioButton *rbMur;
     QRadioButton *rbNintendo;
-    QPushButton *boutonCube;
-    QPushButton *boutonPyramide;
-    QSlider *sliderHomothetie;
+    QRadioButton *rbTranslation;
     QRadioButton *mouseRotation;
     QRadioButton *xRotation;
     QRadioButton *yRotation;
     QRadioButton *zRotation;
-    //colorTextEdit *bleu;
+
+    //QSlider
+    QSlider *sliderHomothetie;
+    QSlider *sliderRouge;
+    QSlider *sliderVert;
+    QSlider *sliderBleu;
+    QSlider *sliderTranslationX;
+    QSlider *sliderTranslationY;
+    QSlider *sliderTranslationZ;
+
+    //QPushButton
+    QPushButton *boutonCube;
+    QPushButton *boutonPyramide;
+
+    //QLabel
+    QLabel *labelHomothetie;
+    QLabel *labelRouge;
+    QLabel *labelVert;
+    QLabel *labelBleu;
+    QLabel *labelCouleur;
+    QLabel *labelTranslation;
+    QLabel *labelTranslationX;
+    QLabel *labelTranslationY;
+    QLabel *labelTranslationZ;
+
+    //QHBoxLayout
+    QHBoxLayout *layoutHomothetie;
+    QHBoxLayout *layoutTranslationX;
+    QHBoxLayout *layoutTranslationY;
+    QHBoxLayout *layoutTranslationZ;
+    QHBoxLayout *layoutRouge;
+    QHBoxLayout *layoutVert;
+    QHBoxLayout *layoutBleu;
+    QHBoxLayout *layoutRotation;
+    QHBoxLayout *layoutBoutonsForme;
+    QHBoxLayout *mainLayout;
+
+    //QVBoxLayout
+    QVBoxLayout *layoutTranslation;
+    QVBoxLayout *layoutCouleur;
+    QVBoxLayout *paramsLayout;
 
 private slots:
-    void ouvrirMessageBox(int value);
+    void changeSize(int value);
     void createCube();
     void createPyramide();
-    void changeTextureNintendo();
-    void changeTextureMur();
-    void changeColorRed();
-    void changeColorGreen();
-    void changeColorBlue();
+    void changeTexture();
     void changeColor();
     void changeRotation();
+    void changePosition();
 };
 
 #endif // FRAME_H

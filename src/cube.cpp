@@ -1,6 +1,6 @@
 #include "cube.h"
 
-Cube::VertexData verticesCube[] = {
+/*Cube::VertexData verticesCube[] = {
     {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 1.0f)}, //0
     {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f), QVector2D(1.0f, 1.0f)}, //1
     {QVector3D(0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f,1.0f), QVector2D(1.0f, 0.0f)}, //2
@@ -51,6 +51,7 @@ GLushort indicesCube[] = {
     22,20,21,
     22,21,23
 };
+*/
 
 Cube::Cube()
 {
@@ -154,6 +155,14 @@ void Cube::update(QOpenGLShaderProgram *program, QVector3D _color){
 
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+}
+
+QVector<QVector3D> Cube::getPosition() {
+    QVector<QVector3D> retour;
+    for (int i=0; i<nbrVertices-1; i++) {
+        retour.append(QVector3D(verticesCube[i].position));
+    }
+    return retour;
 }
 //! [2]
 
