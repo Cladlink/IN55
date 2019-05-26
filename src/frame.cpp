@@ -11,6 +11,9 @@ Frame::Frame()
     // Boutons
     boutonCube = new QPushButton("Cube");
     boutonPyramide = new QPushButton("Pyramide");
+    boutonSphere = new QPushButton("Sphere");
+    boutonTorus = new QPushButton("Torus");
+    boutonSuzanne = new QPushButton("Suzanne");
 
     // Homothétie
     sliderHomothetie = new QSlider(Qt::Horizontal);
@@ -96,6 +99,11 @@ Frame::Frame()
     QHBoxLayout *layoutBoutonsForme = new QHBoxLayout;
     layoutBoutonsForme->addWidget(boutonCube);
     layoutBoutonsForme->addWidget(boutonPyramide);
+    QHBoxLayout *layoutBoutonsForme2 = new QHBoxLayout;
+    layoutBoutonsForme2->addWidget(boutonSphere);
+    layoutBoutonsForme2->addWidget(boutonTorus);
+    QHBoxLayout *layoutBoutonsForme3 = new QHBoxLayout;
+    layoutBoutonsForme3->addWidget(boutonSuzanne);
 
     // Général
     QHBoxLayout *mainLayout = new QHBoxLayout;
@@ -105,6 +113,8 @@ Frame::Frame()
     paramsLayout->addLayout(layoutHomothetie);
     paramsLayout->addLayout(layoutCouleur);
     paramsLayout->addLayout(layoutBoutonsForme);
+    paramsLayout->addLayout(layoutBoutonsForme2);
+    paramsLayout->addLayout(layoutBoutonsForme3);
     paramsLayout->addLayout(layoutRotation);
 
     mainLayout->addWidget(scene3D);
@@ -117,6 +127,9 @@ Frame::Frame()
 
     QObject::connect(boutonCube, SIGNAL(clicked()), this, SLOT(createCube()));
     QObject::connect(boutonPyramide, SIGNAL(clicked()), this, SLOT(createPyramide()));
+    QObject::connect(boutonSphere, SIGNAL(clicked()), this, SLOT(createSphere()));
+    QObject::connect(boutonTorus, SIGNAL(clicked()), this, SLOT(createTorus()));
+    QObject::connect(boutonSuzanne, SIGNAL(clicked()), this, SLOT(createSuzanne()));
 
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTextureNintendo()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTextureMur()));
@@ -149,6 +162,21 @@ void Frame::createCube() {
 
 void Frame::createPyramide() {
     scene3D->setObject("pyramide");
+    scene3D->setNbObjects(1);
+};
+
+void Frame::createSphere() {
+    scene3D->setObject("sphere");
+    scene3D->setNbObjects(1);
+};
+
+void Frame::createTorus() {
+    scene3D->setObject("torus");
+    scene3D->setNbObjects(1);
+};
+
+void Frame::createSuzanne() {
+    scene3D->setObject("suzanne");
     scene3D->setNbObjects(1);
 };
 

@@ -38,6 +38,9 @@ private:
     QRadioButton *rbNintendo;
     QPushButton *boutonCube;
     QPushButton *boutonPyramide;
+    QPushButton *boutonSphere;
+    QPushButton *boutonTorus;
+    QPushButton *boutonSuzanne;
     QSlider *sliderHomothetie;
     QRadioButton *mouseRotation;
     QRadioButton *xRotation;
@@ -49,6 +52,9 @@ private slots:
     void ouvrirMessageBox(int value);
     void createCube();
     void createPyramide();
+    void createSphere();
+    void createTorus();
+    void createSuzanne();
     void changeTextureNintendo();
     void changeTextureMur();
     void changeColorRed();

@@ -54,6 +54,7 @@
 #include "igeometryengine.h"
 #include "cube.h"
 #include "pyramide.h"
+#include "shape.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -111,6 +112,9 @@ private:
     QVector<QPixmap> pixmap;
     Cube *geometriesSquare;
     Pyramide *geometriesPyramide;
+    Shape *geometriesSphere;
+    Shape *geometriesTorus;
+    Shape *geometriesSuzanne;
     float valueSlider = 0.5;
     int nbObjects;
     string object;

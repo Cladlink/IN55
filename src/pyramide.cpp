@@ -99,44 +99,44 @@ void Pyramide::drawGeometry(QOpenGLShaderProgram *program)
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
 }
 
-void Pyramide::update(QOpenGLShaderProgram *program, QVector3D _color){
+//void Pyramide::update(QOpenGLShaderProgram *program, QVector3D _color){
 
-    arrayBuf.bind();
-    for (int i=0; i<nbrVertices-1; i++) {
-        verticesPyramide[i].color = _color;
-    }
+//    arrayBuf.bind();
+//    for (int i=0; i<nbrVertices-1; i++) {
+//        verticesPyramide[i].color = _color;
+//    }
 
-    arrayBuf.allocate(verticesPyramide, nbrVertices * sizeof(VertexData));
+//    arrayBuf.allocate(verticesPyramide, nbrVertices * sizeof(VertexData));
 
-    indexBuf.bind();
-    indexBuf.allocate(indicesPyramide, nbrIndices * sizeof(GLushort));
-    // Tell OpenGL which VBOs to use
-    arrayBuf.bind();
-    indexBuf.bind();
+//    indexBuf.bind();
+//    indexBuf.allocate(indicesPyramide, nbrIndices * sizeof(GLushort));
+//    // Tell OpenGL which VBOs to use
+//    arrayBuf.bind();
+//    indexBuf.bind();
 
-    // Offset for position
-    quintptr offset = 0;
+//    // Offset for position
+//    quintptr offset = 0;
 
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+//    // Tell OpenGL programmable pipeline how to locate vertex position data
+//    int vertexLocation = program->attributeLocation("position");
+//    program->enableAttributeArray(vertexLocation);
+//    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
+//    // Offset for texture coordinate
+//    offset += sizeof(QVector3D);
 
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+//    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
+//    int colorLocation = program->attributeLocation("color");
+//    program->enableAttributeArray(colorLocation);
+//    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
-    int uvLocation = program->attributeLocation("vertexUV");
-    program->enableAttributeArray(uvLocation);
-    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
+//    int uvLocation = program->attributeLocation("vertexUV");
+//    program->enableAttributeArray(uvLocation);
+//    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
 
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
-}
+//    // Draw cube geometry using indices from VBO 1
+//    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+//}
 //! [2]
 
 

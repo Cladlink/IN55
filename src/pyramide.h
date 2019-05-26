@@ -8,7 +8,7 @@ class Pyramide : public IGeometryEngine
 public:
     Pyramide();
     ~Pyramide();
-    void update(QOpenGLShaderProgram *program, QVector3D _color) override;
+//    void update(QOpenGLShaderProgram *program, QVector3D _color) override;
     void initGeometry() override;
 
     void drawGeometry(QOpenGLShaderProgram *program) override;
@@ -18,7 +18,6 @@ public:
 //        QVector3D position;
 //        QVector3D color;
 //    };
-
 };
 
 #endif // PYRAMIDE_H

@@ -1,8 +1,7 @@
 #include "igeometryengine.h"
 
 //! [0]
-IGeometryEngine::IGeometryEngine()
-    : indexBuf(QOpenGLBuffer::IndexBuffer)
+IGeometryEngine::IGeometryEngine(): indexBuf(QOpenGLBuffer::IndexBuffer)
 {
     //initializeOpenGLFunctions();
 

@@ -132,7 +132,7 @@ void MainWidget::timerEvent(QTimerEvent *)
         rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
         // Request an update
     }
-    repaint();
+//    repaint();
     update();
 
 }
@@ -151,11 +151,14 @@ void MainWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     // Enable back face culling
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 //! [2]
 
     geometriesSquare = new Cube;
     geometriesPyramide = new Pyramide;
+    geometriesSphere = new Shape("C:\\Users\\pujol\\OneDrive\\Bureau\\sphere.obj");
+    geometriesTorus = new Shape("C:\\Users\\pujol\\OneDrive\\Bureau\\torus.obj");
+    geometriesSuzanne = new Shape("C:\\Users\\pujol\\OneDrive\\Bureau\\suzanne.obj");
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);
@@ -251,24 +254,37 @@ void MainWidget::paintGL()
     program.setUniformValue("isColor",isColor);
 
 //! [6]
-
     if (getObject() == "cube") {
         geometriesSquare->drawGeometry(&program);
     } else if (getObject() == "pyramide") {
         geometriesPyramide->drawGeometry(&program);
-    }
-
-}
-
-void MainWidget::repaint(){
-    if (getObject() == "cube") {
-        geometriesSquare->update(&program,getColor());
-        //geometriesSquare->initGeometry();
-    } else if (getObject() == "pyramide") {
-        geometriesPyramide->update(&program,getColor());
-       //geometriesPyramide->initGeometry();
+    } else if (getObject() == "sphere") {
+        geometriesSphere->drawGeometry(&program);
+    } else if (getObject() == "torus") {
+        geometriesTorus->drawGeometry(&program);
+    } else if (getObject() == "suzanne") {
+        geometriesSuzanne->drawGeometry(&program);
     }
 }
+
+//void MainWidget::repaint(){
+//    if (getObject() == "cube") {
+//        geometriesSquare->update(&program,getColor());
+//        //geometriesSquare->initGeometry();
+//    } else if (getObject() == "pyramide") {
+//        geometriesPyramide->update(&program,getColor());
+//       //geometriesPyramide->initGeometry();
+//    } else if (getObject() == "Shape") {
+//        geometriesShape->update(&program,getColor());
+//       //geometriesShape->initGeometry();
+//    } else if (getObject() == "torus") {
+//        geometriesTorus->update(&program,getColor());
+//       //geometriesShape->initGeometry();
+//    } else if (getObject() == "suzanne") {
+//        geometriesSuzanne->update(&program,getColor());
+//       //geometriesShape->initGeometry();
+//    }
+//}
 
 float MainWidget::getValue(){
     return valueSlider;
