@@ -156,9 +156,9 @@ void MainWidget::initializeGL()
 
     geometriesSquare = new Cube;
     geometriesPyramide = new Pyramide;
-    geometriesSphere = new Shape("C:\\Users\\pujol\\OneDrive\\Bureau\\sphere.obj");
-    geometriesTorus = new Shape("C:\\Users\\pujol\\OneDrive\\Bureau\\torus.obj");
-    geometriesSuzanne = new Shape("C:\\Users\\pujol\\OneDrive\\Bureau\\suzanne.obj");
+    geometriesSphere = new Shape("C:\\Users\\pujol\\OneDrive\\Documents\\IN55\\ressources\\sphere.obj");
+    geometriesTorus = new Shape("C:\\Users\\pujol\\OneDrive\\Documents\\IN55\\ressources\\torus.obj");
+    geometriesSuzanne = new Shape("C:\\Users\\pujol\\OneDrive\\Documents\\IN55\\ressources\\suzanne.obj");
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);
@@ -213,23 +213,6 @@ void MainWidget::resizeGL(int w, int h)
 
 void MainWidget::paintGL()
 {
-    /*for (int i = 0; i < pixmap.size(); ++i) {
-        glGenTextures(NBR_TEXTURES, texId);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texId[i]);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap[i].width(), pixmap[i].height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap[i].toImage().bits());
-
-    }*/
-
-    /*glGenTextures(NBR_TEXTURES, texId);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texId[1]);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap[1].width(), pixmap[1].height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap[1].toImage().bits());*/
-
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -239,7 +222,15 @@ void MainWidget::paintGL()
     matrix.translate(0.0, 0.0, -5.0);
     matrix.rotate(rotation);
 
-    QVector4D homotethie = QVector4D(this->getValue(),this->getValue(),this->getValue(),1.);
+    // Calculate normal matrix
+    QMatrix4x4 normal;
+
+    normal = matrix.inverted();
+    normal = normal.transposed();
+
+    program.setUniformValue("normal", normal);
+
+    QVector4D homotethie = QVector4D(this->getHomotethie(),this->getHomotethie(),this->getHomotethie(),1.);
 
     // Set modelview-projection matrix
     program.setUniformValue("mvp", projection * matrix);
@@ -286,12 +277,25 @@ void MainWidget::paintGL()
 //    }
 //}
 
-float MainWidget::getValue(){
-    return valueSlider;
+//void MainWidget::repaint(){
+//    if (getObject() == "cube") {
+//        geometriesSquare->update(&program,getColor());
+//        /*QVector<QVector3D> test;
+//        test = geometriesSquare->getPosition();
+//        for (int i = 0; i<test.size(); i++) {
+//            std::cout << "X : " << test[i].x() << " Y : " << test[i].y() << " Z : " << test[i].z() << endl;
+//        }*/
+//    } else if (getObject() == "pyramide") {
+//        geometriesPyramide->update(&program,getColor());
+//    }
+//}
+
+float MainWidget::getHomotethie(){
+    return homotethie;
 }
 
-void MainWidget::setValue(float _value){
-    valueSlider = _value;
+void MainWidget::setHomotethie(float _homotethie){
+    homotethie = _homotethie;
 }
 
 string MainWidget::getObject(){
@@ -353,4 +357,13 @@ int MainWidget::getAxeRotation() {
 
 void MainWidget::setAxeRotation(int _axeRotation) {
     axeRotation = _axeRotation;
+}
+
+QVector3D MainWidget::getPosition() {
+    return position;
+}
+
+void MainWidget::setPosition(QVector3D _position) {
+    //std::cout << "X : " << _position.x() << "Y : " << position.y() << "Z : " << position.z() << endl;
+    position = _position;
 }

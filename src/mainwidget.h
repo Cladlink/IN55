@@ -77,8 +77,8 @@ public:
     ~MainWidget();
     void repaint();
 
-    float getValue();
-    void setValue(float _value);
+    float getHomotethie();
+    void setHomotethie(float _omotethie);
     string getObject();
     void setObject(string _object);
     string getPathTexture();
@@ -93,6 +93,8 @@ public:
     void setNumberBufferTexture(int _index);
     int getAxeRotation();
     void setAxeRotation(int _axeRotation);
+    QVector3D getPosition();
+    void setPosition(QVector3D _position);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -116,6 +118,7 @@ private:
     Shape *geometriesTorus;
     Shape *geometriesSuzanne;
     float valueSlider = 0.5;
+    float homotethie = 0.5;
     int nbObjects;
     string object;
     float beginning;
@@ -126,10 +129,12 @@ private:
     int axeRotation;
 
     QMatrix4x4 projection;
+    QMatrix4x4 matrix;
 
     QVector2D mousePressPosition;
     QVector3D rotationAxis;
     QVector3D color;
+    QVector3D position;
 
     qreal angularSpeed;
     QQuaternion rotation;

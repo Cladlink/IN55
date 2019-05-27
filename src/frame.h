@@ -28,40 +28,75 @@ public:
 
 private:
     MainWidget *scene3D;
+
+    //QRadiotButton
     QRadioButton *rbColor;
-    QSlider *rouge;
-    QSlider *vert;
-    QSlider *bleu;
     QRadioButton *rbMulticolorVertices;
     QRadioButton *rbMulticolorFragments;
+    QRadioButton *rbColorNormal;
     QRadioButton *rbMur;
     QRadioButton *rbNintendo;
+    QRadioButton *rbTranslation;
+    QRadioButton *mouseRotation;
+    QRadioButton *xRotation;
+    QRadioButton *yRotation;
+    QRadioButton *zRotation;
+
+    //QSlider
+    QSlider *sliderHomothetie;
+    QSlider *sliderRouge;
+    QSlider *sliderVert;
+    QSlider *sliderBleu;
+    QSlider *sliderTranslationX;
+    QSlider *sliderTranslationY;
+    QSlider *sliderTranslationZ;
+
+    //QPushButton
     QPushButton *boutonCube;
     QPushButton *boutonPyramide;
     QPushButton *boutonSphere;
     QPushButton *boutonTorus;
     QPushButton *boutonSuzanne;
-    QSlider *sliderHomothetie;
-    QRadioButton *mouseRotation;
-    QRadioButton *xRotation;
-    QRadioButton *yRotation;
-    QRadioButton *zRotation;
-    //colorTextEdit *bleu;
+
+    //QLabel
+    QLabel *labelHomothetie;
+    QLabel *labelRouge;
+    QLabel *labelVert;
+    QLabel *labelBleu;
+    QLabel *labelCouleur;
+    QLabel *labelTranslation;
+    QLabel *labelTranslationX;
+    QLabel *labelTranslationY;
+    QLabel *labelTranslationZ;
+
+    //QHBoxLayout
+    QHBoxLayout *layoutHomothetie;
+    QHBoxLayout *layoutTranslationX;
+    QHBoxLayout *layoutTranslationY;
+    QHBoxLayout *layoutTranslationZ;
+    QHBoxLayout *layoutRouge;
+    QHBoxLayout *layoutVert;
+    QHBoxLayout *layoutBleu;
+    QHBoxLayout *layoutRotation;
+    QHBoxLayout *layoutBoutonsForme;
+    QHBoxLayout *mainLayout;
+
+    //QVBoxLayout
+    QVBoxLayout *layoutTranslation;
+    QVBoxLayout *layoutCouleur;
+    QVBoxLayout *paramsLayout;
 
 private slots:
-    void ouvrirMessageBox(int value);
+    void changeSize(int value);
     void createCube();
     void createPyramide();
+    void changeTexture();
     void createSphere();
     void createTorus();
     void createSuzanne();
-    void changeTextureNintendo();
-    void changeTextureMur();
-    void changeColorRed();
-    void changeColorGreen();
-    void changeColorBlue();
     void changeColor();
     void changeRotation();
+    void changePosition();
 };
 
 #endif // FRAME_H
