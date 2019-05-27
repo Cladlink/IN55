@@ -24,7 +24,5 @@ void main()
         fragColor = vec4(fColor);
     } else if (fIsColor == 3) {
         fragColor = vec4(random((fTime)*fPosition.xy),random((fTime+1.)*fPosition.yz),random((fTime+1.)*fPosition.zy),1.0);
-    } /*else if (fIsColor == 4) {
-        fragColor = vec4(fNormal);
-    }*/
+    }
 }

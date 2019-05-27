@@ -132,7 +132,7 @@ void MainWidget::timerEvent(QTimerEvent *)
         rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
         // Request an update
     }
-//    repaint();
+
     update();
 
 }
@@ -151,14 +151,14 @@ void MainWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     // Enable back face culling
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 //! [2]
 
     geometriesSquare = new Cube;
     geometriesPyramide = new Pyramide;
-    geometriesSphere = new Shape("C:\\Users\\pujol\\OneDrive\\Documents\\IN55\\ressources\\sphere.obj");
-    geometriesTorus = new Shape("C:\\Users\\pujol\\OneDrive\\Documents\\IN55\\ressources\\torus.obj");
-    geometriesSuzanne = new Shape("C:\\Users\\pujol\\OneDrive\\Documents\\IN55\\ressources\\suzanne.obj");
+    geometriesSphere = new Shape("C:/Users/rapha/Documents/UTBM - Semestre 04/IN55/Projet/IN55/ressources/sphere.obj");
+    geometriesTorus = new Shape("C:/Users/rapha/Documents/UTBM - Semestre 04/IN55/Projet/IN55/ressources/torus.obj");
+    geometriesSuzanne = new Shape("C:/Users/rapha/Documents/UTBM - Semestre 04/IN55/Projet/IN55/ressources/suzanne.obj");
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);
@@ -235,6 +235,7 @@ void MainWidget::paintGL()
     // Set modelview-projection matrix
     program.setUniformValue("mvp", projection * matrix);
     program.setUniformValue("homotethie", homotethie);
+    program.setUniformValue("translation", QVector4D(getPosition(),0.));
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texId[getNumberBufferTexture()]);
@@ -246,34 +247,36 @@ void MainWidget::paintGL()
 
 //! [6]
     if (getObject() == "cube") {
-        geometriesSquare->drawGeometry(&program);
+        geometriesSquare->update(&program,getColor());
     } else if (getObject() == "pyramide") {
-        geometriesPyramide->drawGeometry(&program);
+        geometriesPyramide->update(&program,getColor());
     } else if (getObject() == "sphere") {
-        geometriesSphere->drawGeometry(&program);
+        geometriesSphere->update(&program,getColor());
     } else if (getObject() == "torus") {
-        geometriesTorus->drawGeometry(&program);
+        geometriesTorus->update(&program,getColor());
     } else if (getObject() == "suzanne") {
-        geometriesSuzanne->drawGeometry(&program);
+        geometriesSuzanne->update(&program,getColor());
     }
+
+    /*QVector<QVector3D> test;
+    test = geometriesSquare->getPosition();
+    for (int i = 0; i<test.size(); i++) {
+        std::cout << "X : " << test[i].x() << " Y : " << test[i].y() << " Z : " << test[i].z() << endl;
+    }*/
+
 }
 
 //void MainWidget::repaint(){
 //    if (getObject() == "cube") {
 //        geometriesSquare->update(&program,getColor());
-//        //geometriesSquare->initGeometry();
 //    } else if (getObject() == "pyramide") {
 //        geometriesPyramide->update(&program,getColor());
-//       //geometriesPyramide->initGeometry();
 //    } else if (getObject() == "Shape") {
-//        geometriesShape->update(&program,getColor());
-//       //geometriesShape->initGeometry();
+//        geometriesSphere->update(&program,getColor());
 //    } else if (getObject() == "torus") {
 //        geometriesTorus->update(&program,getColor());
-//       //geometriesShape->initGeometry();
 //    } else if (getObject() == "suzanne") {
 //        geometriesSuzanne->update(&program,getColor());
-//       //geometriesShape->initGeometry();
 //    }
 //}
 
@@ -364,6 +367,6 @@ QVector3D MainWidget::getPosition() {
 }
 
 void MainWidget::setPosition(QVector3D _position) {
-    //std::cout << "X : " << _position.x() << "Y : " << position.y() << "Z : " << position.z() << endl;
+    //std::cout << "X : " << _position.x() << "Y : " << _position.y() << "Z : " << _position.z() << endl;
     position = _position;
 }

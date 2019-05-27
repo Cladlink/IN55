@@ -65,7 +65,7 @@ class IGeometryEngine : protected QOpenGLFunctions
 public:
     IGeometryEngine();
     virtual ~IGeometryEngine();
-//    virtual void update(QOpenGLShaderProgram *program, QVector3D _color) = 0;
+    virtual void update(QOpenGLShaderProgram *program, QVector3D _color) = 0;
     virtual void initGeometry() = 0;
 
     virtual void drawGeometry(QOpenGLShaderProgram *program) = 0;

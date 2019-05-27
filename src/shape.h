@@ -18,7 +18,7 @@ public:
     Shape();
     Shape(string _path);
     ~Shape();
-//    void update(QOpenGLShaderProgram *program, QVector3D _color) override;
+    void update(QOpenGLShaderProgram *program, QVector3D _color) override;
     void initGeometry() override;
 
     void drawGeometry(QOpenGLShaderProgram *program) override;

@@ -8,12 +8,10 @@ class Cube : public IGeometryEngine
 public:
     Cube();
     ~Cube();
-//    void update(QOpenGLShaderProgram *program, QVector3D _color) override;
+    void update(QOpenGLShaderProgram *program, QVector3D _color) override;
     void initGeometry() override;
 
     void drawGeometry(QOpenGLShaderProgram *program) override;
-
-    QVector<QVector3D> getPosition();
 
 
 private :

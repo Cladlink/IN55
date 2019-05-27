@@ -5,7 +5,7 @@ using namespace std;
 Frame::Frame()
 {
     scene3D = new MainWidget();
-    scene3D->setFixedSize(700, 500);
+    scene3D->setFixedSize(900, 700);
 
     // Boutons
     boutonCube = new QPushButton("Cube");
@@ -114,9 +114,9 @@ Frame::Frame()
     labelTranslationZ = new QLabel("Z : ");
     labelTranslationZ->setFixedSize(30,30);
     sliderTranslationZ = new QSlider(Qt::Horizontal);
-    sliderTranslationZ->setMinimum(-5.0);
-    sliderTranslationZ->setMaximum(5.0);
-    sliderTranslationZ->setValue(0);
+    sliderTranslationZ->setMinimum(-10.0);
+    sliderTranslationZ->setMaximum(0.0);
+    sliderTranslationZ->setValue(-5.0);
     layoutTranslationZ = new QHBoxLayout;
     layoutTranslationZ->insertSpacing(0, 10);
     layoutTranslationZ->addWidget(labelTranslationZ);

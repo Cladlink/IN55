@@ -5,6 +5,7 @@ uniform vec4 homotethie;
 uniform float time;
 uniform int isColor;
 uniform mat4 normal;
+uniform vec4 translation;
 
 in vec3 position;
 in vec3 color;
@@ -25,8 +26,10 @@ float random (vec2 st) {
 void main()
 {
     // Calculate vertex position in screen space
-    gl_Position = mvp * vec4( position, 1.0);
+    gl_Position = mvp * vec4(position, 1.0);
     gl_Position *= homotethie;
+    gl_Position += translation;
+
     fPosition = gl_Position;
     UV = vertexUV;
     fIsColor = isColor;
