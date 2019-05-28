@@ -7,12 +7,22 @@ Frame::Frame()
     scene3D = new MainWidget();
     scene3D->setFixedSize(900, 700);
 
-    // Boutons
+    // Tab
+    optionsTab = new QTabWidget();
+
+    // Formes
     boutonCube = new QPushButton("Cube");
     boutonPyramide = new QPushButton("Pyramide");
     boutonSphere = new QPushButton("Sphere");
     boutonTorus = new QPushButton("Torus");
     boutonSuzanne = new QPushButton("Suzanne");
+
+    layoutBoutonsForme = new QVBoxLayout;
+    layoutBoutonsForme->addWidget(boutonCube);
+    layoutBoutonsForme->addWidget(boutonPyramide);
+    layoutBoutonsForme->addWidget(boutonSphere);
+    layoutBoutonsForme->addWidget(boutonTorus);
+    layoutBoutonsForme->addWidget(boutonSuzanne);
 
     // Homothétie
     sliderHomothetie = new QSlider(Qt::Horizontal);
@@ -66,7 +76,6 @@ Frame::Frame()
     rbMulticolorFragments = new QRadioButton("Multicolor fragments", this);
     rbColorNormal = new QRadioButton("Couleur en fonction des normales", this);
     rbMur = new QRadioButton("Mur en briques", this);
-    rbMur->setChecked(true);
     rbNintendo = new QRadioButton("Nintendo", this);
     labelCouleur = new QLabel("Couleurs et textures :");
     labelCouleur->setFixedSize(150,30);
@@ -85,9 +94,6 @@ Frame::Frame()
 
     // Translation
     layoutTranslation = new QVBoxLayout;
-
-    rbTranslation = new QRadioButton("Translation", this);
-    rbTranslation->setChecked(true);
 
     labelTranslationX = new QLabel("X : ");
     labelTranslationX->setFixedSize(30,30);
@@ -129,49 +135,48 @@ Frame::Frame()
     labelTranslation->setFixedSize(150,30);
 
     layoutTranslation->addWidget(labelTranslation);
-    layoutTranslation->addWidget(rbTranslation);
     layoutTranslation->addLayout(layoutTranslationX);
     layoutTranslation->addLayout(layoutTranslationY);
     layoutTranslation->addLayout(layoutTranslationZ);
 
     // Rotation
-    layoutRotation = new QHBoxLayout;
+    layoutRotation = new QVBoxLayout;
 
     mouseRotation = new QRadioButton("Mouse");
     xRotation = new QRadioButton("X");
     yRotation = new QRadioButton("Y");
     zRotation = new QRadioButton("Z");
 
-    layoutCouleur->addWidget(mouseRotation);
-    layoutCouleur->addWidget(xRotation);
-    layoutCouleur->addWidget(yRotation);
-    layoutCouleur->addWidget(zRotation);
+    labelRotation = new QLabel("Rotation :");
+    labelRotation->setFixedSize(150,30);
 
-    // Formes
-    layoutBoutonsForme = new QHBoxLayout;
-    layoutBoutonsForme->addWidget(boutonCube);
-    layoutBoutonsForme->addWidget(boutonPyramide);
-    QHBoxLayout *layoutBoutonsForme2 = new QHBoxLayout;
-    layoutBoutonsForme2->addWidget(boutonSphere);
-    layoutBoutonsForme2->addWidget(boutonTorus);
-    QHBoxLayout *layoutBoutonsForme3 = new QHBoxLayout;
-    layoutBoutonsForme3->addWidget(boutonSuzanne);
+    layoutRotation->addWidget(labelRotation);
+    layoutRotation->addWidget(mouseRotation);
+    layoutRotation->addWidget(xRotation);
+    layoutRotation->addWidget(yRotation);
+    layoutRotation->addWidget(zRotation);
+
+    QVBoxLayout *layoutVisuel = new QVBoxLayout;
+    layoutVisuel->addLayout(layoutHomothetie);
+    layoutVisuel->addLayout(layoutTranslation);
+    layoutVisuel->addLayout(layoutRotation);
 
     // Général
+    rbMur->setChecked(true);
+    mouseRotation->setChecked(true);
+    QWidget *colorWidget = new QWidget();
+    QWidget *formeWidget = new QWidget();
+    QWidget *visualisationWidget = new QWidget();
+    formeWidget->setLayout(layoutBoutonsForme);
+    colorWidget->setLayout(layoutCouleur);
+    visualisationWidget->setLayout(layoutVisuel);
+    optionsTab->addTab(colorWidget, "Couleur");
+    optionsTab->addTab(formeWidget, "Formes");
+    optionsTab->addTab(visualisationWidget, "Visuel");
+
     mainLayout = new QHBoxLayout;
-    paramsLayout = new QVBoxLayout;
-
-    // Ajout des éléments au layout des paramètres
-    paramsLayout->addLayout(layoutHomothetie);
-    paramsLayout->addLayout(layoutTranslation);
-    paramsLayout->addLayout(layoutCouleur);
-    paramsLayout->addLayout(layoutBoutonsForme);
-    paramsLayout->addLayout(layoutBoutonsForme2);
-    paramsLayout->addLayout(layoutBoutonsForme3);
-    paramsLayout->addLayout(layoutRotation);
-
     mainLayout->addWidget(scene3D);
-    mainLayout->addLayout(paramsLayout);
+    mainLayout->addWidget(optionsTab);
 
     this->setLayout(mainLayout);
 
@@ -269,12 +274,10 @@ void Frame::changeColor() {
 }
 
 void Frame::changePosition() {
-    if(rbTranslation->isChecked()){
-        float x = sliderTranslationX->value();
-        float y = sliderTranslationY->value();
-        float z = sliderTranslationZ->value();
-        scene3D->setPosition(QVector3D(x,y,z));
-    }
+    float x = sliderTranslationX->value();
+    float y = sliderTranslationY->value();
+    float z = sliderTranslationZ->value();
+    scene3D->setPosition(QVector3D(x,y,z));
 }
 
 void Frame::changeRotation() {

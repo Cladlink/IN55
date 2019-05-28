@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QSize>
 #include <QMessageBox>
+#include <QTabWidget>
 #include <iostream>
 #include <QDebug>
 
@@ -29,6 +30,9 @@ public:
 private:
     MainWidget *scene3D;
 
+    //QTabWidget
+    QTabWidget *optionsTab;
+
     //QRadiotButton
     QRadioButton *rbColor;
     QRadioButton *rbMulticolorVertices;
@@ -36,7 +40,6 @@ private:
     QRadioButton *rbColorNormal;
     QRadioButton *rbMur;
     QRadioButton *rbNintendo;
-    QRadioButton *rbTranslation;
     QRadioButton *mouseRotation;
     QRadioButton *xRotation;
     QRadioButton *yRotation;
@@ -68,6 +71,7 @@ private:
     QLabel *labelTranslationX;
     QLabel *labelTranslationY;
     QLabel *labelTranslationZ;
+    QLabel *labelRotation;
 
     //QHBoxLayout
     QHBoxLayout *layoutHomothetie;
@@ -77,11 +81,11 @@ private:
     QHBoxLayout *layoutRouge;
     QHBoxLayout *layoutVert;
     QHBoxLayout *layoutBleu;
-    QHBoxLayout *layoutRotation;
-    QHBoxLayout *layoutBoutonsForme;
     QHBoxLayout *mainLayout;
 
     //QVBoxLayout
+    QVBoxLayout *layoutRotation;
+    QVBoxLayout *layoutBoutonsForme;
     QVBoxLayout *layoutTranslation;
     QVBoxLayout *layoutCouleur;
     QVBoxLayout *paramsLayout;
