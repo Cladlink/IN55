@@ -156,9 +156,9 @@ void MainWidget::initializeGL()
 
     geometriesSquare = new Cube;
     geometriesPyramide = new Pyramide;
-    geometriesSphere = new Shape("C:/Users/rapha/Documents/UTBM - Semestre 04/IN55/Projet/IN55/ressources/sphere.obj");
-    geometriesTorus = new Shape("C:/Users/rapha/Documents/UTBM - Semestre 04/IN55/Projet/IN55/ressources/torus.obj");
-    geometriesSuzanne = new Shape("C:/Users/rapha/Documents/UTBM - Semestre 04/IN55/Projet/IN55/ressources/suzanne.obj");
+    geometriesSphere = new Shape("IN55/ressources/sphere.obj");
+    geometriesTorus = new Shape("IN55/ressources/torus.obj");
+    geometriesSuzanne = new Shape("IN55/ressources/suzanne.obj");
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);

@@ -9,6 +9,7 @@
 #include <QVector4D>
 #include <sstream>
 #include <regex>
+#include <QCoreApplication>
 
 using namespace std;
 

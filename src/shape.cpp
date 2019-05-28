@@ -121,6 +121,7 @@ void Shape::load_obj(){
     QVector3D normals;
     QVector<GLushort> elements;
 
+    filename = QCoreApplication::applicationDirPath().toStdString() + "/../../" + filename;
     ifstream in(filename, ios::in);
     if (!in)
     {
