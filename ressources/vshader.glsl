@@ -26,9 +26,11 @@ float random (vec2 st) {
 void main()
 {
     // Calculate vertex position in screen space
-    gl_Position = mvp * vec4(position, 1.0);
-    gl_Position *= homotethie;
-    gl_Position += translation;
+    vec4 test = vec4(position,1.) + translation;
+    test = test* homotethie;
+    gl_Position = mvp * test;
+    //gl_Position *= test;
+    //gl_Position += translation;
 
     fPosition = gl_Position;
     UV = vertexUV;

@@ -92,8 +92,9 @@ Frame::Frame()
     labelTranslationX = new QLabel("X : ");
     labelTranslationX->setFixedSize(30,30);
     sliderTranslationX = new QSlider(Qt::Horizontal);
-    sliderTranslationX->setMinimum(-5.0);
-    sliderTranslationX->setMaximum(5.0);
+    sliderTranslationX->setMinimum(-1.0);
+    sliderTranslationX->setTickInterval(20);
+    sliderTranslationX->setMaximum(1.0);
     sliderTranslationX->setValue(0);
     layoutTranslationX = new QHBoxLayout;
     layoutTranslationX->insertSpacing(0, 10);
@@ -103,8 +104,9 @@ Frame::Frame()
     labelTranslationY = new QLabel("Y : ");
     labelTranslationY->setFixedSize(30,30);
     sliderTranslationY = new QSlider(Qt::Horizontal);
-    sliderTranslationY->setMinimum(-5.0);
-    sliderTranslationY->setMaximum(5.0);
+    sliderTranslationY->setMinimum(-1.0);
+    sliderTranslationY->setTickInterval(20);
+    sliderTranslationY->setMaximum(1.0);
     sliderTranslationY->setValue(0);
     layoutTranslationY = new QHBoxLayout;
     layoutTranslationY->insertSpacing(0, 10);
@@ -114,9 +116,10 @@ Frame::Frame()
     labelTranslationZ = new QLabel("Z : ");
     labelTranslationZ->setFixedSize(30,30);
     sliderTranslationZ = new QSlider(Qt::Horizontal);
-    sliderTranslationZ->setMinimum(-10.0);
-    sliderTranslationZ->setMaximum(0.0);
-    sliderTranslationZ->setValue(-5.0);
+    sliderTranslationZ->setMinimum(-1.0);
+    sliderTranslationZ->setTickInterval(20);
+    sliderTranslationZ->setMaximum(1.0);
+    sliderTranslationZ->setValue(0.0);
     layoutTranslationZ = new QHBoxLayout;
     layoutTranslationZ->insertSpacing(0, 10);
     layoutTranslationZ->addWidget(labelTranslationZ);
