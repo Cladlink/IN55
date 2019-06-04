@@ -98,9 +98,9 @@ Frame::Frame()
     labelTranslationX = new QLabel("X : ");
     labelTranslationX->setFixedSize(30,30);
     sliderTranslationX = new QSlider(Qt::Horizontal);
-    sliderTranslationX->setMinimum(-1.0);
-    sliderTranslationX->setTickInterval(20);
-    sliderTranslationX->setMaximum(1.0);
+    sliderTranslationX->setMinimum(-100.0);
+    sliderTranslationX->setTickInterval(1);
+    sliderTranslationX->setMaximum(100.0);
     sliderTranslationX->setValue(0);
     layoutTranslationX = new QHBoxLayout;
     layoutTranslationX->insertSpacing(0, 10);
@@ -110,9 +110,9 @@ Frame::Frame()
     labelTranslationY = new QLabel("Y : ");
     labelTranslationY->setFixedSize(30,30);
     sliderTranslationY = new QSlider(Qt::Horizontal);
-    sliderTranslationY->setMinimum(-1.0);
-    sliderTranslationY->setTickInterval(20);
-    sliderTranslationY->setMaximum(1.0);
+    sliderTranslationY->setMinimum(-100.0);
+    sliderTranslationY->setTickInterval(1);
+    sliderTranslationY->setMaximum(100.0);
     sliderTranslationY->setValue(0);
     layoutTranslationY = new QHBoxLayout;
     layoutTranslationY->insertSpacing(0, 10);
@@ -122,9 +122,9 @@ Frame::Frame()
     labelTranslationZ = new QLabel("Z : ");
     labelTranslationZ->setFixedSize(30,30);
     sliderTranslationZ = new QSlider(Qt::Horizontal);
-    sliderTranslationZ->setMinimum(-1.0);
-    sliderTranslationZ->setTickInterval(20);
-    sliderTranslationZ->setMaximum(1.0);
+    sliderTranslationZ->setMinimum(-100.0);
+    sliderTranslationZ->setTickInterval(1);
+    sliderTranslationZ->setMaximum(100.0);
     sliderTranslationZ->setValue(0.0);
     layoutTranslationZ = new QHBoxLayout;
     layoutTranslationZ->insertSpacing(0, 10);
@@ -161,18 +161,26 @@ Frame::Frame()
     layoutVisuel->addLayout(layoutTranslation);
     layoutVisuel->addLayout(layoutRotation);
 
+    //Lumière
+    layoutLight->addLayout(lightPositionLayout = new QHBoxLayout);
+    lightPositionLayout->addWidget(lightXSlider = new DebugSlider);
+    lightPositionLayout->addWidget(lightYSlider = new DebugSlider(3, 0));
+    lightPositionLayout->addWidget(lightZSlider = new DebugSlider);
+
     // Général
     rbMur->setChecked(true);
     mouseRotation->setChecked(true);
-    QWidget *colorWidget = new QWidget();
-    QWidget *formeWidget = new QWidget();
-    QWidget *visualisationWidget = new QWidget();
+    colorWidget = new QWidget;
+    formeWidget = new QWidget;
+    visualisationWidget = new QWidget;
     formeWidget->setLayout(layoutBoutonsForme);
     colorWidget->setLayout(layoutCouleur);
     visualisationWidget->setLayout(layoutVisuel);
+    lightWidget->setLayout(layoutLight);
     optionsTab->addTab(colorWidget, "Couleur");
     optionsTab->addTab(formeWidget, "Formes");
     optionsTab->addTab(visualisationWidget, "Visuel");
+    optionsTab->addTab(lightWidget, "Lumière");
 
     mainLayout = new QHBoxLayout;
     mainLayout->addWidget(scene3D);
@@ -208,6 +216,10 @@ Frame::Frame()
     QObject::connect(xRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
     QObject::connect(yRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
     QObject::connect(zRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+
+    QObject::connect(lightXSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
+    QObject::connect(lightYSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
+    QObject::connect(lightZSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
     createCube();
@@ -274,9 +286,9 @@ void Frame::changeColor() {
 }
 
 void Frame::changePosition() {
-    float x = sliderTranslationX->value();
-    float y = sliderTranslationY->value();
-    float z = sliderTranslationZ->value();
+    float x = (sliderTranslationX->value()/100.0)*5.;
+    float y = (sliderTranslationY->value()/100.0)*5.;
+    float z = (sliderTranslationZ->value()/100.0)*5.;
     scene3D->setPosition(QVector3D(x,y,z));
 }
 
@@ -290,4 +302,12 @@ void Frame::changeRotation() {
     } else if(zRotation->isChecked()){
         scene3D->setAxeRotation(3);
     }
+}
+
+void Frame::changeLightPosition()
+{
+    myLight.lightPosition.setX(lightXSlider->value());
+    myLight.lightPosition.setY(lightYSlider->value());
+    myLight.lightPosition.setZ(lightZSlider->value());
+    scene3D->repaint();
 }

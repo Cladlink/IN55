@@ -17,6 +17,8 @@
 
 #include "mainwidget.h"
 #include "colortextedit.h"
+#include "DebugSlider.h"
+#include "Light.h"
 
 using namespace std;
 
@@ -28,6 +30,8 @@ public:
     explicit Frame();
 
 private:
+    Light myLight;
+
     MainWidget *scene3D;
 
     //QTabWidget
@@ -53,6 +57,12 @@ private:
     QSlider *sliderTranslationX;
     QSlider *sliderTranslationY;
     QSlider *sliderTranslationZ;
+
+    //DebugSlider
+
+    DebugSlider *lightXSlider;
+    DebugSlider *lightYSlider;
+    DebugSlider *lightZSlider;
 
     //QPushButton
     QPushButton *boutonCube;
@@ -81,6 +91,7 @@ private:
     QHBoxLayout *layoutRouge;
     QHBoxLayout *layoutVert;
     QHBoxLayout *layoutBleu;
+    QHBoxLayout *lightPositionLayout;
     QHBoxLayout *mainLayout;
 
     //QVBoxLayout
@@ -88,7 +99,14 @@ private:
     QVBoxLayout *layoutBoutonsForme;
     QVBoxLayout *layoutTranslation;
     QVBoxLayout *layoutCouleur;
+    QVBoxLayout *layoutLight;
     QVBoxLayout *paramsLayout;
+
+    //QWidget
+    QWidget *colorWidget;
+    QWidget *formeWidget;
+    QWidget *visualisationWidget;
+    QWidget *lightWidget;
 
 private slots:
     void changeSize(int value);
@@ -101,6 +119,7 @@ private slots:
     void changeColor();
     void changeRotation();
     void changePosition();
+    void changeLightPosition();
 };
 
 #endif // FRAME_H

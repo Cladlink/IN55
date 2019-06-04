@@ -66,6 +66,8 @@ MainWidget::MainWidget(QWidget *parent) :
     beginning = QDateTime::currentMSecsSinceEpoch();
     pixmap.append(QPixmap(":/mur.png"));
     pixmap.append(QPixmap(":/nintendo.png"));
+    camera = new Camera;
+
 }
 
 MainWidget::~MainWidget()
@@ -211,13 +213,38 @@ void MainWidget::resizeGL(int w, int h)
 }
 //! [5]
 
+void MainWidget::repaint() {
+    paintGL();
+}
+
 void MainWidget::paintGL()
 {
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    QVector3D lightPositionWorld = myLight->lightPosition;
+
 //! [6]
     // Calculate model view transformation
+    QMatrix4x4 viewToProjectionMatrix;
+    viewToProjectionMatrix.perspective(60.0f, ((float)width()) / height(), 0.1f, 20.0f);
+    QMatrix4x4 worldToViewMatrix = camera->getWorldToViewMatrix();
+    QMatrix4x4 worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
+
+    QVector4D ambientLight(0.05f, 0.05f, 0.05f, 1.0f);
+    program.setUniformValue("ambientLightUniformLocation", ambientLight);
+
+    QVector3D color(0.f, 1.f, 0.05f);
+    program.setUniformValue("colorUniformLocation", color);
+
+    QVector3D eyePosition = camera->getPosition();
+    program.setUniformValue("eyePosition", eyePosition);
+
+    program.setUniformValue("lightPositionWorld", lightPositionWorld);
+
+    //fullTransformationUniformLocation = glGetUniformLocation(programID, "modelToProjectionMatrix");
+    //modelToWorldMatrixUniformLocation = glGetUniformLocation(programID, "modelToWorldMatrix");
+
     QMatrix4x4 matrix;
     matrix.translate(0.0, 0.0, -5.0);
     matrix.rotate(rotation);
@@ -239,6 +266,8 @@ void MainWidget::paintGL()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texId[getNumberBufferTexture()]);
+    //glBindTexture(GL_TEXTURE_2D, texId[0]);
+    //glBindTexture(GL_TEXTURE_2D, texId[1]);
 
     launch = QDateTime::currentMSecsSinceEpoch();
 
@@ -257,41 +286,7 @@ void MainWidget::paintGL()
     } else if (getObject() == "suzanne") {
         geometriesSuzanne->update(&program,getColor());
     }
-
-    /*QVector<QVector3D> test;
-    test = geometriesSquare->getPosition();
-    for (int i = 0; i<test.size(); i++) {
-        std::cout << "X : " << test[i].x() << " Y : " << test[i].y() << " Z : " << test[i].z() << endl;
-    }*/
-
 }
-
-//void MainWidget::repaint(){
-//    if (getObject() == "cube") {
-//        geometriesSquare->update(&program,getColor());
-//    } else if (getObject() == "pyramide") {
-//        geometriesPyramide->update(&program,getColor());
-//    } else if (getObject() == "Shape") {
-//        geometriesSphere->update(&program,getColor());
-//    } else if (getObject() == "torus") {
-//        geometriesTorus->update(&program,getColor());
-//    } else if (getObject() == "suzanne") {
-//        geometriesSuzanne->update(&program,getColor());
-//    }
-//}
-
-//void MainWidget::repaint(){
-//    if (getObject() == "cube") {
-//        geometriesSquare->update(&program,getColor());
-//        /*QVector<QVector3D> test;
-//        test = geometriesSquare->getPosition();
-//        for (int i = 0; i<test.size(); i++) {
-//            std::cout << "X : " << test[i].x() << " Y : " << test[i].y() << " Z : " << test[i].z() << endl;
-//        }*/
-//    } else if (getObject() == "pyramide") {
-//        geometriesPyramide->update(&program,getColor());
-//    }
-//}
 
 float MainWidget::getHomotethie(){
     return homotethie;
@@ -367,6 +362,41 @@ QVector3D MainWidget::getPosition() {
 }
 
 void MainWidget::setPosition(QVector3D _position) {
-    //std::cout << "X : " << _position.x() << "Y : " << _position.y() << "Z : " << _position.z() << endl;
     position = _position;
+}
+
+void MainWidget::mouseMoveEvent(QMouseEvent* e)
+{
+    //setFocus();
+    QVector2D mouse;
+    mouse.setX(e->x());
+    mouse.setY(e->y());
+    camera->mouseUpdate(mouse);
+    update();
+}
+
+void MainWidget::keyPressEvent(QKeyEvent* e)
+{
+    switch (e->key())
+    {
+    case Qt::Key::Key_Z:
+        camera->moveForward();
+        break;
+    case Qt::Key::Key_S:
+        camera->moveBackward();
+        break;
+    case Qt::Key::Key_Q:
+        camera->strafeLeft();
+        break;
+    case Qt::Key::Key_D:
+        camera->strafeRight();
+        break;
+    case Qt::Key::Key_R:
+        camera->moveUp();
+        break;
+    case Qt::Key::Key_F:
+        camera->moveDown();
+        break;
+    }
+    update();
 }

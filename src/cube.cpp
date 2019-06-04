@@ -26,10 +26,13 @@ void Cube::initGeometry()
     // Transfer vertex data to VBO 0
     arrayBuf.bind();
     arrayBuf.allocate(verticesCube, nbrVertices * sizeof(VertexData));
+    //arrayBuf.allocate(verticesCube2, nbrVertices * sizeof(VertexData));
 
     // Transfer index data to VBO 1
     indexBuf.bind();
     indexBuf.allocate(indicesCube, nbrIndices * sizeof(GLushort));
+    //indexBuf.allocate(indicesCube2, nbrIndices * sizeof(GLushort));
+
 //! [1]
 }
 

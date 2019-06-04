@@ -74,6 +74,7 @@ public:
         QVector3D position;
         QVector3D color;
         QVector2D uv;
+        QVector3D normal;
     };
 
 protected :

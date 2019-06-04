@@ -55,6 +55,8 @@
 #include "cube.h"
 #include "pyramide.h"
 #include "shape.h"
+#include "camera.h"
+#include "Light.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -108,6 +110,9 @@ protected:
     void initShaders();
     void initTextures();
 
+    void mouseMoveEvent(QMouseEvent*) override;
+    void keyPressEvent(QKeyEvent*) override;
+
 private:
     QBasicTimer timer;
     QOpenGLShaderProgram program;
@@ -135,6 +140,10 @@ private:
     QVector3D rotationAxis;
     QVector3D color;
     QVector3D position;
+
+    Light *myLight;
+
+    Camera* camera;
 
     qreal angularSpeed;
     QQuaternion rotation;

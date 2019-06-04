@@ -4,6 +4,8 @@ TARGET = template
 TEMPLATE = app
 
 SOURCES += \
+    src/DebugSlider.cpp \
+    src/camera.cpp \
     src/cube.cpp \
     src/igeometryengine.cpp \
     src/main.cpp \
@@ -15,6 +17,9 @@ SOURCES += \
     src/shape.cpp
 
 HEADERS += \
+    src/DebugSlider.h \
+    src/Light.h \
+    src/camera.h \
     src/cube.h \
     src/igeometryengine.h \
     src/mainwidget.h \
