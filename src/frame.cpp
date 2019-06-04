@@ -4,7 +4,7 @@ using namespace std;
 
 Frame::Frame()
 {
-    scene3D = new MainWidget();
+    scene3D = new MainWidget(&myLight);
     scene3D->setFixedSize(900, 700);
 
     // Tab
@@ -156,12 +156,13 @@ Frame::Frame()
     layoutRotation->addWidget(yRotation);
     layoutRotation->addWidget(zRotation);
 
-    QVBoxLayout *layoutVisuel = new QVBoxLayout;
+    layoutVisuel = new QVBoxLayout;
     layoutVisuel->addLayout(layoutHomothetie);
     layoutVisuel->addLayout(layoutTranslation);
     layoutVisuel->addLayout(layoutRotation);
 
     //Lumière
+    layoutLight = new QHBoxLayout;
     layoutLight->addLayout(lightPositionLayout = new QHBoxLayout);
     lightPositionLayout->addWidget(lightXSlider = new DebugSlider);
     lightPositionLayout->addWidget(lightYSlider = new DebugSlider(3, 0));
@@ -172,6 +173,7 @@ Frame::Frame()
     mouseRotation->setChecked(true);
     colorWidget = new QWidget;
     formeWidget = new QWidget;
+    lightWidget = new QWidget;
     visualisationWidget = new QWidget;
     formeWidget->setLayout(layoutBoutonsForme);
     colorWidget->setLayout(layoutCouleur);
@@ -222,8 +224,8 @@ Frame::Frame()
     QObject::connect(lightZSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
-    createCube();
-    changeTexture();
+    //createCube();
+    //changeTexture();
 }
 
 void Frame::changeSize(int value) {
@@ -309,5 +311,5 @@ void Frame::changeLightPosition()
     myLight.lightPosition.setX(lightXSlider->value());
     myLight.lightPosition.setY(lightYSlider->value());
     myLight.lightPosition.setZ(lightZSlider->value());
-    scene3D->repaint();
+    //scene3D->repaint();
 }

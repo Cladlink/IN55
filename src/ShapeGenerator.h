@@ -39,7 +39,7 @@ public:
     static ShapeData makeArrow();
     static ShapeData makePlane(uint dimensions = 10);
     static ShapeData makeTeapot(uint tesselation = 10);
-    //static ShapeData makeTeapot(uint tesselation = 10, const QMatrix4x4 &lidTransform = null);
+    //static ShapeData makeTeapot(uint tesselation = 10, const QMatrix4x4 &lidTransform = QMatrix4x4());
     static ShapeData makeSphere(uint tesselation = 20);
     static ShapeData makeTorus(uint tesselation = 20);
     static ShapeData generateNormals(const ShapeData& data);

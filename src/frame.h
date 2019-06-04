@@ -92,6 +92,7 @@ private:
     QHBoxLayout *layoutVert;
     QHBoxLayout *layoutBleu;
     QHBoxLayout *lightPositionLayout;
+    QHBoxLayout *layoutLight;
     QHBoxLayout *mainLayout;
 
     //QVBoxLayout
@@ -99,7 +100,7 @@ private:
     QVBoxLayout *layoutBoutonsForme;
     QVBoxLayout *layoutTranslation;
     QVBoxLayout *layoutCouleur;
-    QVBoxLayout *layoutLight;
+    QVBoxLayout *layoutVisuel;
     QVBoxLayout *paramsLayout;
 
     //QWidget

@@ -2,11 +2,9 @@
 
 const float Camera::MOVEMENT_SPEED = 0.1f;
 
-Camera::Camera() :
-    position(-3.11094999f, 2.23070025f, -2.86016989f),
-    viewDirection(0.663740635f, -0.492421985f, 0.562995136f),
-    UP(0.0f, 1.0f, 0.0f)
-{
+Camera::Camera() {
+    this->position = QVector3D(-3.11094999f, 2.23070025f, -2.86016989f);
+    this->viewDirection = QVector3D(0.663740635f, -0.492421985f, 0.562995136f);
 }
 
 void Camera::mouseUpdate(const QVector2D& newMousePosition)

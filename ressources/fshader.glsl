@@ -1,5 +1,5 @@
 #version 330
-
+/*
 flat in int fIsColor;
 in vec4 fColor;
 in vec2 UV;
@@ -13,6 +13,15 @@ out vec4 fragColor;
 uniform sampler2D image;
 uniform sampler2D mur;
 uniform sampler2D nintendo;
+
+out vec4 daColor;
+in vec3 normalWorld;
+in vec3 vertexPositionWorld;
+
+uniform vec3 lightPositionWorld;
+uniform vec3 eyePositionWorld;
+uniform vec4 ambientLight;
+uniform vec3 vertexToFragmentColor;*/
 
 out vec4 daColor;
 in vec3 normalWorld;
@@ -55,8 +64,8 @@ void main()
     s = pow(s, 20);
     vec4 specularLight = vec4(s, 0, 0, 1);
 
-    daColor = vec4(vertexToFragmentColor, 1) + ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
-
+    daColor = vec4(1.,1.,1.,1.);//ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
+    //vec4(vertexToFragmentColor, 1) +
     /*if (fIsColor == 0) {
         fragColor = vec4(texture2D(image, UV).rgb,1.0);
     } else if (fIsColor == 1 || fIsColor == 2 || fIsColor == 4) {

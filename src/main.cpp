@@ -50,6 +50,7 @@
 
 #include <QApplication>
 #include <QSurfaceFormat>
+#include <QGLFormat>
 
 #include "frame.h"
 #include "shape.h"
@@ -70,11 +71,6 @@ int main(int argc, char *argv[])
     frame.setFixedSize(1200, 800);
 
     frame.show();
-
-    /*QMatrix4x4 test = QMatrix4x4(-1.,0.,0.,0.,0.,1.,0.,0.,0.,0.,1.,0.,0.,0.,0.,1.);
-    QVector3D toto = QVector3D(-1.0,0.,0.);
-    test.map(QVector3D(-1.0,0.,0.));
-    qDebug() << "Date:" << test;*/
 
     return app.exec();
 }

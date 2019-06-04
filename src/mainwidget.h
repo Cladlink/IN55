@@ -78,18 +78,20 @@ class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions
 
 public:
     explicit MainWidget(QWidget *parent = 0);
+    explicit MainWidget(Light* _myLight, QWidget *parent = 0);
+
     ~MainWidget();
     void repaint();
 
     string readShaderCode(const char* fileName);
 
-    bool checkStatus(
+    /*bool checkStatus(
             GLuint objectID,
             PFNGLGETSHADERIVPROC objectPropertyGetterFunc,
             PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
             GLenum statusType);
     bool checkShaderStatus(GLuint shaderID);
-    bool checkProgramStatus(GLuint programID);
+    bool checkProgramStatus(GLuint programID);*/
 
     void sendDataToOpenGL();
 
@@ -124,8 +126,8 @@ protected:
     void initShaders();
     void initTextures();
 
-    void mouseMoveEvent(QMouseEvent*) override;
-    void keyPressEvent(QKeyEvent*) override;
+    void mouseMoveEvent(QMouseEvent*);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     QBasicTimer timer;

@@ -1,8 +1,8 @@
 #version 330
-layout(location=0) vec4 vertexPositionModel;
+/*layout(location=0) vec4 vertexPositionModel;
 layout(location=1) vec3 vertexColor;
 layout(location=2) vec3 normalModel;
-//layout(location = 1) in vec2 vertexUV;
+layout(location = 1) in vec2 vertexUV;
 uniform mat4 mvp;
 uniform vec4 homotethie;
 uniform float time;
@@ -26,6 +26,16 @@ uniform mat4 modelToProjectionMatrix;
 uniform mat4 modelToWorldMatrix;
 
 out vec3 normalWorld;
+out vec3 vertexPositionWorld;*/
+
+in layout(location=0) vec4 vertexPositionModel;
+in layout(location=1) vec3 vertexColor;
+in layout(location=2) vec3 normalModel;
+
+uniform mat4 modelToProjectionMatrix;
+uniform mat4 modelToWorldMatrix;
+
+out vec3 normalWorld;
 out vec3 vertexPositionWorld;
 
 float random (vec2 st) {
@@ -39,8 +49,8 @@ void main()
     gl_Position = modelToProjectionMatrix * vertexPositionModel;
     normalWorld = vec3(modelToWorldMatrix * vec4(normalModel, 0));
     vertexPositionWorld = vec3(modelToWorldMatrix * vertexPositionModel);
-    /*// Calculate vertex position in screen space
-    vec4 pos = vec4(position,1.) + translation;
+    // Calculate vertex position in screen space
+    /*vec4 pos = vec4(position,1.) + translation;
     pos = pos * homotethie;
     gl_Position = mvp * pos;
 
