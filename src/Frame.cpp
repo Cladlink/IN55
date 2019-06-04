@@ -1,4 +1,4 @@
-#include "frame.h"
+#include "Frame.h"
 
 using namespace std;
 
@@ -224,7 +224,7 @@ Frame::Frame()
     QObject::connect(lightZSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
-    //createCube();
+    createCube();
     //changeTexture();
 }
 
@@ -311,5 +311,5 @@ void Frame::changeLightPosition()
     myLight.lightPosition.setX(lightXSlider->value());
     myLight.lightPosition.setY(lightYSlider->value());
     myLight.lightPosition.setZ(lightZSlider->value());
-    //scene3D->repaint();
+    scene3D->repaint();
 }

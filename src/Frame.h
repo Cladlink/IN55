@@ -15,8 +15,8 @@
 #include <iostream>
 #include <QDebug>
 
-#include "mainwidget.h"
-#include "colortextedit.h"
+#include "MainWidget.h"
+#include "Colortextedit.h"
 #include "DebugSlider.h"
 #include "Light.h"
 

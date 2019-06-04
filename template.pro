@@ -4,38 +4,42 @@ TARGET = template
 TEMPLATE = app
 
 SOURCES += \
+    src/Camera.cpp \
+    src/Colortextedit.cpp \
+    src/Cube.cpp \
     src/DebugSlider.cpp \
+    src/Frame.cpp \
+    src/IGeometryEngine.cpp \
+    src/MainWidget.cpp \
+    src/Parameter.cpp \
+    src/Plane.cpp \
+    src/Pyramide.cpp \
+    src/Shape.cpp \
     src/ShapeGenerator.cpp \
-    src/camera.cpp \
-    src/cube.cpp \
-    src/igeometryengine.cpp \
-    src/main.cpp \
-    src/mainwidget.cpp \
-    src/frame.cpp \
-    src/parameter.cpp \
-    src/pyramide.cpp \
-    src/colortextedit.cpp \
-    src/shape.cpp
+    src/main.cpp
 
 HEADERS += \
+    src/Camera.h \
+    src/Colortextedit.h \
+    src/Cube.h \
     src/DebugSlider.h \
+    src/Frame.h \
+    src/IGeometryEngine.h \
     src/Light.h \
+    src/MainWidget.h \
+    src/Parameter.h \
+    src/Plane.h \
+    src/Pyramide.h \
+    src/Shape.h \
     src/ShapeData.h \
     src/ShapeGenerator.h \
     src/TeapotData.h \
     src/Vertex.h \
-    src/camera.h \
-    src/cube.h \
-    src/igeometryengine.h \
-    src/mainwidget.h \
-    src/frame.h \
-    src/parameter.h \
-    src/pyramide.h \
-    colortextedit.h \
-    src/colortextedit.h \
-    src/shape.h
+    colortextedit.h
 
 RESOURCES += \
     ressources/shaders.qrc \
 
-DISTFILES +=
+DISTFILES += \
+    ressources/fShaderThroughCode.glsl \
+    ressources/vShaderThroughCode.glsl

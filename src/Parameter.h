@@ -1,7 +1,7 @@
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
-#include "mainwidget.h"
+#include "MainWidget.h"
 
 class parameter
 {

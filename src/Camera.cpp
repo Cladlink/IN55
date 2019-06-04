@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "Camera.h"
 
 const float Camera::MOVEMENT_SPEED = 0.1f;
 

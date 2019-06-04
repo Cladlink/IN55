@@ -28,15 +28,16 @@ uniform mat4 modelToWorldMatrix;
 out vec3 normalWorld;
 out vec3 vertexPositionWorld;*/
 
-in layout(location=0) vec4 vertexPositionModel;
-in layout(location=1) vec3 vertexColor;
-in layout(location=2) vec3 normalModel;
+in vec4 position;
+in vec3 color;
+in vec3 normal;
 
 uniform mat4 modelToProjectionMatrix;
 uniform mat4 modelToWorldMatrix;
 
 out vec3 normalWorld;
 out vec3 vertexPositionWorld;
+out vec4 fColor;
 
 float random (vec2 st) {
     return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
@@ -45,10 +46,11 @@ float random (vec2 st) {
 //! [0]
 void main()
 {
-
-    gl_Position = modelToProjectionMatrix * vertexPositionModel;
-    normalWorld = vec3(modelToWorldMatrix * vec4(normalModel, 0));
-    vertexPositionWorld = vec3(modelToWorldMatrix * vertexPositionModel);
+    vec4 pos = vec4(position) * vec4(1.,1.,1.,1.);
+    gl_Position = modelToProjectionMatrix * position;
+    normalWorld = vec3(modelToWorldMatrix * vec4(normal, 0));
+    vertexPositionWorld = vec3(modelToWorldMatrix * position);
+    fColor = vec4(color,1.0);
     // Calculate vertex position in screen space
     /*vec4 pos = vec4(position,1.) + translation;
     pos = pos * homotethie;

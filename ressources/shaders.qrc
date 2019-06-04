@@ -7,7 +7,5 @@
         <file>sphere.obj</file>
         <file>suzanne.obj</file>
         <file>torus.obj</file>
-        <file>fShaderThroughCode.glsl</file>
-        <file>vShaderThroughCode.glsl</file>
     </qresource>
 </RCC>

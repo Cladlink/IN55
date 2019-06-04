@@ -1,7 +1,7 @@
 #ifndef Shape_H
 #define Shape_H
 
-#include "igeometryengine.h"
+#include "IGeometryEngine.h"
 #include <iostream>
 #include <fstream>
 #include <QVector2D>

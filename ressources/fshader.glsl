@@ -23,14 +23,15 @@ uniform vec3 eyePositionWorld;
 uniform vec4 ambientLight;
 uniform vec3 vertexToFragmentColor;*/
 
-out vec4 daColor;
+in vec4 fColor;
 in vec3 normalWorld;
 in vec3 vertexPositionWorld;
 
 uniform vec3 lightPositionWorld;
 uniform vec3 eyePositionWorld;
 uniform vec4 ambientLight;
-uniform vec3 vertexToFragmentColor;
+
+out vec4 daColor;
 
 float random (vec2 st) {
     return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
@@ -64,7 +65,8 @@ void main()
     s = pow(s, 20);
     vec4 specularLight = vec4(s, 0, 0, 1);
 
-    daColor = vec4(1.,1.,1.,1.);//ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
+    daColor = vec4(fColor)+ ambientLight + clamp(diffuseLight, 0, 1) + specularLight;//vec4(1.,1.,1.,1.);
+            //+ ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
     //vec4(vertexToFragmentColor, 1) +
     /*if (fIsColor == 0) {
         fragColor = vec4(texture2D(image, UV).rgb,1.0);

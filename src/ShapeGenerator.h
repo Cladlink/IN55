@@ -3,10 +3,13 @@
 
 #include "ShapeData.h"
 #include <QMatrix3x3>
+#include <QOpenGLFunctions>
+#include <QOpenGLBuffer>
+#include <QOpenGLShaderProgram>
 
 typedef unsigned int uint;
 
-class ShapeGenerator
+class ShapeGenerator : protected QOpenGLFunctions
 {
     static ShapeData makePlaneVerts(uint dimensions);
     static ShapeData makePlaneIndices(uint dimensions);

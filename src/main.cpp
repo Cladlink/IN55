@@ -52,8 +52,8 @@
 #include <QSurfaceFormat>
 #include <QGLFormat>
 
-#include "frame.h"
-#include "shape.h"
+#include "Frame.h"
+#include "Shape.h"
 
 int main(int argc, char *argv[])
 {

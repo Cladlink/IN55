@@ -1,4 +1,4 @@
-#include "igeometryengine.h"
+#include "IGeometryEngine.h"
 
 //! [0]
 IGeometryEngine::IGeometryEngine(): indexBuf(QOpenGLBuffer::IndexBuffer)

@@ -1,4 +1,4 @@
- #include "pyramide.h"
+ #include "Pyramide.h"
 
 Pyramide::Pyramide()
 {

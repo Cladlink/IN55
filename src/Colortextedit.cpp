@@ -1,4 +1,4 @@
-#include "colortextedit.h"
+#include "Colortextedit.h"
 
 colorTextEdit::colorTextEdit(QString _value)
 {

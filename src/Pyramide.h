@@ -1,7 +1,7 @@
 #ifndef PYRAMIDE_H
 #define PYRAMIDE_H
 
-#include "igeometryengine.h"
+#include "IGeometryEngine.h"
 
 class Pyramide : public IGeometryEngine
 {
@@ -13,11 +13,6 @@ public:
 
     void drawGeometry(QOpenGLShaderProgram *program) override;
 
-//    struct VertexData
-//    {
-//        QVector3D position;
-//        QVector3D color;
-//    };
 private :
     VertexData verticesPyramide[16] = {
         {QVector3D(0.f, 1.f, 0.f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.5f, 1.0f)}, //0 -> 0

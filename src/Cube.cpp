@@ -1,4 +1,4 @@
-#include "cube.h"
+#include "Cube.h"
 
 Cube::Cube()
 {
@@ -9,7 +9,7 @@ Cube::Cube()
     indexBuf.create();
     // Initializes cube geometry and transfers it to VBOs
     nbrIndices = 36;
-    nbrVertices = 24;
+    nbrVertices = 72;
     initGeometry();
 }
 
@@ -26,12 +26,10 @@ void Cube::initGeometry()
     // Transfer vertex data to VBO 0
     arrayBuf.bind();
     arrayBuf.allocate(verticesCube, nbrVertices * sizeof(VertexData));
-    //arrayBuf.allocate(verticesCube2, nbrVertices * sizeof(VertexData));
 
     // Transfer index data to VBO 1
     indexBuf.bind();
     indexBuf.allocate(indicesCube, nbrIndices * sizeof(GLushort));
-    //indexBuf.allocate(indicesCube2, nbrIndices * sizeof(GLushort));
 
 //! [1]
 }
@@ -99,9 +97,9 @@ void Cube::update(QOpenGLShaderProgram *program, QVector3D _color){
 
     offset += sizeof(QVector3D);
 
-    int uvLocation = program->attributeLocation("vertexUV");
-    program->enableAttributeArray(uvLocation);
-    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
+    int normalLocation = program->attributeLocation("normal");
+    program->enableAttributeArray(normalLocation);
+    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
 
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);

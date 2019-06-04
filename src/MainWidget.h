@@ -51,11 +51,12 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include "igeometryengine.h"
-#include "cube.h"
-#include "pyramide.h"
-#include "shape.h"
-#include "camera.h"
+#include "IGeometryEngine.h"
+#include "Cube.h"
+#include "Pyramide.h"
+#include "Shape.h"
+#include "Camera.h"
+#include "Plane.h"
 #include "Light.h"
 #include "ShapeData.h"
 #include "ShapeGenerator.h"
@@ -83,18 +84,6 @@ public:
     ~MainWidget();
     void repaint();
 
-    string readShaderCode(const char* fileName);
-
-    /*bool checkStatus(
-            GLuint objectID,
-            PFNGLGETSHADERIVPROC objectPropertyGetterFunc,
-            PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
-            GLenum statusType);
-    bool checkShaderStatus(GLuint shaderID);
-    bool checkProgramStatus(GLuint programID);*/
-
-    void sendDataToOpenGL();
-
     float getHomotethie();
     void setHomotethie(float _omotethie);
     string getObject();
@@ -117,6 +106,8 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void keyPressEvent(QKeyEvent *e) override;
     void timerEvent(QTimerEvent *e) override;
 
     void initializeGL() override;
@@ -126,15 +117,13 @@ protected:
     void initShaders();
     void initTextures();
 
-    void mouseMoveEvent(QMouseEvent*);
-    void keyPressEvent(QKeyEvent *e);
-
 private:
     QBasicTimer timer;
     QOpenGLShaderProgram program;
     QVector<QPixmap> pixmap;
     Cube *geometriesSquare;
     Pyramide *geometriesPyramide;
+    Plane *geometriesPlane;
     Shape *geometriesSphere;
     Shape *geometriesTorus;
     Shape *geometriesSuzanne;
@@ -159,21 +148,8 @@ private:
 
     Light *myLight;
 
-    GLuint programID;
-    GLuint passThroughProgramID;
-    GLuint theBufferID;
-
-
-    GLuint cubeVertexArrayObjectID;
-    GLuint cubeNumIndices;
-    GLuint cubeIndexByteOffset;
-
-    GLuint planeVertexArrayObjectID;
-    GLuint planeNumIndices;
-    GLuint planeIndexByteOffset;
-
-    ShapeData plane;
-    ShapeData cube;
+    int nbrVertices;
+    int nbrIndices;
 
     Camera* camera;
 
