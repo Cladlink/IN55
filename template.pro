@@ -5,6 +5,7 @@ TEMPLATE = app
 
 SOURCES += \
     src/DebugSlider.cpp \
+    src/ShapeGenerator.cpp \
     src/camera.cpp \
     src/cube.cpp \
     src/igeometryengine.cpp \
@@ -19,6 +20,10 @@ SOURCES += \
 HEADERS += \
     src/DebugSlider.h \
     src/Light.h \
+    src/ShapeData.h \
+    src/ShapeGenerator.h \
+    src/TeapotData.h \
+    src/Vertex.h \
     src/camera.h \
     src/cube.h \
     src/igeometryengine.h \
@@ -32,3 +37,5 @@ HEADERS += \
 
 RESOURCES += \
     ressources/shaders.qrc \
+
+DISTFILES +=

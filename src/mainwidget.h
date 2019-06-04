@@ -57,6 +57,8 @@
 #include "shape.h"
 #include "camera.h"
 #include "Light.h"
+#include "ShapeData.h"
+#include "ShapeGenerator.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -78,6 +80,18 @@ public:
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget();
     void repaint();
+
+    string readShaderCode(const char* fileName);
+
+    bool checkStatus(
+            GLuint objectID,
+            PFNGLGETSHADERIVPROC objectPropertyGetterFunc,
+            PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
+            GLenum statusType);
+    bool checkShaderStatus(GLuint shaderID);
+    bool checkProgramStatus(GLuint programID);
+
+    void sendDataToOpenGL();
 
     float getHomotethie();
     void setHomotethie(float _omotethie);
@@ -142,6 +156,22 @@ private:
     QVector3D position;
 
     Light *myLight;
+
+    GLuint programID;
+    GLuint passThroughProgramID;
+    GLuint theBufferID;
+
+
+    GLuint cubeVertexArrayObjectID;
+    GLuint cubeNumIndices;
+    GLuint cubeIndexByteOffset;
+
+    GLuint planeVertexArrayObjectID;
+    GLuint planeNumIndices;
+    GLuint planeIndexByteOffset;
+
+    ShapeData plane;
+    ShapeData cube;
 
     Camera* camera;
 

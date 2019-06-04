@@ -52,11 +52,19 @@
 
 #include <QMouseEvent>
 #include <QTime>
-
+#include <QGuiApplication>
+#include <QOpenGLContext>
+#include <QWindow>
+#include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLVertexArrayObject>
 #include <math.h>
 
 const int NBR_TEXTURES = 10;
 GLuint texId[NBR_TEXTURES];
+
+const uint NUM_VERTICES_PER_TRI = 3;
+const uint NUM_FLOATS_PER_VERTICE = 9;
+const uint VERTEX_BYTE_SIZE = NUM_FLOATS_PER_VERTICE * sizeof(float);
 
 MainWidget::MainWidget(QWidget *parent) :
     QOpenGLWidget(parent),
@@ -177,6 +185,68 @@ void MainWidget::initShaders()
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap[i].width(), pixmap[i].height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap[i].toImage().bits());
     }
 
+    GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+    GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+    const GLchar* adapter[1];
+    string temp = readShaderCode("vshader.glsl");
+    adapter[0] = temp.c_str();
+    glShaderSource(vertexShaderID, 1, adapter, 0);
+    temp = readShaderCode("fshader.glsl");
+    adapter[0] = temp.c_str();
+    glShaderSource(fragmentShaderID, 1, adapter, 0);
+
+    glCompileShader(vertexShaderID);
+    glCompileShader(fragmentShaderID);
+
+    /*if (!checkShaderStatus(vertexShaderID) || !checkShaderStatus(fragmentShaderID))
+        return;*/
+
+    programID = glCreateProgram();
+    glAttachShader(programID, vertexShaderID);
+    glAttachShader(programID, fragmentShaderID);
+
+    glLinkProgram(programID);
+
+    /*if (!checkProgramStatus(programID))
+        return;*/
+
+    glDeleteShader(vertexShaderID);
+    glDeleteShader(fragmentShaderID);
+
+    vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+    fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+    temp = readShaderCode("vShaderThroughCode.glsl");
+    adapter[0] = temp.c_str();
+    glShaderSource(vertexShaderID, 1, adapter, 0);
+    temp = readShaderCode("fShaderThroughCode.glsl");
+    adapter[0] = temp.c_str();
+    glShaderSource(fragmentShaderID, 1, adapter, 0);
+
+    glCompileShader(vertexShaderID);
+    glCompileShader(fragmentShaderID);
+
+    /*if (!checkShaderStatus(vertexShaderID) || !checkShaderStatus(fragmentShaderID))
+        return;*/
+
+    passThroughProgramID = glCreateProgram();
+    glAttachShader(passThroughProgramID, vertexShaderID);
+    glAttachShader(passThroughProgramID, fragmentShaderID);
+
+    glLinkProgram(passThroughProgramID);
+
+    if (!checkProgramStatus(passThroughProgramID))
+        return;
+
+    glDeleteShader(vertexShaderID);
+    glDeleteShader(fragmentShaderID);
+
+
+    //programID = glCreateProgram();
+
+
+    /*
     // Compile vertex shader
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
         close();
@@ -191,7 +261,7 @@ void MainWidget::initShaders()
 
     // Bind shader pipeline for use
     if (!program.bind())
-        close();
+        close();*/
 }
 //! [3]
 
@@ -220,7 +290,13 @@ void MainWidget::repaint() {
 void MainWidget::paintGL()
 {
     // Clear color and depth buffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glViewport(0, 0, width(), height());
+
+    QMatrix4x4 modelToProjectionMatrix;
+
+    GLuint fullTransformationUniformLocation;
+    GLuint modelToWorldMatrixUniformLocation;
 
     QVector3D lightPositionWorld = myLight->lightPosition;
 
@@ -231,7 +307,35 @@ void MainWidget::paintGL()
     QMatrix4x4 worldToViewMatrix = camera->getWorldToViewMatrix();
     QMatrix4x4 worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 
+    glUseProgram(programID);
+    GLint ambientLightUniformLocation = glGetUniformLocation(programID, "ambientLight");
     QVector4D ambientLight(0.05f, 0.05f, 0.05f, 1.0f);
+    glUniform4fv(ambientLightUniformLocation, 1, &ambientLight[0]);
+    GLint colorUniformLocation = glGetUniformLocation(programID, "vertexToFragmentColor");
+    QVector3D color(0.f, 1.f, 0.05f);
+    glUniform4fv(colorUniformLocation, 1, &color[0]);
+    GLint eyePositionWorldUniformLocation = glGetUniformLocation(programID, "eyePositionWorld");
+    QVector3D eyePosition = camera->getPosition();
+    glUniform3fv(eyePositionWorldUniformLocation, 1, &eyePosition[0]);
+    GLint lightPositionUniformLocation = glGetUniformLocation(programID, "lightPositionWorld");
+    glUniform3fv(lightPositionUniformLocation, 1, &lightPositionWorld[0]);
+
+    fullTransformationUniformLocation = glGetUniformLocation(programID, "modelToProjectionMatrix");
+    modelToWorldMatrixUniformLocation = glGetUniformLocation(programID, "modelToWorldMatrix");
+    glGenBuffers(1,&cubeVertexArrayObjectID);
+
+    QMatrix4x4 cubeModelToWorldMatrix;
+    cubeModelToWorldMatrix.translate(3.0f, 0.0f, 3.0f);
+    modelToProjectionMatrix = worldToProjectionMatrix * cubeModelToWorldMatrix;
+    QVector4D rowMatrixModelToProjection = modelToProjectionMatrix.row(0);
+    glUniformMatrix4fv(fullTransformationUniformLocation, 1, GL_FALSE,
+                       &rowMatrixModelToProjection[0]);
+    QVector4D rowMatrixModelToWorld = cubeModelToWorldMatrix.row(0);
+    glUniformMatrix4fv(modelToWorldMatrixUniformLocation, 1, GL_FALSE,
+        &rowMatrixModelToWorld[0]);
+    glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexByteOffset);
+
+    /*QVector4D ambientLight(0.05f, 0.05f, 0.05f, 1.0f);
     program.setUniformValue("ambientLightUniformLocation", ambientLight);
 
     QVector3D color(0.f, 1.f, 0.05f);
@@ -242,8 +346,8 @@ void MainWidget::paintGL()
 
     program.setUniformValue("lightPositionWorld", lightPositionWorld);
 
-    //fullTransformationUniformLocation = glGetUniformLocation(programID, "modelToProjectionMatrix");
-    //modelToWorldMatrixUniformLocation = glGetUniformLocation(programID, "modelToWorldMatrix");
+    fullTransformationUniformLocation = glGetUniformLocation(programID, "modelToProjectionMatrix");
+    modelToWorldMatrixUniformLocation = glGetUniformLocation(programID, "modelToWorldMatrix");*/
 
     QMatrix4x4 matrix;
     matrix.translate(0.0, 0.0, -5.0);
@@ -399,4 +503,198 @@ void MainWidget::keyPressEvent(QKeyEvent* e)
         break;
     }
     update();
+}
+
+string MainWidget::readShaderCode(const char* fileName)
+{
+    ifstream meInput(fileName);
+    if (!meInput.good())
+    {
+        cout << "File failed to load..." << fileName;
+        exit(1);
+    }
+    return std::string(
+        std::istreambuf_iterator<char>(meInput),
+        std::istreambuf_iterator<char>());
+}
+
+bool MainWidget::checkStatus(
+    GLuint objectID,
+    PFNGLGETSHADERIVPROC objectPropertyGetterFunc,
+    PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
+    GLenum statusType)
+{
+    GLint status;
+    objectPropertyGetterFunc(objectID, statusType, &status);
+    if (status != GL_TRUE)
+    {
+        GLint infoLogLength;
+        objectPropertyGetterFunc(objectID, GL_INFO_LOG_LENGTH, &infoLogLength);
+        GLchar* buffer = new GLchar[infoLogLength];
+
+        GLsizei bufferSize;
+        getInfoLogFunc(objectID, infoLogLength, &bufferSize, buffer);
+        cout << buffer << endl;
+        delete[] buffer;
+        return false;
+    }
+    return true;
+}
+
+/*bool MainWidget::checkShaderStatus(GLuint shaderID)
+{
+    return checkStatus(shaderID, glGetShaderiv(shaderID,), glGetShaderInfoLog, GL_COMPILE_STATUS);
+}
+
+bool MainWidget::checkProgramStatus(GLuint programID)
+{
+    return checkStatus(programID, glGetProgramiv, glGetProgramInfoLog, GL_LINK_STATUS);
+}*/
+
+
+void MainWidget::sendDataToOpenGL()
+{
+    cube = ShapeGenerator::makeCube();
+    plane = ShapeGenerator::makePlane();
+    /*ShapeData arrow = ShapeGenerator::makeArrow();
+    ShapeData plane = ShapeGenerator::makePlane();
+    ShapeData teapot = ShapeGenerator::makeTeapot();
+    ShapeData sphere = ShapeGenerator::makeSphere(5);
+    ShapeData torus = ShapeGenerator::makeTorus();*/
+
+    glGenBuffers(1, &theBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
+    glBufferData(GL_ARRAY_BUFFER,
+        cube.vertexBufferSize() + cube.indexBufferSize()+
+        plane.vertexBufferSize() + plane.indexBufferSize()/* +
+        arrow.vertexBufferSize() + arrow.indexBufferSize() +
+        teapot.vertexBufferSize() + teapot.indexBufferSize() +
+        sphere.vertexBufferSize() + sphere.indexBufferSize() +
+        torus.vertexBufferSize() + torus.indexBufferSize()*/, 0, GL_STATIC_DRAW);
+
+    GLsizeiptr currentOffset = 0;
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, cube.vertexBufferSize(), cube.vertices);
+    currentOffset += cube.vertexBufferSize();
+    cubeIndexByteOffset = currentOffset;
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, cube.indexBufferSize(), cube.indices);
+    currentOffset += cube.indexBufferSize();
+
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, plane.vertexBufferSize(), plane.vertices);
+    currentOffset += plane.vertexBufferSize();
+    planeIndexByteOffset = currentOffset;
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, plane.indexBufferSize(), plane.indices);
+    currentOffset += plane.indexBufferSize();
+
+    /*glBufferSubData(GL_ARRAY_BUFFER, currentOffset, arrow.vertexBufferSize(), arrow.vertices);
+    currentOffset += arrow.vertexBufferSize();
+    arrowIndexByteOffset = currentOffset;
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, arrow.indexBufferSize(), arrow.indices);
+    currentOffset += arrow.indexBufferSize();
+
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, teapot.vertexBufferSize(), teapot.vertices);
+    currentOffset += teapot.vertexBufferSize();
+    teapotIndexByteOffset = currentOffset;
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, teapot.indexBufferSize(), teapot.indices);
+    currentOffset += teapot.indexBufferSize();
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, sphere.vertexBufferSize(), sphere.vertices);
+    currentOffset += sphere.vertexBufferSize();
+    sphereIndexByteOffset = currentOffset;
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, sphere.indexBufferSize(), sphere.indices);
+    currentOffset += sphere.indexBufferSize();
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, torus.vertexBufferSize(), torus.vertices);
+    currentOffset += torus.vertexBufferSize();
+    torusIndexByteOffset = currentOffset;
+    glBufferSubData(GL_ARRAY_BUFFER, currentOffset, torus.indexBufferSize(), torus.indices);
+    currentOffset += torus.indexBufferSize();*/
+
+    cubeNumIndices = cube.numIndices;
+    planeNumIndices = plane.numIndices;
+    /*arrowNumIndices = arrow.numIndices;
+
+    teapotNumIndices = teapot.numIndices;
+    sphereNumIndices = sphere.numIndices;
+    torusNumIndices = torus.numIndices;*/
+    /*QOpenGLVertexArrayObject* m_vao1 = new QOpenGLVertexArrayObject( this );
+    m_vao1->create();
+    m_vao1->bind();
+    m_vao1->*/
+    glGenVertexArrays(1, &cubeVertexArrayObjectID);
+    glGenVertexArrays(1, &planeVertexArrayObjectID);
+    /*glGenVertexArrays(1, &arrowVertexArrayObjectID);
+
+    glGenVertexArrays(1, &teapotVertexArrayObjectID);
+    glGenVertexArrays(1, &sphereVertexArrayObjectID);
+    glGenVertexArrays(1, &torusVertexArrayObjectID);*/
+
+    glBindVertexArray(cubeVertexArrayObjectID);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, 0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(sizeof(float) * 3));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(sizeof(float) * 6));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
+
+    glBindVertexArray(planeVertexArrayObjectID);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
+    GLuint planeByteOffset = cube.vertexBufferSize() + cube.indexBufferSize();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)planeByteOffset);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(planeByteOffset + sizeof(float) * 3));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(planeByteOffset + sizeof(float) * 6));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
+
+    /*glBindVertexArray(arrowVertexArrayObjectID);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
+    GLuint arrowByteOffset = planeByteOffset + plane.vertexBufferSize() + plane.indexBufferSize();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)arrowByteOffset);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(arrowByteOffset + sizeof(float) * 3));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(arrowByteOffset + sizeof(float) * 6));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
+
+    glBindVertexArray(teapotVertexArrayObjectID);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
+    GLuint teapotByteOffset = arrowByteOffset + arrow.vertexBufferSize() + arrow.indexBufferSize();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)teapotByteOffset);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(teapotByteOffset + sizeof(float) * 3));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(teapotByteOffset + sizeof(float) * 6));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
+
+    glBindVertexArray(sphereVertexArrayObjectID);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
+    GLuint sphereByteOffset = teapotByteOffset + teapot.vertexBufferSize() + teapot.indexBufferSize();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)sphereByteOffset);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(sphereByteOffset + sizeof(float) * 3));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(sphereByteOffset + sizeof(float) * 6));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
+
+    glBindVertexArray(torusVertexArrayObjectID);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
+    GLuint torusByteOffset = sphereByteOffset + sphere.vertexBufferSize() + sphere.indexBufferSize();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)torusByteOffset);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(torusByteOffset + sizeof(float) * 3));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (void*)(torusByteOffset + sizeof(float) * 6));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);*/
+
+    cube.cleanup();
+    plane.cleanup();
+    /*arrow.cleanup();
+    teapot.cleanup();
+    sphere.cleanup();
+    torus.cleanup();*/
 }
