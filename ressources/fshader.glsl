@@ -65,6 +65,7 @@ void main()
     vec4 specularLight = vec4(s, 0, 0, 1);
 
     daColor = fColor + ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
+
     //daColor = vec4(fColor) /*
             //+ ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
     //vec4(vertexToFragmentColor, 1) +

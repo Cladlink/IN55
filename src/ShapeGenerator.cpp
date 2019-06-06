@@ -653,7 +653,7 @@ void ShapeGenerator::buildPatch(QVector3D patch[][4],
 
 void ShapeGenerator::getPatch(int patchNum, QVector3D patch[][4], bool reverseV)
 {
-    for (int u = 0; u < 4; u++) {          // Loop in u direction
+    /*for (int u = 0; u < 4; u++) {          // Loop in u direction
         for (int v = 0; v < 4; v++) {     // Loop in v direction
             if (reverseV) {
                 patch[u][v] = QVector3D(
@@ -670,7 +670,7 @@ void ShapeGenerator::getPatch(int patchNum, QVector3D patch[][4], bool reverseV)
                     );
             }
         }
-    }
+    }*/
 }
 
 void ShapeGenerator::computeBasisFunctions(float * B, float * dB, int grid) {

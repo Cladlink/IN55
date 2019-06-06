@@ -57,8 +57,13 @@
 #include <iostream>
 #include <QVector2D>
 #include <QVector3D>
+#include <math.h>
 #include "vertex.h"
 #include "ShapeData.h"
+#include <QtMath>
+#include "TeapotData.h"
+
+#define PI 3.14159265359
 #define NUM_ARRAY_ELEMENTS(a) sizeof(a) / sizeof(*a)
 
 using namespace std;
@@ -74,6 +79,38 @@ public:
     void initGeometry(Vertex *verticesShape, unsigned short *indicesShape);
 
     void drawGeometry(QOpenGLShaderProgram *program);
+
+    QVector3D randomColor();
+    ShapeData makeArrow();
+    ShapeData makeCube();
+    ShapeData makePlaneVerts(uint dimensions);
+    ShapeData makePlaneIndices(uint dimensions);
+    ShapeData makePlaneUnseamedIndices(uint tesselation);
+    ShapeData makePyramide();
+    ShapeData makeSphere(uint tesselation = 20);
+    ShapeData makeTeapot(uint tesselation = 10, const QMatrix4x4 &lidTransform = QMatrix4x4());
+    ShapeData makeTorus(uint tesselation = 20);
+
+    void generatePatches(float * v, float * n, float * tc, unsigned short* el, int grid);
+    void moveLid(int grid, float *v, const QMatrix4x4 &lidTransform);
+    void buildPatchReflect(int patchNum,
+       float *B, float *dB,
+       float *v, float *n,
+       float *tc, unsigned short *el,
+       int &index, int &elIndex, int &tcIndex, int grid,
+       bool reflectX, bool reflectY);
+    void buildPatch(QVector3D patch[][4],
+       float *B, float *dB,
+       float *v, float *n, float *tc,
+       unsigned short *el,
+       int &index, int &elIndex, int &tcIndex,
+       int grid, QMatrix3x3 reflect,
+       bool invertNormal);
+    void getPatch(int patchNum, QVector3D patch[][4], bool reverseV);
+    void computeBasisFunctions(float * B, float * dB, int grid);
+    QVector3D evaluate(int gridU, int gridV, float *B, QVector3D patch[][4]);
+    QVector3D evaluateNormal(int gridU, int gridV,
+       float *B, float *dB, QVector3D patch[][4]);
 
 protected :
     QOpenGLBuffer arrayBuf;

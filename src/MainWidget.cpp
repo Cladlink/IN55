@@ -56,7 +56,7 @@
 #include <QOpenGLContext>
 #include <QWindow>
 #include <QOpenGLVertexArrayObject>
-#include <math.h>
+
 
 const int NBR_TEXTURES = 10;
 GLuint texId[NBR_TEXTURES];
@@ -176,7 +176,11 @@ void MainWidget::initializeGL()
     geometriesSquare = new Cube;
     geometriesLight = new Cube;
     geometriesPyramide = new Pyramide;
+    geometriesArrow = new Arrow;
+    geometriesTeapot = new Teapot();
     geometriesPlane = new Plane(20);
+    geometriesSphere = new Sphere(10);
+    geometriesTorus = new Torus();
     //geometriesPyramide = new Pyramide;
     /*geometriesPyramide = new Pyramide;
     geometriesSphere = new Shape("IN55/ressources/sphere.obj");
@@ -277,10 +281,14 @@ void MainWidget::paintGL()
     program.setUniformValue("isColor",isColor);
 
     geometriesSquare->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPositionCube());
+    geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(-1.,2.,-1.));
+    geometriesTorus->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,4.,0.));
     geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(1.,1.,1.));
+    geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(-2.,2.,2.));
     geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,0.,0.));
-
-
+    modelToProjectionMatrix.rotate(-90,QVector3D(1.f,0.f,0.f));
+    geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(3.,2.,3.));
+    modelToProjectionMatrix.rotate(90,QVector3D(1.f,0.f,0.f));
 //! [6]
     /*if (getObject() == "cube") {
         geometriesSquare->update(&program,getColor());

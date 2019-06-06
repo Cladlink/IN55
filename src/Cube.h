@@ -14,7 +14,7 @@ public:
     void initGeometry();
     void drawGeometry(QOpenGLShaderProgram *program);
 
-    ShapeData makeCube();
+
 
 private :
     Vertex *verticesCube;

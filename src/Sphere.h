@@ -1,25 +1,25 @@
-#ifndef PLANE_H
-#define PLANE_H
+#ifndef SPHERE_H
+#define SPHERE_H
 
 #include "IGeometryEngine.h"
 
-
-class Plane : public IGeometryEngine
+class Sphere : public IGeometryEngine
 {
 public:
-    Plane(uint _dimensions = 10);
-    ~Plane();
+    Sphere(uint _tesselation = 20);
+    ~Sphere() override;
     void update(QOpenGLShaderProgram *program,QVector3D _color,
                 QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
                 QVector3D _position);
     void initGeometry();
-
     void drawGeometry(QOpenGLShaderProgram *program);
 
+
+
 private :
-    uint dimensions;
-    Vertex *verticesPlane;
-    unsigned short *indicesPlane;
+    uint tesselation;
+    Vertex *verticesSphere;
+    unsigned short *indicesSphere;
 };
 
-#endif // PLANE_H
+#endif // SPHERE_H

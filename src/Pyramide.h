@@ -15,7 +15,7 @@ public:
 
     void drawGeometry(QOpenGLShaderProgram *program);
 
-    ShapeData makePyramide();
+
 
 private :
     Vertex *verticesPyramide;

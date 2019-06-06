@@ -58,6 +58,10 @@
 #include "Camera.h"
 #include "Plane.h"
 #include "Light.h"
+#include "Arrow.h"
+#include "Teapot.h"
+#include "Torus.h"
+#include "Sphere.h"
 #include "ShapeData.h"
 #include "ShapeGenerator.h"
 
@@ -125,8 +129,10 @@ private:
     Cube *geometriesLight;
     Pyramide *geometriesPyramide;
     Plane *geometriesPlane;
-    Shape *geometriesSphere;
-    Shape *geometriesTorus;
+    Arrow *geometriesArrow;
+    Teapot *geometriesTeapot;
+    Sphere *geometriesSphere;
+    Torus *geometriesTorus;
     Shape *geometriesSuzanne;
     float valueSlider = 0.5;
     float homotethie = 0.5;

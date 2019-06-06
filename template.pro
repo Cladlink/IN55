@@ -4,6 +4,7 @@ TARGET = template
 TEMPLATE = app
 
 SOURCES += \
+    src/Arrow.cpp \
     src/Camera.cpp \
     src/Colortextedit.cpp \
     src/Cube.cpp \
@@ -16,9 +17,13 @@ SOURCES += \
     src/Pyramide.cpp \
     src/Shape.cpp \
     src/ShapeGenerator.cpp \
+    src/Sphere.cpp \
+    src/Teapot.cpp \
+    src/Torus.cpp \
     src/main.cpp
 
 HEADERS += \
+    src/Arrow.h \
     src/Camera.h \
     src/Colortextedit.h \
     src/Cube.h \
@@ -33,7 +38,10 @@ HEADERS += \
     src/Shape.h \
     src/ShapeData.h \
     src/ShapeGenerator.h \
+    src/Sphere.h \
+    src/Teapot.h \
     src/TeapotData.h \
+    src/Torus.h \
     src/Vertex.h \
     colortextedit.h
 
