@@ -11,11 +11,11 @@ Frame::Frame()
     optionsTab = new QTabWidget();
 
     // Formes
-    boutonCube = new QPushButton("Cube");
-    boutonPyramide = new QPushButton("Pyramide");
-    boutonSphere = new QPushButton("Sphere");
-    boutonTorus = new QPushButton("Torus");
-    boutonSuzanne = new QPushButton("Suzanne");
+    boutonCube = new QCheckBox("Cube");
+    boutonPyramide = new QCheckBox("Pyramide");
+    boutonSphere = new QCheckBox("Sphere");
+    boutonTorus = new QCheckBox("Torus");
+    boutonSuzanne = new QCheckBox("Suzanne");
 
     layoutBoutonsForme = new QVBoxLayout;
     layoutBoutonsForme->addWidget(boutonCube);
@@ -193,11 +193,11 @@ Frame::Frame()
     // Listener des boutons
     QObject::connect(sliderHomothetie, SIGNAL(valueChanged(int)), this, SLOT(changeSize(int)));
 
-    QObject::connect(boutonCube, SIGNAL(clicked()), this, SLOT(createCube()));
-    QObject::connect(boutonPyramide, SIGNAL(clicked()), this, SLOT(createPyramide()));
-    QObject::connect(boutonSphere, SIGNAL(clicked()), this, SLOT(createSphere()));
-    QObject::connect(boutonTorus, SIGNAL(clicked()), this, SLOT(createTorus()));
-    QObject::connect(boutonSuzanne, SIGNAL(clicked()), this, SLOT(createSuzanne()));
+    QObject::connect(boutonCube, SIGNAL(stateChanged(int)), this, SLOT(createCube()));
+    QObject::connect(boutonPyramide, SIGNAL(stateChanged(int)), this, SLOT(createPyramide()));
+    QObject::connect(boutonSphere, SIGNAL(stateChanged(int)), this, SLOT(createSphere()));
+    QObject::connect(boutonTorus, SIGNAL(stateChanged(int)), this, SLOT(createTorus()));
+    QObject::connect(boutonSuzanne, SIGNAL(stateChanged(int)), this, SLOT(createSuzanne()));
 
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTexture()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTexture()));
@@ -288,9 +288,9 @@ void Frame::changeColor() {
 }
 
 void Frame::changePositionCube() {
-    float x = (sliderTranslationCubeX->value()/100.0)*5.;
-    float y = (sliderTranslationCubeY->value()/100.0)*5.;
-    float z = (sliderTranslationCubeZ->value()/100.0)*5.;
+    float x = (sliderTranslationCubeX->value()/100.f)*5.f;
+    float y = (sliderTranslationCubeY->value()/100.f)*5.f;
+    float z = (sliderTranslationCubeZ->value()/100.f)*5.f;
     scene3D->setPositionCube(QVector3D(x,y,z));
 }
 

@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     app.setApplicationVersion("1.0");
 
     Frame frame;
-    frame.setFixedSize(1200, 800);
+    frame.setFixedSize(1400, 800);
 
     frame.show();
 
