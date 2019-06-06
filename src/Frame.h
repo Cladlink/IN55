@@ -2,6 +2,7 @@
 #define FRAME_H
 
 #include <QPushButton>
+#include <QCheckBox>
 #include <QHBoxLayout>
 #include <QRadioButton>
 #include <QButtonGroup>
@@ -64,12 +65,12 @@ private:
     DebugSlider *lightYSlider;
     DebugSlider *lightZSlider;
 
-    //QPushButton
-    QPushButton *boutonCube;
-    QPushButton *boutonPyramide;
-    QPushButton *boutonSphere;
-    QPushButton *boutonTorus;
-    QPushButton *boutonSuzanne;
+    //QCheckBox
+    QCheckBox *boutonCube;
+    QCheckBox *boutonPyramide;
+    QCheckBox *boutonSphere;
+    QCheckBox *boutonTorus;
+    QCheckBox *boutonSuzanne;
 
     //QLabel
     QLabel *labelHomothetie;
