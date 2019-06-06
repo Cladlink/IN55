@@ -54,9 +54,9 @@ private:
     QSlider *sliderRouge;
     QSlider *sliderVert;
     QSlider *sliderBleu;
-    QSlider *sliderTranslationX;
-    QSlider *sliderTranslationY;
-    QSlider *sliderTranslationZ;
+    QSlider *sliderTranslationCubeX;
+    QSlider *sliderTranslationCubeY;
+    QSlider *sliderTranslationCubeZ;
 
     //DebugSlider
 
@@ -119,7 +119,7 @@ private slots:
     void createSuzanne();
     void changeColor();
     void changeRotation();
-    void changePosition();
+    void changePositionCube();
     void changeLightPosition();
 };
 

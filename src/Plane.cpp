@@ -32,87 +32,20 @@ Plane::~Plane()
 
 void Plane::initGeometry()
 {
-////! [1]
-    // Transfer vertex data to VBO 0
-    arrayBuf.bind();
-    arrayBuf.allocate(verticesPlane, nbrVertices * sizeof(VertexData));
-
-    // Transfer index data to VBO 1
-    indexBuf.bind();
-    indexBuf.allocate(indicesPlane, nbrIndices * sizeof(GLushort));
-
-//! [1]
+    IGeometryEngine::initGeometry(verticesPlane,indicesPlane);
 }
 
 //! [2]
 void Plane::drawGeometry(QOpenGLShaderProgram *program)
 {
-    // Tell OpenGL which VBOs to use
-    arrayBuf.bind();
-    indexBuf.bind();
-
-    // Offset for position
-    quintptr offset = 0;
-
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
-
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    offset += sizeof(QVector3D);
-
-    int uvLocation = program->attributeLocation("vertexUV");
-    program->enableAttributeArray(uvLocation);
-    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
-
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+    IGeometryEngine::drawGeometry(program);
 }
 
-void Plane::update(QOpenGLShaderProgram *program, QVector3D _color){
+void Plane::update(QOpenGLShaderProgram *program,QVector3D _color,
+                   QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
+                   QVector3D _position){
 
-    arrayBuf.bind();
-    for (int i=0; i<nbrVertices-1; i++) {
-        verticesPlane[i].color = _color;
-    }
-
-    arrayBuf.allocate(verticesPlane, nbrVertices * sizeof(VertexData));
-
-    indexBuf.bind();
-    indexBuf.allocate(indicesPlane, nbrIndices * sizeof(GLushort));
-
-    // Offset for position
-    quintptr offset = 0;
-
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
-
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    offset += sizeof(QVector3D);
-
-    int normalLocation = program->attributeLocation("normal");
-    program->enableAttributeArray(normalLocation);
-    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
-
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+    IGeometryEngine::update(program,verticesPlane,indicesPlane,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position);
 }
 
 QVector3D Plane::randomColor()

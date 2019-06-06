@@ -57,6 +57,9 @@
 #include <iostream>
 #include <QVector2D>
 #include <QVector3D>
+#include "vertex.h"
+#include "ShapeData.h"
+#define NUM_ARRAY_ELEMENTS(a) sizeof(a) / sizeof(*a)
 
 using namespace std;
 
@@ -65,17 +68,12 @@ class IGeometryEngine : protected QOpenGLFunctions
 public:
     IGeometryEngine();
     virtual ~IGeometryEngine();
-    virtual void update(QOpenGLShaderProgram *program, QVector3D _color) = 0;
-    virtual void initGeometry() = 0;
+    void update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape, QVector3D _color,
+                QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
+                QVector3D _position);
+    void initGeometry(Vertex *verticesShape, unsigned short *indicesShape);
 
-    virtual void drawGeometry(QOpenGLShaderProgram *program) = 0;
-    struct VertexData
-    {
-        QVector3D position;
-        QVector3D color;
-        QVector3D normal;
-        //QVector2D uv;
-    };
+    void drawGeometry(QOpenGLShaderProgram *program);
 
 protected :
     QOpenGLBuffer arrayBuf;

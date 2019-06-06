@@ -38,6 +38,7 @@ class ShapeGenerator : protected QOpenGLFunctions
         float *B, float *dB, QVector3D patch[][4]);
 public:
     static ShapeData makeTriangle();
+    static ShapeData makePyramide();
     static ShapeData makeCube();
     static ShapeData makeArrow();
     static ShapeData makePlane(uint dimensions = 10);

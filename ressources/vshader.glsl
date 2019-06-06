@@ -4,11 +4,11 @@ layout(location=1) vec3 vertexColor;
 layout(location=2) vec3 normalModel;
 layout(location = 1) in vec2 vertexUV;
 uniform mat4 mvp;
-uniform vec4 homotethie;
+
 uniform float time;
 uniform int isColor;
 //uniform vec3 normal;
-uniform vec4 translation;
+
 
 in vec3 position;
 in vec3 color;
@@ -32,24 +32,26 @@ in vec4 position;
 in vec3 color;
 in vec3 normal;
 
-uniform mat4 modelToProjectionMatrix;
-uniform mat4 modelToWorldMatrix;
+
+uniform vec4 homotethie;
 
 out vec3 normalWorld;
 out vec3 vertexPositionWorld;
+out vec3 vertexToFragmentColor;
 out vec4 fColor;
 
-float random (vec2 st) {
-    return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
-}
+uniform mat4 modelToProjectionMatrix;
+uniform mat4 modelToWorldMatrix;
+uniform vec4 translation;
 
 //! [0]
 void main()
 {
-    vec4 pos = vec4(position) * vec4(1.,1.,1.,1.);
-    gl_Position = modelToProjectionMatrix * position;
+    vec4 pos = position + translation;
+    gl_Position = modelToProjectionMatrix * pos;
     normalWorld = vec3(modelToWorldMatrix * vec4(normal, 0));
     vertexPositionWorld = vec3(modelToWorldMatrix * position);
+    vertexToFragmentColor = color;
     fColor = vec4(color,1.0);
     // Calculate vertex position in screen space
     /*vec4 pos = vec4(position,1.) + translation;
@@ -70,5 +72,11 @@ void main()
     } else if (fIsColor == 4) {
         //fColor = normalize(normal * vecNormal);
     }*/
+}
+
+
+
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
 }
 //! [0]

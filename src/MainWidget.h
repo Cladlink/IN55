@@ -100,8 +100,8 @@ public:
     void setNumberBufferTexture(int _index);
     int getAxeRotation();
     void setAxeRotation(int _axeRotation);
-    QVector3D getPosition();
-    void setPosition(QVector3D _position);
+    QVector3D getPositionCube();
+    void setPositionCube(QVector3D _position);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -122,6 +122,7 @@ private:
     QOpenGLShaderProgram program;
     QVector<QPixmap> pixmap;
     Cube *geometriesSquare;
+    Cube *geometriesLight;
     Pyramide *geometriesPyramide;
     Plane *geometriesPlane;
     Shape *geometriesSphere;

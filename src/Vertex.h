@@ -2,6 +2,7 @@
 #define VERTEX_H
 
 #include <QVector3D>
+#include <QMatrix4x4>
 
 struct Vertex
 {

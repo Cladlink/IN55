@@ -1,15 +1,20 @@
 #include "Cube.h"
 
-Cube::Cube()
-{
+Cube::Cube() {
+
     initializeOpenGLFunctions();
+
+    ShapeData cube = makeCube();
+
+    verticesCube = cube.vertices;
+    indicesCube = cube.indices;
 
     // Generate 2 VBOs
     arrayBuf.create();
     indexBuf.create();
     // Initializes cube geometry and transfers it to VBOs
-    nbrIndices = 36;
-    nbrVertices = 72;
+    nbrIndices = cube.numIndices;
+    nbrVertices = cube.numVertices;
     initGeometry();
 }
 
@@ -22,87 +27,122 @@ Cube::~Cube()
 
 void Cube::initGeometry()
 {
-////! [1]
-    // Transfer vertex data to VBO 0
-    arrayBuf.bind();
-    arrayBuf.allocate(verticesCube, nbrVertices * sizeof(VertexData));
-
-    // Transfer index data to VBO 1
-    indexBuf.bind();
-    indexBuf.allocate(indicesCube, nbrIndices * sizeof(GLushort));
-
-//! [1]
+    IGeometryEngine::initGeometry(verticesCube,indicesCube);
 }
 
 //! [2]
 void Cube::drawGeometry(QOpenGLShaderProgram *program)
 {
-    // Tell OpenGL which VBOs to use
-    arrayBuf.bind();
-    indexBuf.bind();
-
-    // Offset for position
-    quintptr offset = 0;
-
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
-
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    offset += sizeof(QVector3D);
-
-    int uvLocation = program->attributeLocation("vertexUV");
-    program->enableAttributeArray(uvLocation);
-    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
-
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+    IGeometryEngine::drawGeometry(program);
 }
 
-void Cube::update(QOpenGLShaderProgram *program, QVector3D _color){
+void Cube::update(QOpenGLShaderProgram *program,QVector3D _color,
+                  QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
+                  QVector3D _position){
 
-    arrayBuf.bind();
-    for (int i=0; i<nbrVertices-1; i++) {
-        verticesCube[i].color = _color;
-    }
+    IGeometryEngine::update(program,verticesCube,indicesCube,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position);
+}
 
-    arrayBuf.allocate(verticesCube, nbrVertices * sizeof(VertexData));
+ShapeData Cube::makeCube() {
+    ShapeData ret;
+    Vertex stackVerts[] =
+    {
+        QVector3D(-1.0f, +1.0f, +1.0f),  // 0
+        QVector3D(+1.0f, +0.0f, +0.0f),	// Color
+        QVector3D(+0.0f, +1.0f, +0.0f),  // Normal
+        QVector3D(+1.0f, +1.0f, +1.0f),  // 1
+        QVector3D(+0.0f, +1.0f, +0.0f),	// Color
+        QVector3D(+0.0f, +1.0f, +0.0f),  // Normal
+        QVector3D(+1.0f, +1.0f, -1.0f),  // 2
+        QVector3D(+0.0f, +0.0f, +1.0f),  // Color
+        QVector3D(+0.0f, +1.0f, +0.0f),  // Normal
+        QVector3D(-1.0f, +1.0f, -1.0f),  // 3
+        QVector3D(+1.0f, +1.0f, +1.0f),  // Color
+        QVector3D(+0.0f, +1.0f, +0.0f),  // Normal
 
-    indexBuf.bind();
-    indexBuf.allocate(indicesCube, nbrIndices * sizeof(GLushort));
+        QVector3D(-1.0f, +1.0f, -1.0f),  // 4
+        QVector3D(+1.0f, +0.0f, +1.0f),  // Color
+        QVector3D(+0.0f, +0.0f, -1.0f),  // Normal
+        QVector3D(+1.0f, +1.0f, -1.0f),  // 5
+        QVector3D(+0.0f, +0.5f, +0.2f),  // Color
+        QVector3D(+0.0f, +0.0f, -1.0f),  // Normal
+        QVector3D(+1.0f, -1.0f, -1.0f),  // 6
+        QVector3D(+0.8f, +0.6f, +0.4f),  // Color
+        QVector3D(+0.0f, +0.0f, -1.0f),  // Normal
+        QVector3D(-1.0f, -1.0f, -1.0f),  // 7
+        QVector3D(+0.3f, +1.0f, +0.5f),  // Color
+        QVector3D(+0.0f, +0.0f, -1.0f),  // Normal
 
-    // Offset for position
-    quintptr offset = 0;
+        QVector3D(+1.0f, +1.0f, -1.0f),  // 8
+        QVector3D(+0.2f, +0.5f, +0.2f),  // Color
+        QVector3D(+1.0f, +0.0f, +0.0f),  // Normal
+        QVector3D(+1.0f, +1.0f, +1.0f),  // 9
+        QVector3D(+0.9f, +0.3f, +0.7f),  // Color
+        QVector3D(+1.0f, +0.0f, +0.0f),  // Normal
+        QVector3D(+1.0f, -1.0f, +1.0f),  // 10
+        QVector3D(+0.3f, +0.7f, +0.5f),  // Color
+        QVector3D(+1.0f, +0.0f, +0.0f),  // Normal
+        QVector3D(+1.0f, -1.0f, -1.0f),  // 11
+        QVector3D(+0.5f, +0.7f, +0.5f),  // Color
+        QVector3D(+1.0f, +0.0f, +0.0f),  // Normal
 
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        QVector3D(-1.0f, +1.0f, +1.0f),  // 12
+        QVector3D(+0.7f, +0.8f, +0.2f),  // Color
+        QVector3D(-1.0f, +0.0f, +0.0f),  // Normal
+        QVector3D(-1.0f, +1.0f, -1.0f),  // 13
+        QVector3D(+0.5f, +0.7f, +0.3f),  // Color
+        QVector3D(-1.0f, +0.0f, +0.0f),  // Normal
+        QVector3D(-1.0f, -1.0f, -1.0f),  // 14
+        QVector3D(+0.4f, +0.7f, +0.7f),  // Color
+        QVector3D(-1.0f, +0.0f, +0.0f),  // Normal
+        QVector3D(-1.0f, -1.0f, +1.0f),  // 15
+        QVector3D(+0.2f, +0.5f, +1.0f),  // Color
+        QVector3D(-1.0f, +0.0f, +0.0f),  // Normal
 
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
+        QVector3D(+1.0f, +1.0f, +1.0f),  // 16
+        QVector3D(+0.6f, +1.0f, +0.7f),  // Color
+        QVector3D(+0.0f, +0.0f, +1.0f),  // Normal
+        QVector3D(-1.0f, +1.0f, +1.0f),  // 17
+        QVector3D(+0.6f, +0.4f, +0.8f),  // Color
+        QVector3D(+0.0f, +0.0f, +1.0f),  // Normal
+        QVector3D(-1.0f, -1.0f, +1.0f),  // 18
+        QVector3D(+0.2f, +0.8f, +0.7f),  // Color
+        QVector3D(+0.0f, +0.0f, +1.0f),  // Normal
+        QVector3D(+1.0f, -1.0f, +1.0f),  // 19
+        QVector3D(+0.2f, +0.7f, +1.0f),  // Color
+        QVector3D(+0.0f, +0.0f, +1.0f),  // Normal
 
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        QVector3D(+1.0f, -1.0f, -1.0f),  // 20
+        QVector3D(+0.8f, +0.3f, +0.7f),  // Color
+        QVector3D(+0.0f, -1.0f, +0.0f),  // Normal
+        QVector3D(-1.0f, -1.0f, -1.0f),  // 21
+        QVector3D(+0.8f, +0.9f, +0.5f),  // Color
+        QVector3D(+0.0f, -1.0f, +0.0f),  // Normal
+        QVector3D(-1.0f, -1.0f, +1.0f),  // 22
+        QVector3D(+0.5f, +0.8f, +0.5f),  // Color
+        QVector3D(+0.0f, -1.0f, +0.0f),  // Normal
+        QVector3D(+1.0f, -1.0f, +1.0f),  // 23
+        QVector3D(+0.9f, +1.0f, +0.2f),  // Color
+        QVector3D(+0.0f, -1.0f, +0.0f),  // Normal
+    };
 
-    offset += sizeof(QVector3D);
+    ret.numVertices = NUM_ARRAY_ELEMENTS(stackVerts);
+    ret.vertices = new Vertex[ret.numVertices];
+    memcpy(ret.vertices, stackVerts, sizeof(stackVerts));
 
-    int normalLocation = program->attributeLocation("normal");
-    program->enableAttributeArray(normalLocation);
-    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
+    unsigned short stackIndices[] = {
+        0,   1,  2,  0,  2,  3, // Top
+        4,   5,  6,  4,  6,  7, // Front
+        8,   9, 10,  8, 10, 11, // Right
+        12, 13, 14, 12, 14, 15, // Left
+        16, 17, 18, 16, 18, 19, // Back
+        20, 22, 21, 20, 23, 22, // Bottom
+    };
+    ret.numIndices = NUM_ARRAY_ELEMENTS(stackIndices);
+    ret.indices = new GLushort[ret.numIndices];
+    memcpy(ret.indices, stackIndices, sizeof(stackIndices));
 
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+    return ret;
 }
 
 //! [2]

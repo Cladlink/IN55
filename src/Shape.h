@@ -19,10 +19,12 @@ public:
     Shape();
     Shape(string _path);
     ~Shape();
-    void update(QOpenGLShaderProgram *program, QVector3D _color) override;
-    void initGeometry() override;
+    void update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape, QVector3D _color,
+                QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
+                QVector3D _position);
+    void initGeometry();
 
-    void drawGeometry(QOpenGLShaderProgram *program) override;
+    void drawGeometry(QOpenGLShaderProgram *program);
 
     void load_obj();
     void setPath(string _path);

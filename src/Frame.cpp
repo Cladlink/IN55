@@ -97,39 +97,39 @@ Frame::Frame()
 
     labelTranslationX = new QLabel("X : ");
     labelTranslationX->setFixedSize(30,30);
-    sliderTranslationX = new QSlider(Qt::Horizontal);
-    sliderTranslationX->setMinimum(-100.0);
-    sliderTranslationX->setTickInterval(1);
-    sliderTranslationX->setMaximum(100.0);
-    sliderTranslationX->setValue(0);
+    sliderTranslationCubeX = new QSlider(Qt::Horizontal);
+    sliderTranslationCubeX->setMinimum(-100.0);
+    sliderTranslationCubeX->setTickInterval(1);
+    sliderTranslationCubeX->setMaximum(100.0);
+    sliderTranslationCubeX->setValue(0);
     layoutTranslationX = new QHBoxLayout;
     layoutTranslationX->insertSpacing(0, 10);
     layoutTranslationX->addWidget(labelTranslationX);
-    layoutTranslationX->addWidget(sliderTranslationX);
+    layoutTranslationX->addWidget(sliderTranslationCubeX);
 
     labelTranslationY = new QLabel("Y : ");
     labelTranslationY->setFixedSize(30,30);
-    sliderTranslationY = new QSlider(Qt::Horizontal);
-    sliderTranslationY->setMinimum(-100.0);
-    sliderTranslationY->setTickInterval(1);
-    sliderTranslationY->setMaximum(100.0);
-    sliderTranslationY->setValue(0);
+    sliderTranslationCubeY = new QSlider(Qt::Horizontal);
+    sliderTranslationCubeY->setMinimum(-100.0);
+    sliderTranslationCubeY->setTickInterval(1);
+    sliderTranslationCubeY->setMaximum(100.0);
+    sliderTranslationCubeY->setValue(0);
     layoutTranslationY = new QHBoxLayout;
     layoutTranslationY->insertSpacing(0, 10);
     layoutTranslationY->addWidget(labelTranslationY);
-    layoutTranslationY->addWidget(sliderTranslationY);
+    layoutTranslationY->addWidget(sliderTranslationCubeY);
 
     labelTranslationZ = new QLabel("Z : ");
     labelTranslationZ->setFixedSize(30,30);
-    sliderTranslationZ = new QSlider(Qt::Horizontal);
-    sliderTranslationZ->setMinimum(-100.0);
-    sliderTranslationZ->setTickInterval(1);
-    sliderTranslationZ->setMaximum(100.0);
-    sliderTranslationZ->setValue(0.0);
+    sliderTranslationCubeZ = new QSlider(Qt::Horizontal);
+    sliderTranslationCubeZ->setMinimum(-100.0);
+    sliderTranslationCubeZ->setTickInterval(1);
+    sliderTranslationCubeZ->setMaximum(100.0);
+    sliderTranslationCubeZ->setValue(0.0);
     layoutTranslationZ = new QHBoxLayout;
     layoutTranslationZ->insertSpacing(0, 10);
     layoutTranslationZ->addWidget(labelTranslationZ);
-    layoutTranslationZ->addWidget(sliderTranslationZ);
+    layoutTranslationZ->addWidget(sliderTranslationCubeZ);
 
     labelTranslation = new QLabel("Translation :");
     labelTranslation->setFixedSize(150,30);
@@ -210,9 +210,9 @@ Frame::Frame()
     QObject::connect(sliderVert, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
     QObject::connect(sliderBleu, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
 
-    QObject::connect(sliderTranslationX, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
-    QObject::connect(sliderTranslationY, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
-    QObject::connect(sliderTranslationZ, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
+    QObject::connect(sliderTranslationCubeX, SIGNAL(valueChanged(int)), this, SLOT(changePositionCube()));
+    QObject::connect(sliderTranslationCubeY, SIGNAL(valueChanged(int)), this, SLOT(changePositionCube()));
+    QObject::connect(sliderTranslationCubeZ, SIGNAL(valueChanged(int)), this, SLOT(changePositionCube()));
 
     QObject::connect(mouseRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
     QObject::connect(xRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
@@ -224,7 +224,7 @@ Frame::Frame()
     QObject::connect(lightZSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
-    createCube();
+    //createCube();
     //changeTexture();
 }
 
@@ -287,11 +287,11 @@ void Frame::changeColor() {
     }
 }
 
-void Frame::changePosition() {
-    float x = (sliderTranslationX->value()/100.0)*5.;
-    float y = (sliderTranslationY->value()/100.0)*5.;
-    float z = (sliderTranslationZ->value()/100.0)*5.;
-    scene3D->setPosition(QVector3D(x,y,z));
+void Frame::changePositionCube() {
+    float x = (sliderTranslationCubeX->value()/100.0)*5.;
+    float y = (sliderTranslationCubeY->value()/100.0)*5.;
+    float z = (sliderTranslationCubeZ->value()/100.0)*5.;
+    scene3D->setPositionCube(QVector3D(x,y,z));
 }
 
 void Frame::changeRotation() {

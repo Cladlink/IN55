@@ -84,8 +84,8 @@ MainWidget::MainWidget(Light* _myLight, QWidget *parent) :
     angularSpeed(0)
 {
     beginning = QDateTime::currentMSecsSinceEpoch();
-    pixmap.append(QPixmap(":/mur.png"));
-    pixmap.append(QPixmap(":/nintendo.png"));
+    //pixmap.append(QPixmap(":/mur.png"));
+    //pixmap.append(QPixmap(":/nintendo.png"));
 }
 
 MainWidget::~MainWidget()
@@ -101,12 +101,12 @@ MainWidget::~MainWidget()
 void MainWidget::mousePressEvent(QMouseEvent *e)
 {
     // Save mouse press position
-    mousePressPosition = QVector2D(e->localPos());
+    //mousePressPosition = QVector2D(e->localPos());
 }
 
 void MainWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if(getAxeRotation() == 0){
+    /*if(getAxeRotation() == 0){
         // Mouse release position - mouse press position
         QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
 
@@ -122,7 +122,7 @@ void MainWidget::mouseReleaseEvent(QMouseEvent *e)
 
         // Increase angular speed
         angularSpeed += acc;
-    }
+    }*/
 }
 //! [0]
 
@@ -174,7 +174,9 @@ void MainWidget::initializeGL()
 //! [2]
 
     geometriesSquare = new Cube;
-    geometriesPlane = new Plane;
+    geometriesLight = new Cube;
+    geometriesPyramide = new Pyramide;
+    geometriesPlane = new Plane(20);
     //geometriesPyramide = new Pyramide;
     /*geometriesPyramide = new Pyramide;
     geometriesSphere = new Shape("IN55/ressources/sphere.obj");
@@ -188,13 +190,13 @@ void MainWidget::initializeGL()
 //! [3]
 void MainWidget::initShaders()
 {
-    glGenTextures(NBR_TEXTURES, texId);
+    /*glGenTextures(NBR_TEXTURES, texId);
     for (int i = 0; i < pixmap.size(); ++i) {
         glBindTexture(GL_TEXTURE_2D, texId[i]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap[i].width(), pixmap[i].height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap[i].toImage().bits());
-    }
+    }*/
 
     // Compile vertex shader
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
@@ -218,17 +220,6 @@ void MainWidget::initShaders()
 //! [5]
 void MainWidget::resizeGL(int w, int h)
 {
-    // Calculate aspect ratio
-    qreal aspect = qreal(w) / qreal(h ? h : 1);
-
-    // Set near plane to 3.0, far plane to 7.0, field of view 45 degrees
-    const qreal zNear = 1.0, zFar = 10.0, fov = 45.0;
-
-    // Reset projection
-    projection.setToIdentity();
-
-    // Set perspective projection
-    projection.perspective(fov, aspect, zNear, zFar);
 }
 //! [5]
 
@@ -245,15 +236,7 @@ void MainWidget::paintGL()
     QMatrix4x4 modelToProjectionMatrix;
 
     QVector3D lightPositionWorld = myLight->lightPosition;
-//! [6]
-    // Calculate model view transformation
-    QMatrix4x4 viewToProjectionMatrix;
-    viewToProjectionMatrix.perspective(60.0f, ((float)width()) / height(), 0.1f, 20.0f);
-    //qDebug() << "ViewToProjectionMatrix" << viewToProjectionMatrix << endl;
-    QMatrix4x4 worldToViewMatrix = camera->getWorldToViewMatrix();
-    //qDebug() << "WorldToViewMatrix" << worldToViewMatrix << endl;
-    QMatrix4x4 worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
-    //qDebug() << "WorldToProjectionMatrix" << worldToProjectionMatrix << endl;
+
     QVector4D ambientLight(0.05f, 0.05f, 0.05f, 1.0f);
     program.setUniformValue("ambientLight", ambientLight);
 
@@ -261,40 +244,42 @@ void MainWidget::paintGL()
     program.setUniformValue("eyePosition", eyePosition);
 
     program.setUniformValue("lightPositionWorld", lightPositionWorld);
+//! [6]
+    // Calculate model view transformation
+    QMatrix4x4 viewToProjectionMatrix;
+    // Calculate aspect ratio
+    float aspect = width() / height();
+    // Set near plane to 0.1, far plane to 50.0, field of view 60 degrees
+    float zNear = 0.1f, zFar = 50.0f, fov = 60.0f;
 
-    QMatrix4x4 cubeModelToWorldMatrix;
-    cubeModelToWorldMatrix.translate(0.0f, 0.0f, -10.0f);
-    modelToProjectionMatrix = worldToProjectionMatrix * cubeModelToWorldMatrix;
+    viewToProjectionMatrix.perspective(fov, aspect, zNear, zFar);
+
+    QMatrix4x4 worldToViewMatrix = camera->getWorldToViewMatrix();
+
+    QMatrix4x4 worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
+
+    QMatrix4x4 shapeModelToWorldMatrix;
+    modelToProjectionMatrix = worldToProjectionMatrix * shapeModelToWorldMatrix;
     program.setUniformValue("modelToProjectionMatrix", modelToProjectionMatrix);
 
-    program.setUniformValue("modelToWorldMatrix", cubeModelToWorldMatrix);
-
-    QMatrix4x4 matrix;
-    matrix.translate(0.0, 0.0, -5.0);
-    matrix.rotate(rotation);
+    program.setUniformValue("modelToWorldMatrix", shapeModelToWorldMatrix);
 
     QVector4D homotethie = QVector4D(this->getHomotethie(),this->getHomotethie(),this->getHomotethie(),1.);
 
-    // Set modelview-projection matrix
-    /*program.setUniformValue("mvp", projection * matrix);
     program.setUniformValue("homotethie", homotethie);
-    program.setUniformValue("translation", QVector4D(getPosition(),0.));*/
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texId[getNumberBufferTexture()]);
-    //glBindTexture(GL_TEXTURE_2D, texId[0]);
-    //glBindTexture(GL_TEXTURE_2D, texId[1]);
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, texId[getNumberBufferTexture()]);
 
     launch = QDateTime::currentMSecsSinceEpoch();
 
     program.setUniformValue("time", (launch-beginning)/1000);
     program.setUniformValue("isColor",isColor);
 
-    geometriesSquare->update(&program,getColor());
-    geometriesPlane->update(&program,getColor());
-    /*if (getObject() == "cube") {
+    geometriesSquare->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPositionCube());
+    geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(1.,1.,1.));
+    geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,0.,0.));
 
-    }*/
 
 //! [6]
     /*if (getObject() == "cube") {
@@ -370,7 +355,6 @@ void MainWidget::setNumberBufferTexture(int _index) {
     indexBufferArrayTexture = _index;
 }
 
-
 int MainWidget::getAxeRotation() {
     return axeRotation;
 }
@@ -379,11 +363,11 @@ void MainWidget::setAxeRotation(int _axeRotation) {
     axeRotation = _axeRotation;
 }
 
-QVector3D MainWidget::getPosition() {
+QVector3D MainWidget::getPositionCube() {
     return position;
 }
 
-void MainWidget::setPosition(QVector3D _position) {
+void MainWidget::setPositionCube(QVector3D _position) {
     position = _position;
 }
 

@@ -26,6 +26,7 @@ uniform vec3 vertexToFragmentColor;*/
 in vec4 fColor;
 in vec3 normalWorld;
 in vec3 vertexPositionWorld;
+in vec3 vertexToFragmentColor;
 
 uniform vec3 lightPositionWorld;
 uniform vec3 eyePositionWorld;
@@ -39,10 +40,8 @@ float random (vec2 st) {
 
 void main()
 {
-    /*vec3 eyeSpaceLigthDirection = vec3(0.0,0.0,1.0);
-    float diffuse = max(0.0,dot(normalize(n),eyeSpaceLigthDirection));
 
-    float a = smoothstep(-1.,-0.8,fPosition.y) * (1.0 - smoothstep(-0.6,-0.4,fPosition.y));
+    /*float a = smoothstep(-1.,-0.8,fPosition.y) * (1.0 - smoothstep(-0.6,-0.4,fPosition.y));
     float b = smoothstep(-0.6,-0.4,fPosition.y) * (1.0 - smoothstep(-0.1,0.2,fPosition.y));
     float c = smoothstep(-0.1,0.2,fPosition.y) * (1.0 - smoothstep(0.2,0.5,fPosition.y));
     float d = smoothstep(0.2,0.5,fPosition.y) * (1.0 - smoothstep(0.5,1.,fPosition.y));
@@ -65,7 +64,8 @@ void main()
     s = pow(s, 20);
     vec4 specularLight = vec4(s, 0, 0, 1);
 
-    daColor = vec4(fColor)+ ambientLight + clamp(diffuseLight, 0, 1) + specularLight;//vec4(1.,1.,1.,1.);
+    daColor = fColor + ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
+    //daColor = vec4(fColor) /*
             //+ ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
     //vec4(vertexToFragmentColor, 1) +
     /*if (fIsColor == 0) {

@@ -8,7 +8,6 @@ class parameter
 public:
     parameter();
     static void setGeometries(MainWidget *scene3D);
-    static void setValue(int value);
 
 private:
     static MainWidget *scene3D;

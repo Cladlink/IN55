@@ -75,7 +75,9 @@ void Shape::drawGeometry(QOpenGLShaderProgram *program)
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
 }
 
-void Shape::update(QOpenGLShaderProgram *program, QVector3D _color){
+void Shape::update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape, QVector3D _color,
+                   QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
+                   QVector3D _position){
 
     arrayBuf.bind();
     for (int i=0; i<nbrVertices-1; i++) {

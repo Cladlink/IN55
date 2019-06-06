@@ -4,13 +4,17 @@ Pyramide::Pyramide()
 {
     initializeOpenGLFunctions();
 
+    ShapeData pyramide = makePyramide();
+
+    verticesPyramide = pyramide.vertices;
+    indicesPyramide = pyramide.indices;
+
     // Generate 2 VBOs
     arrayBuf.create();
     indexBuf.create();
     // Initializes cube geometry and transfers it to VBOs
-    nbrIndices = 18;
-    nbrVertices = 16;
-
+    nbrIndices = pyramide.numIndices;
+    nbrVertices = pyramide.numVertices;
     initGeometry();
 }
 
@@ -23,87 +27,64 @@ Pyramide::~Pyramide()
 
 void Pyramide::initGeometry()
 {
-////! [1]
-    // Transfer vertex data to VBO 0
-    arrayBuf.bind();
-    arrayBuf.allocate(verticesPyramide, nbrVertices * sizeof(VertexData));
-
-    // Transfer index data to VBO 1
-    indexBuf.bind();
-    indexBuf.allocate(indicesPyramide, nbrIndices * sizeof(GLushort));
-//! [1]
+    IGeometryEngine::initGeometry(verticesPyramide,indicesPyramide);
 }
 
 //! [2]
 void Pyramide::drawGeometry(QOpenGLShaderProgram *program)
 {
-    // Tell OpenGL which VBOs to use
-    arrayBuf.bind();
-    indexBuf.bind();
-
-    // Offset for position
-    quintptr offset = 0;
-
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
-
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    offset += sizeof(QVector3D);
-
-    int uvLocation = program->attributeLocation("vertexUV");
-    program->enableAttributeArray(uvLocation);
-    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
-
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+    IGeometryEngine::drawGeometry(program);
 }
 
-void Pyramide::update(QOpenGLShaderProgram *program, QVector3D _color){
+void Pyramide::update(QOpenGLShaderProgram *program,QVector3D _color,
+                      QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
+                      QVector3D _position){
 
-    arrayBuf.bind();
-    for (int i=0; i<nbrVertices-1; i++) {
-        verticesPyramide[i].color = _color;
-    }
+    IGeometryEngine::update(program,verticesPyramide,indicesPyramide,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position);
+}
 
-    arrayBuf.allocate(verticesPyramide, nbrVertices * sizeof(VertexData));
+ShapeData Pyramide::makePyramide()
+{
+    ShapeData ret;
 
-    indexBuf.bind();
-    indexBuf.allocate(indicesPyramide, nbrIndices * sizeof(GLushort));
-    // Tell OpenGL which VBOs to use
-    arrayBuf.bind();
-    indexBuf.bind();
+    Vertex myPyr[] =
+    {
+        {QVector3D(0.f, 1.f, 0.f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.5f, 1.0f)}, //0 -> 0
+        {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 0.0f)}, //2 -> 1
+        {QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(1.0f, 0.0f)}, //1 -> 2
 
-    // Offset for position
-    quintptr offset = 0;
+        {QVector3D(0.f, 1.f, 0.f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.5f, 1.0f)}, //0 -> 3
+        {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 0.0f)}, //4 -> 4
+        {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(1.0f, 0.0f)}, //3 -> 5
 
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        {QVector3D(0.f, 1.f, 0.f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.5f, 1.0f)}, //0 -> 6
+        {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 0.0f)}, //3 -> 7
+        {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(1.0f, 0.0f)}, //2 -> 8
 
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
+        {QVector3D(0.f, 1.f, 0.f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.5f, 1.0f)}, //0 -> 9
+        {QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 0.0f)}, //1 -> 10
+        {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(1.0f, 0.0f)}, //4 -> 11
 
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        {QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 0.0f)}, //1 -> 12
+        {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(1.0f, 0.0f)}, //2 -> 13
+        {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(1.0f, 1.0f)}, //3 -> 14
+        {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 1.0f)}
+    };
+    ret.numVertices = NUM_ARRAY_ELEMENTS(myPyr);
+    ret.vertices = new Vertex[ret.numVertices];
+    memcpy(ret.vertices, myPyr, sizeof(myPyr));
 
-    int uvLocation = program->attributeLocation("vertexUV");
-    program->enableAttributeArray(uvLocation);
-    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
+    GLushort indices[] = { 0,1,2,
+                           3,4,5,
+                           6,7,8,
+                           9,10,11,
+                           15,12,13,
+                           13,14,15};
+    ret.numIndices = NUM_ARRAY_ELEMENTS(indices);
+    ret.indices = new GLushort[ret.numIndices];
+    memcpy(ret.indices, indices, sizeof(indices));
 
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+    return ret;
 }
 //! [2]
 

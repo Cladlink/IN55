@@ -1,40 +1,24 @@
 #include "IGeometryEngine.h"
 
-//! [0]
 IGeometryEngine::IGeometryEngine(): indexBuf(QOpenGLBuffer::IndexBuffer)
 {
-    //initializeOpenGLFunctions();
-
-    // Generate 2 VBOs
-    //arrayBuf.create();
-    //indexBuf.create();
-    // Initializes cube geometry and transfers it to VBOs
-    //initGeometry();
 }
 
 IGeometryEngine::~IGeometryEngine()
 {
-    //arrayBuf.destroy();
-    //indexBuf.destroy();
 }
-//! [0]
 
-
-/*void GeometryEngine::initGeometry()
+void IGeometryEngine::initGeometry(Vertex *verticesShape, unsigned short *indicesShape)
 {
-////! [1]
-    // Transfer vertex data to VBO 0
     arrayBuf.bind();
-    arrayBuf.allocate(vertices, nbrVertices * sizeof(VertexData));
+    arrayBuf.allocate(verticesShape, nbrVertices * sizeof(Vertex));
 
     // Transfer index data to VBO 1
     indexBuf.bind();
-    indexBuf.allocate(indices, nbrIndices * sizeof(GLushort));
-//! [1]
-}*/
+    indexBuf.allocate(indicesShape, nbrIndices * sizeof(GLushort));
+}
 
-//! [2]
-/*void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program)
+void IGeometryEngine::drawGeometry(QOpenGLShaderProgram *program)
 {
     // Tell OpenGL which VBOs to use
     arrayBuf.bind();
@@ -46,7 +30,7 @@ IGeometryEngine::~IGeometryEngine()
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertexLocation = program->attributeLocation("position");
     program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(Vertex));
 
     // Offset for texture coordinate
     offset += sizeof(QVector3D);
@@ -54,21 +38,58 @@ IGeometryEngine::~IGeometryEngine()
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
     int colorLocation = program->attributeLocation("color");
     program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(Vertex));
+
+    offset += sizeof(QVector3D);
+
+    int uvLocation = program->attributeLocation("normal");
+    program->enableAttributeArray(uvLocation);
+    program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 3, sizeof(Vertex));
 
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
-}*/
+    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+}
 
+void IGeometryEngine::update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape, QVector3D _color,
+                             QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
+                             QVector3D _position) {
+    arrayBuf.bind();
+    for (int i=0; i<nbrVertices-1; i++) {
+        verticesShape[i].color = _color;
+    }
+    arrayBuf.allocate(verticesShape, nbrVertices * sizeof(Vertex));
 
-/*void GeometryEngine::update(){
-        vertices[0] = {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[1] = {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[2] = {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[3] = {QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[4] = {QVector3D(-0.5f, 0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[5] = {QVector3D(0.5f, 0.5f, 0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[6] = {QVector3D(0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-        vertices[7] = {QVector3D(-0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)};
-}*/
-//! [2]
+    indexBuf.bind();
+    indexBuf.allocate(indicesShape, nbrIndices * sizeof(GLushort));
+
+    // Offset for position
+    quintptr offset = 0;
+
+    // Tell OpenGL programmable pipeline how to locate vertex position data
+    int vertexLocation = program->attributeLocation("position");
+    program->enableAttributeArray(vertexLocation);
+    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(Vertex));
+
+    // Offset for texture coordinate
+    offset += sizeof(QVector3D);
+
+    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
+    int colorLocation = program->attributeLocation("color");
+    program->enableAttributeArray(colorLocation);
+    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(Vertex));
+
+    offset += sizeof(QVector3D);
+
+    int normalLocation = program->attributeLocation("normal");
+    program->enableAttributeArray(normalLocation);
+    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(Vertex));
+
+    program->setUniformValue("modelToProjectionMatrix", _modelToProjectionMatrix);
+
+    program->setUniformValue("modelToWorldMatrix",_shapeModelToWorldMatrix);
+
+    program->setUniformValue("translation",QVector4D(_position,1.f));
+
+    // Draw cube geometry using indices from VBO 1
+    glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
+}
