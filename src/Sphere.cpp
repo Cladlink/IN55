@@ -39,7 +39,7 @@ void Sphere::drawGeometry(QOpenGLShaderProgram *program)
 
 void Sphere::update(QOpenGLShaderProgram *program,QVector3D _color,
                   QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                  QVector3D _position){
+                  QVector3D _position, QQuaternion _rotation){
 
-    IGeometryEngine::update(program,verticesSphere,indicesSphere,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position);
+    IGeometryEngine::update(program,verticesSphere,indicesSphere,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position,_rotation);
 }

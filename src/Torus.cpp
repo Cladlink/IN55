@@ -41,5 +41,5 @@ void Torus::update(QOpenGLShaderProgram *program,QVector3D _color,
                   QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
                   QVector3D _position){
 
-    IGeometryEngine::update(program,verticesTorus,indicesTorus,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position);
+    IGeometryEngine::update(program,verticesTorus,indicesTorus,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position,QQuaternion());
 }

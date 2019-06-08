@@ -15,6 +15,7 @@
 #include <QTabWidget>
 #include <iostream>
 #include <QDebug>
+#include <QQuaternion>
 
 #include "MainWidget.h"
 #include "Colortextedit.h"
@@ -55,22 +56,27 @@ private:
     QSlider *sliderRouge;
     QSlider *sliderVert;
     QSlider *sliderBleu;
-    QSlider *sliderTranslationCubeX;
-    QSlider *sliderTranslationCubeY;
-    QSlider *sliderTranslationCubeZ;
+    QSlider *sliderTranslationX;
+    QSlider *sliderTranslationY;
+    QSlider *sliderTranslationZ;
+    QSlider *sliderRotationX;
+    QSlider *sliderRotationY;
+    QSlider *sliderRotationZ;
 
     //DebugSlider
 
-    DebugSlider *lightXSlider;
-    DebugSlider *lightYSlider;
-    DebugSlider *lightZSlider;
+    DebugSlider *sliderLightX;
+    DebugSlider *sliderLightY;
+    DebugSlider *sliderLightZ;
 
     //QCheckBox
-    QCheckBox *boutonCube;
-    QCheckBox *boutonPyramide;
-    QCheckBox *boutonSphere;
-    QCheckBox *boutonTorus;
-    QCheckBox *boutonSuzanne;
+    QCheckBox *checkBoxCube;
+    QCheckBox *checkBoxArrow;
+    QCheckBox *checkBoxPlane;
+    QCheckBox *checkBoxPyramide;
+    QCheckBox *checkBoxSphere;
+    QCheckBox *checkBoxTorus;
+    QCheckBox *checkBoxTeapot;
 
     //QLabel
     QLabel *labelHomothetie;
@@ -83,12 +89,18 @@ private:
     QLabel *labelTranslationY;
     QLabel *labelTranslationZ;
     QLabel *labelRotation;
+    QLabel *labelRotationX;
+    QLabel *labelRotationY;
+    QLabel *labelRotationZ;
 
     //QHBoxLayout
     QHBoxLayout *layoutHomothetie;
     QHBoxLayout *layoutTranslationX;
     QHBoxLayout *layoutTranslationY;
     QHBoxLayout *layoutTranslationZ;
+    QHBoxLayout *layoutRotationX;
+    QHBoxLayout *layoutRotationY;
+    QHBoxLayout *layoutRotationZ;
     QHBoxLayout *layoutRouge;
     QHBoxLayout *layoutVert;
     QHBoxLayout *layoutBleu;
@@ -119,9 +131,12 @@ private slots:
     void createTorus();
     void createSuzanne();
     void changeColor();
-    void changeRotation();
-    void changePositionCube();
+    void changeRotationX();
+    void changeRotationY();
+    void changeRotationZ();
+    void changePosition();
     void changeLightPosition();
+    void selectShape();
 };
 
 #endif // FRAME_H

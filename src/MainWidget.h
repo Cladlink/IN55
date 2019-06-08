@@ -74,6 +74,7 @@
 #include <QBasicTimer>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
+#include <QMap>
 
 class GeometryEngine;
 
@@ -88,24 +89,31 @@ public:
     ~MainWidget();
     void repaint();
 
+    // Getter
     float getHomotethie();
-    void setHomotethie(float _omotethie);
     string getObject();
-    void setObject(string _object);
     string getPathTexture();
-    void setPathTexture(string _pathTexture);
     int getNbObjects();
-    void setNbObjects(int _nbObject);
     QVector3D getColor();
-    void setColor(QVector3D _color);
     int getIsColor();
-    void setIsColor(int _isColor);
     int getNumberBufferTexture();
-    void setNumberBufferTexture(int _index);
     int getAxeRotation();
+    QVector3D getPosition(QString name);
+    QQuaternion getRotation(QString name);
+    bool isShapeInMap(QString name);
+
+    // Setter
+    void setHomotethie(float _omotethie);
+    void setObject(string _object);
+    void setPathTexture(string _pathTexture);
+    void setNbObjects(int _nbObject);
+    void setColor(QVector3D _color);
+    void setIsColor(int _isColor);
+    void setNumberBufferTexture(int _index);
     void setAxeRotation(int _axeRotation);
-    QVector3D getPositionCube();
-    void setPositionCube(QVector3D _position);
+    void setPosition(QVector3D _position);
+    void setRotation(QQuaternion _rotation);
+    void selectShape(QString name);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -125,7 +133,7 @@ private:
     QBasicTimer timer;
     QOpenGLShaderProgram program;
     QVector<QPixmap> pixmap;
-    Cube *geometriesSquare;
+    Cube *geometriesCube;
     Cube *geometriesLight;
     Pyramide *geometriesPyramide;
     Plane *geometriesPlane;
@@ -134,6 +142,8 @@ private:
     Sphere *geometriesSphere;
     Torus *geometriesTorus;
     Shape *geometriesSuzanne;
+    QMap<QString, QString> itemsMapShape;
+
     float valueSlider = 0.5;
     float homotethie = 0.5;
     int nbObjects;

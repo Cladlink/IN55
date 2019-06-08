@@ -11,18 +11,26 @@ Frame::Frame()
     optionsTab = new QTabWidget();
 
     // Formes
-    boutonCube = new QCheckBox("Cube");
-    boutonPyramide = new QCheckBox("Pyramide");
-    boutonSphere = new QCheckBox("Sphere");
-    boutonTorus = new QCheckBox("Torus");
-    boutonSuzanne = new QCheckBox("Suzanne");
+    checkBoxCube = new QCheckBox("Cube");
+    checkBoxCube->setCheckState(Qt::Checked);
+    checkBoxArrow = new QCheckBox("Arrow");
+    checkBoxArrow->setCheckState(Qt::Checked);
+    checkBoxPlane = new QCheckBox("Plane");
+    checkBoxPlane->setCheckState(Qt::Checked);
+    checkBoxPyramide = new QCheckBox("Pyramide");
+    checkBoxPyramide->setCheckState(Qt::Checked);
+    checkBoxSphere = new QCheckBox("Sphere");
+    checkBoxSphere->setCheckState(Qt::Checked);
+    checkBoxTeapot = new QCheckBox("Teapot");
+    checkBoxTeapot->setCheckState(Qt::Checked);
 
     layoutBoutonsForme = new QVBoxLayout;
-    layoutBoutonsForme->addWidget(boutonCube);
-    layoutBoutonsForme->addWidget(boutonPyramide);
-    layoutBoutonsForme->addWidget(boutonSphere);
-    layoutBoutonsForme->addWidget(boutonTorus);
-    layoutBoutonsForme->addWidget(boutonSuzanne);
+    layoutBoutonsForme->addWidget(checkBoxCube);
+    layoutBoutonsForme->addWidget(checkBoxArrow);
+    layoutBoutonsForme->addWidget(checkBoxPlane);
+    layoutBoutonsForme->addWidget(checkBoxPyramide);
+    layoutBoutonsForme->addWidget(checkBoxSphere);
+    layoutBoutonsForme->addWidget(checkBoxTeapot);
 
     // Homothétie
     sliderHomothetie = new QSlider(Qt::Horizontal);
@@ -97,39 +105,39 @@ Frame::Frame()
 
     labelTranslationX = new QLabel("X : ");
     labelTranslationX->setFixedSize(30,30);
-    sliderTranslationCubeX = new QSlider(Qt::Horizontal);
-    sliderTranslationCubeX->setMinimum(-100.0);
-    sliderTranslationCubeX->setTickInterval(1);
-    sliderTranslationCubeX->setMaximum(100.0);
-    sliderTranslationCubeX->setValue(0);
+    sliderTranslationX = new QSlider(Qt::Horizontal);
+    sliderTranslationX->setMinimum(-100.0);
+    sliderTranslationX->setTickInterval(1);
+    sliderTranslationX->setMaximum(100.0);
+    sliderTranslationX->setValue(0);
     layoutTranslationX = new QHBoxLayout;
     layoutTranslationX->insertSpacing(0, 10);
     layoutTranslationX->addWidget(labelTranslationX);
-    layoutTranslationX->addWidget(sliderTranslationCubeX);
+    layoutTranslationX->addWidget(sliderTranslationX);
 
     labelTranslationY = new QLabel("Y : ");
     labelTranslationY->setFixedSize(30,30);
-    sliderTranslationCubeY = new QSlider(Qt::Horizontal);
-    sliderTranslationCubeY->setMinimum(-100.0);
-    sliderTranslationCubeY->setTickInterval(1);
-    sliderTranslationCubeY->setMaximum(100.0);
-    sliderTranslationCubeY->setValue(0);
+    sliderTranslationY = new QSlider(Qt::Horizontal);
+    sliderTranslationY->setMinimum(-100.0);
+    sliderTranslationY->setTickInterval(1);
+    sliderTranslationY->setMaximum(100.0);
+    sliderTranslationY->setValue(0);
     layoutTranslationY = new QHBoxLayout;
     layoutTranslationY->insertSpacing(0, 10);
     layoutTranslationY->addWidget(labelTranslationY);
-    layoutTranslationY->addWidget(sliderTranslationCubeY);
+    layoutTranslationY->addWidget(sliderTranslationY);
 
     labelTranslationZ = new QLabel("Z : ");
     labelTranslationZ->setFixedSize(30,30);
-    sliderTranslationCubeZ = new QSlider(Qt::Horizontal);
-    sliderTranslationCubeZ->setMinimum(-100.0);
-    sliderTranslationCubeZ->setTickInterval(1);
-    sliderTranslationCubeZ->setMaximum(100.0);
-    sliderTranslationCubeZ->setValue(0.0);
+    sliderTranslationZ = new QSlider(Qt::Horizontal);
+    sliderTranslationZ->setMinimum(-100.0);
+    sliderTranslationZ->setTickInterval(1);
+    sliderTranslationZ->setMaximum(100.0);
+    sliderTranslationZ->setValue(0.0);
     layoutTranslationZ = new QHBoxLayout;
     layoutTranslationZ->insertSpacing(0, 10);
     layoutTranslationZ->addWidget(labelTranslationZ);
-    layoutTranslationZ->addWidget(sliderTranslationCubeZ);
+    layoutTranslationZ->addWidget(sliderTranslationZ);
 
     labelTranslation = new QLabel("Translation :");
     labelTranslation->setFixedSize(150,30);
@@ -142,7 +150,57 @@ Frame::Frame()
     // Rotation
     layoutRotation = new QVBoxLayout;
 
-    mouseRotation = new QRadioButton("Mouse");
+    labelRotation = new QLabel("Rotation :");
+    labelRotation->setFixedSize(150,30);
+
+    labelRotationX = new QLabel("X : ");
+    labelRotationX->setFixedSize(30,30);
+    sliderRotationX = new QSlider(Qt::Horizontal);
+    sliderRotationX->setMinimum(0.);
+    sliderRotationX->setTickInterval(1);
+    sliderRotationX->setMaximum(360.);
+    sliderRotationX->setValue(0);
+    layoutRotationX = new QHBoxLayout;
+    layoutRotationX->insertSpacing(0, 10);
+    layoutRotationX->addWidget(labelRotationX);
+    layoutRotationX->addWidget(sliderRotationX);
+
+    labelRotationY = new QLabel("Y : ");
+    labelRotationY->setFixedSize(30,30);
+    sliderRotationY = new QSlider(Qt::Horizontal);
+    sliderRotationY->setMinimum(0.);
+    sliderRotationY->setTickInterval(1);
+    sliderRotationY->setMaximum(360.);
+    sliderRotationY->setValue(0);
+    layoutRotationY = new QHBoxLayout;
+    layoutRotationY->insertSpacing(0, 10);
+    layoutRotationY->addWidget(labelRotationY);
+    layoutRotationY->addWidget(sliderRotationY);
+
+    labelRotationZ = new QLabel("Z : ");
+    labelRotationZ->setFixedSize(30,30);
+    sliderRotationZ = new QSlider(Qt::Horizontal);
+    sliderRotationZ->setMinimum(0.);
+    sliderRotationZ->setTickInterval(1);
+    sliderRotationZ->setMaximum(360.);
+    sliderRotationZ->setValue(0.0);
+    layoutRotationZ = new QHBoxLayout;
+    layoutRotationZ->insertSpacing(0, 10);
+    layoutRotationZ->addWidget(labelRotationZ);
+    layoutRotationZ->addWidget(sliderRotationZ);
+
+    layoutRotation->addWidget(labelRotation);
+    layoutRotation->addLayout(layoutRotationX);
+    layoutRotation->addLayout(layoutRotationY);
+    layoutRotation->addLayout(layoutRotationZ);
+
+    /*layoutRotation->addWidget(labelRotation);
+    layoutRotation->addWidget(mouseRotation);
+    layoutRotation->addWidget(xRotation);
+    layoutRotation->addWidget(yRotation);
+    layoutRotation->addWidget(zRotation);*/
+
+    /*mouseRotation = new QRadioButton("Mouse");
     xRotation = new QRadioButton("X");
     yRotation = new QRadioButton("Y");
     zRotation = new QRadioButton("Z");
@@ -154,7 +212,7 @@ Frame::Frame()
     layoutRotation->addWidget(mouseRotation);
     layoutRotation->addWidget(xRotation);
     layoutRotation->addWidget(yRotation);
-    layoutRotation->addWidget(zRotation);
+    layoutRotation->addWidget(zRotation);*/
 
     layoutVisuel = new QVBoxLayout;
     layoutVisuel->addLayout(layoutHomothetie);
@@ -164,13 +222,13 @@ Frame::Frame()
     //Lumière
     layoutLight = new QHBoxLayout;
     layoutLight->addLayout(lightPositionLayout = new QHBoxLayout);
-    lightPositionLayout->addWidget(lightXSlider = new DebugSlider);
-    lightPositionLayout->addWidget(lightYSlider = new DebugSlider(3, 0));
-    lightPositionLayout->addWidget(lightZSlider = new DebugSlider);
+    lightPositionLayout->addWidget(sliderLightX = new DebugSlider);
+    lightPositionLayout->addWidget(sliderLightY = new DebugSlider);
+    lightPositionLayout->addWidget(sliderLightZ = new DebugSlider);
 
     // Général
     rbMur->setChecked(true);
-    mouseRotation->setChecked(true);
+    //mouseRotation->setChecked(true);
     colorWidget = new QWidget;
     formeWidget = new QWidget;
     lightWidget = new QWidget;
@@ -193,11 +251,12 @@ Frame::Frame()
     // Listener des boutons
     QObject::connect(sliderHomothetie, SIGNAL(valueChanged(int)), this, SLOT(changeSize(int)));
 
-    QObject::connect(boutonCube, SIGNAL(stateChanged(int)), this, SLOT(createCube()));
-    QObject::connect(boutonPyramide, SIGNAL(stateChanged(int)), this, SLOT(createPyramide()));
-    QObject::connect(boutonSphere, SIGNAL(stateChanged(int)), this, SLOT(createSphere()));
-    QObject::connect(boutonTorus, SIGNAL(stateChanged(int)), this, SLOT(createTorus()));
-    QObject::connect(boutonSuzanne, SIGNAL(stateChanged(int)), this, SLOT(createSuzanne()));
+    QObject::connect(checkBoxCube, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxArrow, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxPlane, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxPyramide, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxSphere, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxTeapot, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
 
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTexture()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTexture()));
@@ -210,18 +269,22 @@ Frame::Frame()
     QObject::connect(sliderVert, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
     QObject::connect(sliderBleu, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
 
-    QObject::connect(sliderTranslationCubeX, SIGNAL(valueChanged(int)), this, SLOT(changePositionCube()));
-    QObject::connect(sliderTranslationCubeY, SIGNAL(valueChanged(int)), this, SLOT(changePositionCube()));
-    QObject::connect(sliderTranslationCubeZ, SIGNAL(valueChanged(int)), this, SLOT(changePositionCube()));
+    QObject::connect(sliderTranslationX, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
+    QObject::connect(sliderTranslationY, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
+    QObject::connect(sliderTranslationZ, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
 
-    QObject::connect(mouseRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
-    QObject::connect(xRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
-    QObject::connect(yRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
-    QObject::connect(zRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+    QObject::connect(sliderRotationX, SIGNAL(valueChanged(int)), this, SLOT(changeRotationX()));
+    QObject::connect(sliderRotationY, SIGNAL(valueChanged(int)), this, SLOT(changeRotationY()));
+    QObject::connect(sliderRotationZ, SIGNAL(valueChanged(int)), this, SLOT(changeRotationZ()));
 
-    QObject::connect(lightXSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
-    QObject::connect(lightYSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
-    QObject::connect(lightZSlider, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
+    //QObject::connect(mouseRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+    //QObject::connect(xRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+    //QObject::connect(yRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+    //QObject::connect(zRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
+
+    QObject::connect(sliderLightX, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
+    QObject::connect(sliderLightY, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
+    QObject::connect(sliderLightZ, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
     //createCube();
@@ -231,6 +294,44 @@ Frame::Frame()
 void Frame::changeSize(int value) {
     scene3D->setHomotethie(value/2.0f);
 };
+
+void Frame::selectShape() {
+    if (!checkBoxCube->isChecked() && scene3D->isShapeInMap("Cube")) {
+        scene3D->selectShape("Cube");
+    } else if (checkBoxCube->isChecked() && !scene3D->isShapeInMap("Cube")) {
+        scene3D->selectShape("Cube");
+    }
+
+    if (!checkBoxPyramide->isChecked() && scene3D->isShapeInMap("Pyramide")) {
+        scene3D->selectShape("Pyramide");
+    } else if (checkBoxPyramide->isChecked() && !scene3D->isShapeInMap("Pyramide")) {
+        scene3D->selectShape("Pyramide");
+    }
+
+    if (!checkBoxPlane->isChecked() && scene3D->isShapeInMap("Plane")) {
+        scene3D->selectShape("Plane");
+    } else if (checkBoxPlane->isChecked() && !scene3D->isShapeInMap("Plane")) {
+        scene3D->selectShape("Plane");
+    }
+
+    if (!checkBoxSphere->isChecked() && scene3D->isShapeInMap("Sphere")) {
+        scene3D->selectShape("Sphere");
+    } else if (checkBoxSphere->isChecked() && !scene3D->isShapeInMap("Sphere")) {
+        scene3D->selectShape("Sphere");
+    }
+
+    if (!checkBoxTeapot->isChecked() && scene3D->isShapeInMap("Teapot")) {
+        scene3D->selectShape("Teapot");
+    } else if (checkBoxTeapot->isChecked() && !scene3D->isShapeInMap("Teapot")) {
+        scene3D->selectShape("Teapot");
+    }
+
+    if (!checkBoxArrow->isChecked() && scene3D->isShapeInMap("Arrow")) {
+        scene3D->selectShape("Arrow");
+    } else if (checkBoxArrow->isChecked() && !scene3D->isShapeInMap("Arrow")) {
+        scene3D->selectShape("Arrow");
+    }
+}
 
 void Frame::createCube() {
     scene3D->setObject("cube");
@@ -287,29 +388,43 @@ void Frame::changeColor() {
     }
 }
 
-void Frame::changePositionCube() {
-    float x = (sliderTranslationCubeX->value()/100.f)*5.f;
-    float y = (sliderTranslationCubeY->value()/100.f)*5.f;
-    float z = (sliderTranslationCubeZ->value()/100.f)*5.f;
-    scene3D->setPositionCube(QVector3D(x,y,z));
+void Frame::changePosition() {
+    float x = (sliderTranslationX->value()/100.f)*5.f;
+    float y = (sliderTranslationY->value()/100.f)*5.f;
+    float z = (sliderTranslationZ->value()/100.f)*5.f;
+    scene3D->setPosition(QVector3D(x,y,z));
 }
 
-void Frame::changeRotation() {
-    if(mouseRotation->isChecked()){
-        scene3D->setAxeRotation(0);
-    } else if(xRotation->isChecked()){
-        scene3D->setAxeRotation(1);
-    } else if(yRotation->isChecked()){
-        scene3D->setAxeRotation(2);
-    } else if(zRotation->isChecked()){
-        scene3D->setAxeRotation(3);
-    }
+void Frame::changeRotationX() {
+    float angle = (sliderRotationX->value()/360.f);
+    scene3D->setRotation(QQuaternion(angle,QVector3D(1.,0.,0.).normalized()));
 }
+
+void Frame::changeRotationY() {
+    float angle = (sliderRotationY->value()/360.f);
+    scene3D->setRotation(QQuaternion(angle,QVector3D(0.,1.,0.).normalized()));
+}
+
+void Frame::changeRotationZ() {
+    float angle = (sliderRotationZ->value()/360.f);
+    scene3D->setRotation(QQuaternion(angle,QVector3D(0.,0.,1.).normalized()));
+}
+
+
+/*if(mouseRotation->isChecked()){
+    scene3D->setAxeRotation(0);
+} else if(xRotation->isChecked()){
+    scene3D->setAxeRotation(1);
+} else if(yRotation->isChecked()){
+    scene3D->setAxeRotation(2);
+} else if(zRotation->isChecked()){
+    scene3D->setAxeRotation(3);
+}*/
 
 void Frame::changeLightPosition()
 {
-    myLight.lightPosition.setX(lightXSlider->value());
-    myLight.lightPosition.setY(lightYSlider->value());
-    myLight.lightPosition.setZ(lightZSlider->value());
+    myLight.lightPosition.setX(sliderLightX->value());
+    myLight.lightPosition.setY(sliderLightY->value());
+    myLight.lightPosition.setZ(sliderLightZ->value());
     scene3D->repaint();
 }

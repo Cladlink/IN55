@@ -55,13 +55,17 @@ void IGeometryEngine::drawGeometry(QOpenGLShaderProgram *program)
     program->enableAttributeArray(uvLocation);
     program->setAttributeBuffer(uvLocation, GL_FLOAT, offset, 3, sizeof(Vertex));
 
+    program->setUniformValue("axis",QVector3D(1.,0.,0.));
+
+    program->setUniformValue("angle",0.f);
+
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
 }
 
 void IGeometryEngine::update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape, QVector3D _color,
                              QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                             QVector3D _position) {
+                             QVector3D _position, QQuaternion _rotation) {
     arrayBuf.bind();
     for (int i=0; i<nbrVertices-1; i++) {
         verticesShape[i].color = _color;
@@ -98,6 +102,10 @@ void IGeometryEngine::update(QOpenGLShaderProgram *program,Vertex *verticesShape
     program->setUniformValue("modelToWorldMatrix",_shapeModelToWorldMatrix);
 
     program->setUniformValue("translation",QVector4D(_position,1.f));
+
+    program->setUniformValue("axis",_rotation.vector());
+
+    program->setUniformValue("angle",_rotation.scalar());
 
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
@@ -492,6 +500,41 @@ ShapeData IGeometryEngine::makeSphere(uint tesselation) {
 
 ShapeData IGeometryEngine::makeTorus(uint tesselation)
 {
+    /*ShapeData ret;
+    uint dimensions = tesselation * tesselation;
+    ret.numVertices = dimensions;
+    ret.vertices = new Vertex[ret.numVertices];
+    float sliceAngle = 360 / tesselation;
+    const float torusRadius = 1.0f;
+    const float pipeRadius = 0.5f;
+    for (uint round1 = 0; round1 < tesselation; round1++)
+    {
+        // Generate a circle on the xy plane, then
+        // translate then rotate it into position
+        glm::mat4 transform =
+            glm::rotate(glm::mat4(), round1 * sliceAngle, glm::vec3(0.0f, 1.0f, 0.0f)) *
+            glm::translate(glm::mat4(), glm::vec3(torusRadius, 0.0f, 0.0f));
+        glm::mat3 normalTransform = (glm::mat3)transform;
+        for (uint round2 = 0; round2 < tesselation; round2++)
+        {
+            Vertex& v = ret.vertices[round1 * tesselation + round2];
+            glm::vec4 glmVert(
+                pipeRadius * cos(glm::radians(sliceAngle * round2)),
+                pipeRadius * sin(glm::radians(sliceAngle * round2)),
+                0,
+                1.0f);
+            glm::vec4 glmVertPrime = transform * glmVert;
+            v.position = (glm::vec3)glmVertPrime;
+            v.normal = glm::normalize(normalTransform * (glm::vec3)glmVert);
+            v.color = randomColor();
+        }
+    }
+
+    ShapeData ret2 = makePlaneUnseamedIndices(tesselation);
+    ret.numIndices = ret2.numIndices;
+    ret.indices = ret2.indices;
+    return ret;*/
+
     ShapeData ret;
     uint dimensions = tesselation * tesselation;
     ret.numVertices = dimensions;
@@ -506,9 +549,6 @@ ShapeData IGeometryEngine::makeTorus(uint tesselation)
         QMatrix4x4 transform;
         transform.translate(QVector3D(torusRadius, 0.0f, 0.0f));
         transform.rotate(round1 * sliceAngle, QVector3D(0.0f, 1.0f, 0.0f));
-        QVector4D row0 = transform.row(0);
-        QVector4D row1 = transform.row(1);
-        QVector4D row2 = transform.row(2);
 
         for (uint round2 = 0; round2 < tesselation; round2++)
         {

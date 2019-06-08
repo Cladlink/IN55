@@ -75,7 +75,7 @@ public:
     virtual ~IGeometryEngine();
     void update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape, QVector3D _color,
                 QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                QVector3D _position);
+                QVector3D _position, QQuaternion _rotation);
     void initGeometry(Vertex *verticesShape, unsigned short *indicesShape);
 
     void drawGeometry(QOpenGLShaderProgram *program);
