@@ -182,14 +182,14 @@ void MainWidget::initializeGL()
 //! [2]
 
     geometriesCube = new Cube;
+    cubeNormal = new Cube;
     geometriesLight = new Cube;
     //geometriesTorus = new Torus;
     geometriesPyramide = new Pyramide;
     geometriesArrow = new Arrow;
-    geometriesTeapot = new Teapot(30);
+    geometriesTeapot = new Teapot;
     geometriesPlane = new Plane;
-    geometriesSphere = new Sphere(10);
-    //geometriesPyramide = new Pyramide;
+    geometriesSphere = new Sphere;
     /*geometriesPyramide = new Pyramide;
     geometriesSphere = new Shape("IN55/ressources/sphere.obj");
     geometriesTorus = new Shape("IN55/ressources/torus.obj");
@@ -288,34 +288,24 @@ void MainWidget::paintGL()
     program.setUniformValue("time", (launch-beginning)/1000);
     program.setUniformValue("isColor",isColor);
 
-    geometriesCube->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Cube"), getRotation("Cube"));
-    geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,getPosition("Arrow"), getRotation("Arrow"));
-    //geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(-2.,2.,2.), getRotation());
-    geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Sphere"), getRotation("Sphere"));
-    //geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(-1.,2.,-1.), getRotation());
-    geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,getPosition("Pyramide"), getRotation("Pyramide"));
-    //geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(1.,1.,1.), getRotation());
-    geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Plane"), getRotation("Plane"));
+    qDebug() << "Hide Number : " << hideShapeNumber;
+
+    geometriesCube->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Cube"), getRotation("Cube"), normal, hideShapeNumber);
+    //geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Plane"), getRotation("Plane"), normal,hideShapeNumber);
     //geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,0.,0.), getRotation());
+    /*geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,getPosition("Arrow"), getRotation("Arrow"), normal);
+    //geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(-2.,2.,2.), getRotation());
+    geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Sphere"), getRotation("Sphere"), normal);
+    //geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(-1.,2.,-1.), getRotation());
+    geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,getPosition("Pyramide"), getRotation("Pyramide"), normal);
+    //geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(1.,1.,1.), getRotation());
+
     modelToProjectionMatrix.rotate(-90,QVector3D(1.f,0.f,0.f));
-    geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Teapot"), getRotation("Teapot"));
+    geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Teapot"), getRotation("Teapot"), normal);
     //geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(3.,2.,3.), getRotation());
-    modelToProjectionMatrix.rotate(90,QVector3D(1.f,0.f,0.f));
+    modelToProjectionMatrix.rotate(90,QVector3D(1.f,0.f,0.f));*/
 
-    ////geometriesTorus->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,4.,0.), getRotation());
-
-//! [6]
-    /*if (getObject() == "cube") {
-        geometriesSquare->update(&program,getColor());
-    } else if (getObject() == "pyramide") {
-        geometriesPyramide->update(&program,getColor());
-    } else if (getObject() == "sphere") {
-        geometriesSphere->update(&program,getColor());
-    } else if (getObject() == "torus") {
-        geometriesTorus->update(&program,getColor());
-    } else if (getObject() == "suzanne") {
-        geometriesSuzanne->update(&program,getColor());
-    }*/
+    //geometriesTorus->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,4.,0.), getRotation());
 }
 
 float MainWidget::getHomotethie(){
@@ -324,6 +314,27 @@ float MainWidget::getHomotethie(){
 
 void MainWidget::setHomotethie(float _homotethie){
     homotethie = _homotethie;
+}
+
+int MainWidget::getTesselation(){
+    return tesselation;
+}
+
+void MainWidget::setTesselation(int _tesselation){
+    if (itemsMapShape.contains("Sphere")) {
+        geometriesSphere->~Sphere();
+        geometriesSphere = new Sphere(_tesselation);
+    }
+
+    if (itemsMapShape.contains("Plane")) {
+        geometriesPlane->~Plane();
+        geometriesPlane = new Plane(_tesselation);
+    }
+
+    if (itemsMapShape.contains("Teapot")) {
+        geometriesTeapot->~Teapot();
+        geometriesTeapot = new Teapot(_tesselation);
+    }
 }
 
 string MainWidget::getObject(){
@@ -376,6 +387,14 @@ void MainWidget::selectShape(QString name) {
     } else {
         itemsMapShape.insert(name,name);
     }
+}
+
+void MainWidget::showNormal(bool _showNormal) {
+    normal = _showNormal;
+}
+
+void MainWidget::hideShape(int _hideShapeNumber) {
+    hideShapeNumber = _hideShapeNumber;
 }
 
 bool MainWidget::isShapeInMap(QString name) {
@@ -440,13 +459,25 @@ void MainWidget::keyPressEvent(QKeyEvent* e)
     case Qt::Key::Key_Z:
         camera->moveForward();
         break;
+    case Qt::Key::Key_Up:
+        camera->moveForward();
+        break;
     case Qt::Key::Key_S:
+        camera->moveBackward();
+        break;
+    case Qt::Key::Key_Down:
         camera->moveBackward();
         break;
     case Qt::Key::Key_Q:
         camera->strafeLeft();
         break;
+    case Qt::Key::Key_Left:
+        camera->strafeLeft();
+        break;
     case Qt::Key::Key_D:
+        camera->strafeRight();
+        break;
+    case Qt::Key::Key_Right:
         camera->strafeRight();
         break;
     case Qt::Key::Key_R:

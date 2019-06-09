@@ -5,6 +5,7 @@ Pyramide::Pyramide()
     initializeOpenGLFunctions();
 
     ShapeData pyramide = IGeometryEngine::makePyramide();
+    //ShapeData pyramideNormal = IGeometryEngine::generateNormals(pyramide);
 
     verticesPyramide = pyramide.vertices;
     indicesPyramide = pyramide.indices;
@@ -38,9 +39,11 @@ void Pyramide::drawGeometry(QOpenGLShaderProgram *program)
 
 void Pyramide::update(QOpenGLShaderProgram *program,QVector3D _color,
                       QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                      QVector3D _position, QQuaternion _rotation){
+                      QVector3D _position, QQuaternion _rotation, bool _showNormal, int _hideShapeNumber){
 
-    IGeometryEngine::update(program,verticesPyramide,indicesPyramide,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position,_rotation);
+    IGeometryEngine::update(program,verticesPyramide,indicesPyramide,verticesPyramideNormal,indicesPyramideNormal,
+                            _color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,
+                            _position,_rotation, false,_hideShapeNumber);
 }
 
 

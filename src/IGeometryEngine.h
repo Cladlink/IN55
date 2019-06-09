@@ -73,11 +73,11 @@ class IGeometryEngine : protected QOpenGLFunctions
 public:
     IGeometryEngine();
     virtual ~IGeometryEngine();
-    void update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape, QVector3D _color,
-                QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                QVector3D _position, QQuaternion _rotation);
-    void initGeometry(Vertex *verticesShape, unsigned short *indicesShape);
-
+    void update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape,
+                Vertex *verticesNormal, unsigned short *indicesNormal,
+                QVector3D _color,QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
+                QVector3D _position, QQuaternion _rotation, bool showNormal, int _hideShapeNumber);
+    void initGeometry(Vertex *verticesShape,unsigned short *indicesShape);
     void drawGeometry(QOpenGLShaderProgram *program);
 
     QVector3D randomColor();
@@ -90,6 +90,7 @@ public:
     ShapeData makeSphere(uint tesselation = 20);
     ShapeData makeTeapot(uint tesselation = 10, const QMatrix4x4 &lidTransform = QMatrix4x4());
     ShapeData makeTorus(uint tesselation = 20);
+    ShapeData generateNormals(const ShapeData& data);
 
     void generatePatches(float * v, float * n, float * tc, unsigned short* el, int grid);
     void moveLid(int grid, float *v, const QMatrix4x4 &lidTransform);
@@ -115,8 +116,12 @@ public:
 protected :
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;
+    QOpenGLBuffer arrayNormalBuf;
+    QOpenGLBuffer indexNormalBuf;
     int nbrVertices;
     int nbrIndices;
+    int nbrVerticesNormal;
+    int nbrIndicesNormal;
 };
 
 #endif // GEOMETRYENGINE_H

@@ -23,6 +23,10 @@ Frame::Frame()
     checkBoxSphere->setCheckState(Qt::Checked);
     checkBoxTeapot = new QCheckBox("Teapot");
     checkBoxTeapot->setCheckState(Qt::Checked);
+    checkBoxNormal = new QCheckBox("Normal");
+    checkBoxNormal->setCheckState(Qt::Unchecked);
+    checkBoxHideShape = new QCheckBox("Hide Shape");
+    checkBoxHideShape->setCheckState(Qt::Unchecked);
 
     layoutBoutonsForme = new QVBoxLayout;
     layoutBoutonsForme->addWidget(checkBoxCube);
@@ -31,6 +35,8 @@ Frame::Frame()
     layoutBoutonsForme->addWidget(checkBoxPyramide);
     layoutBoutonsForme->addWidget(checkBoxSphere);
     layoutBoutonsForme->addWidget(checkBoxTeapot);
+    layoutBoutonsForme->addWidget(checkBoxHideShape);
+    //layoutBoutonsForme->addWidget(checkBoxNormal);
 
     // Homothétie
     sliderHomothetie = new QSlider(Qt::Horizontal);
@@ -43,6 +49,18 @@ Frame::Frame()
     layoutHomothetie = new QHBoxLayout;
     layoutHomothetie->addWidget(labelHomothetie);
     layoutHomothetie->addWidget(sliderHomothetie);
+
+    // Tesselation
+    sliderTesselation = new QSlider(Qt::Horizontal);
+    sliderTesselation->setMinimum(5);
+    sliderTesselation->setMaximum(50);
+
+    labelTesselation = new QLabel("Tesselation : ");
+    labelTesselation->setFixedSize(100,30);
+
+    layoutTesselation = new QHBoxLayout;
+    layoutTesselation->addWidget(labelTesselation);
+    layoutTesselation->addWidget(sliderTesselation);
 
     // Couleurs
     rbColor = new QRadioButton("Couleur", this);
@@ -156,9 +174,9 @@ Frame::Frame()
     labelRotationX = new QLabel("X : ");
     labelRotationX->setFixedSize(30,30);
     sliderRotationX = new QSlider(Qt::Horizontal);
-    sliderRotationX->setMinimum(0.);
+    sliderRotationX->setMinimum(-180.);
     sliderRotationX->setTickInterval(1);
-    sliderRotationX->setMaximum(360.);
+    sliderRotationX->setMaximum(180.);
     sliderRotationX->setValue(0);
     layoutRotationX = new QHBoxLayout;
     layoutRotationX->insertSpacing(0, 10);
@@ -215,6 +233,7 @@ Frame::Frame()
     layoutRotation->addWidget(zRotation);*/
 
     layoutVisuel = new QVBoxLayout;
+    layoutVisuel->addLayout(layoutTesselation);
     layoutVisuel->addLayout(layoutHomothetie);
     layoutVisuel->addLayout(layoutTranslation);
     layoutVisuel->addLayout(layoutRotation);
@@ -251,12 +270,16 @@ Frame::Frame()
     // Listener des boutons
     QObject::connect(sliderHomothetie, SIGNAL(valueChanged(int)), this, SLOT(changeSize(int)));
 
+    QObject::connect(sliderTesselation, SIGNAL(valueChanged(int)), this, SLOT(changeShapeWithTesselation(int)));
+
     QObject::connect(checkBoxCube, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
     QObject::connect(checkBoxArrow, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
     QObject::connect(checkBoxPlane, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
     QObject::connect(checkBoxPyramide, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
     QObject::connect(checkBoxSphere, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
     QObject::connect(checkBoxTeapot, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxNormal, SIGNAL(stateChanged(int)), this, SLOT(showNormal()));
+    QObject::connect(checkBoxHideShape, SIGNAL(stateChanged(int)), this, SLOT(hideShape()));
 
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTexture()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTexture()));
@@ -295,41 +318,49 @@ void Frame::changeSize(int value) {
     scene3D->setHomotethie(value/2.0f);
 };
 
+void Frame::changeShapeWithTesselation(int value) {
+    scene3D->setTesselation(value);
+};
+
 void Frame::selectShape() {
-    if (!checkBoxCube->isChecked() && scene3D->isShapeInMap("Cube")) {
-        scene3D->selectShape("Cube");
-    } else if (checkBoxCube->isChecked() && !scene3D->isShapeInMap("Cube")) {
+    if ((!checkBoxCube->isChecked() && scene3D->isShapeInMap("Cube")) || (checkBoxCube->isChecked() && !scene3D->isShapeInMap("Cube"))) {
         scene3D->selectShape("Cube");
     }
 
-    if (!checkBoxPyramide->isChecked() && scene3D->isShapeInMap("Pyramide")) {
-        scene3D->selectShape("Pyramide");
-    } else if (checkBoxPyramide->isChecked() && !scene3D->isShapeInMap("Pyramide")) {
+    if ((!checkBoxPyramide->isChecked() && scene3D->isShapeInMap("Pyramide")) || (checkBoxPyramide->isChecked() && !scene3D->isShapeInMap("Pyramide"))) {
         scene3D->selectShape("Pyramide");
     }
 
-    if (!checkBoxPlane->isChecked() && scene3D->isShapeInMap("Plane")) {
-        scene3D->selectShape("Plane");
-    } else if (checkBoxPlane->isChecked() && !scene3D->isShapeInMap("Plane")) {
+    if ((!checkBoxPlane->isChecked() && scene3D->isShapeInMap("Plane")) || (checkBoxPlane->isChecked() && !scene3D->isShapeInMap("Plane"))) {
         scene3D->selectShape("Plane");
     }
 
-    if (!checkBoxSphere->isChecked() && scene3D->isShapeInMap("Sphere")) {
-        scene3D->selectShape("Sphere");
-    } else if (checkBoxSphere->isChecked() && !scene3D->isShapeInMap("Sphere")) {
+    if ((!checkBoxSphere->isChecked() && scene3D->isShapeInMap("Sphere")) || (checkBoxSphere->isChecked() && !scene3D->isShapeInMap("Sphere"))) {
         scene3D->selectShape("Sphere");
     }
 
-    if (!checkBoxTeapot->isChecked() && scene3D->isShapeInMap("Teapot")) {
-        scene3D->selectShape("Teapot");
-    } else if (checkBoxTeapot->isChecked() && !scene3D->isShapeInMap("Teapot")) {
+    if ((!checkBoxTeapot->isChecked() && scene3D->isShapeInMap("Teapot")) || (checkBoxTeapot->isChecked() && !scene3D->isShapeInMap("Teapot"))) {
         scene3D->selectShape("Teapot");
     }
 
-    if (!checkBoxArrow->isChecked() && scene3D->isShapeInMap("Arrow")) {
+    if ((!checkBoxArrow->isChecked() && scene3D->isShapeInMap("Arrow")) || (checkBoxArrow->isChecked() && !scene3D->isShapeInMap("Arrow"))) {
         scene3D->selectShape("Arrow");
-    } else if (checkBoxArrow->isChecked() && !scene3D->isShapeInMap("Arrow")) {
-        scene3D->selectShape("Arrow");
+    }
+}
+
+void Frame::showNormal() {
+    if (checkBoxNormal->isChecked()) {
+        scene3D->showNormal(true);
+    } else {
+        scene3D->showNormal(false);
+    }
+}
+
+void Frame::hideShape() {
+    if (checkBoxHideShape->isChecked()) {
+        scene3D->hideShape(1);
+    } else {
+        scene3D->hideShape(0);
     }
 }
 
@@ -396,7 +427,7 @@ void Frame::changePosition() {
 }
 
 void Frame::changeRotationX() {
-    float angle = (sliderRotationX->value()/360.f);
+    float angle = (sliderRotationX->value()/360.0f);
     scene3D->setRotation(QQuaternion(angle,QVector3D(1.,0.,0.).normalized()));
 }
 

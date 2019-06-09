@@ -10,7 +10,7 @@ public:
     ~Pyramide();
     void update(QOpenGLShaderProgram *program,QVector3D _color,
                 QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                QVector3D _position, QQuaternion _rotation);
+                QVector3D _position, QQuaternion _rotation, bool showNormal, int _hideShapeNumber);
     void initGeometry();
 
     void drawGeometry(QOpenGLShaderProgram *program);
@@ -20,6 +20,8 @@ public:
 private :
     Vertex *verticesPyramide;
     unsigned short *indicesPyramide;
+    Vertex *verticesPyramideNormal;
+    unsigned short *indicesPyramideNormal;
     /*Vertex verticesPyramide[16] = {
         {QVector3D(0.f, 1.f, 0.f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.5f, 1.0f)}, //0 -> 0
         {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f), QVector2D(0.0f, 0.0f)}, //2 -> 1

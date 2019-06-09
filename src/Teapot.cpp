@@ -7,9 +7,12 @@ Teapot::Teapot(uint _tesselation, const QMatrix4x4 &_lidTransform) {
     initializeOpenGLFunctions();
 
     ShapeData teapot = IGeometryEngine::makeTeapot(tesselation,*lidTransform);
+    ShapeData teapotNormal = IGeometryEngine::generateNormals(teapot);
 
     verticesTeapot = teapot.vertices;
     indicesTeapot = teapot.indices;
+    verticesTeapotNormal = teapotNormal.vertices;
+    indicesTeapotNormal = teapotNormal.indices;
 
     // Generate 2 VBOs
     arrayBuf.create();
@@ -17,6 +20,8 @@ Teapot::Teapot(uint _tesselation, const QMatrix4x4 &_lidTransform) {
     // Initializes cube geometry and transfers it to VBOs
     nbrIndices = teapot.numIndices;
     nbrVertices = teapot.numVertices;
+    nbrIndicesNormal = teapotNormal.numIndices;
+    nbrVerticesNormal = teapotNormal.numVertices;
     initGeometry();
 }
 
@@ -40,9 +45,11 @@ void Teapot::drawGeometry(QOpenGLShaderProgram *program)
 
 void Teapot::update(QOpenGLShaderProgram *program,QVector3D _color,
                   QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                  QVector3D _position, QQuaternion _rotation){
+                  QVector3D _position, QQuaternion _rotation, bool _showNormal, int _hideShapeNumber){
 
-    IGeometryEngine::update(program,verticesTeapot,indicesTeapot,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position,_rotation);
+    IGeometryEngine::update(program,verticesTeapot,indicesTeapot,verticesTeapotNormal, indicesTeapotNormal,
+                            _color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,
+                            _position,_rotation, _showNormal, _hideShapeNumber);
 }
 
 //! [2]

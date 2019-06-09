@@ -8,7 +8,7 @@ DebugSlider::DebugSlider(float value, float min, float max, bool textOnLeft, flo
     sliderGranularity = granularity;
     setLayout(layout = textOnLeft ? (QLayout*)new QHBoxLayout : new QVBoxLayout);
     layout->addWidget(label = new QLabel);
-    label->setMinimumWidth(35);
+    label->setMinimumWidth(5);
     layout->addWidget(slider = new QSlider);
     label->setAlignment(Qt::AlignCenter);
     slider->setOrientation(Qt::Horizontal);

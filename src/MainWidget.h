@@ -91,6 +91,7 @@ public:
 
     // Getter
     float getHomotethie();
+    int getTesselation();
     string getObject();
     string getPathTexture();
     int getNbObjects();
@@ -103,7 +104,8 @@ public:
     bool isShapeInMap(QString name);
 
     // Setter
-    void setHomotethie(float _omotethie);
+    void setHomotethie(float _homotethie);
+    void setTesselation(int _tesselation);
     void setObject(string _object);
     void setPathTexture(string _pathTexture);
     void setNbObjects(int _nbObject);
@@ -113,7 +115,11 @@ public:
     void setAxeRotation(int _axeRotation);
     void setPosition(QVector3D _position);
     void setRotation(QQuaternion _rotation);
+
+    // Others methods
     void selectShape(QString name);
+    void showNormal(bool _showNormal);
+    void hideShape(int _hideShapeNumber);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -134,6 +140,7 @@ private:
     QOpenGLShaderProgram program;
     QVector<QPixmap> pixmap;
     Cube *geometriesCube;
+    Cube *cubeNormal;
     Cube *geometriesLight;
     Pyramide *geometriesPyramide;
     Plane *geometriesPlane;
@@ -144,7 +151,7 @@ private:
     Shape *geometriesSuzanne;
     QMap<QString, QString> itemsMapShape;
 
-    float valueSlider = 0.5;
+    int tesselation;
     float homotethie = 0.5;
     int nbObjects;
     string object;
@@ -152,8 +159,10 @@ private:
     float launch;
     string pathTexture;
     int isColor;
+    int hideShapeNumber;
     int indexBufferArrayTexture;
     int axeRotation;
+    bool normal = false;
 
     QMatrix4x4 projection;
     QMatrix4x4 matrix;
@@ -164,9 +173,6 @@ private:
     QVector3D position;
 
     Light *myLight;
-
-    int nbrVertices;
-    int nbrIndices;
 
     Camera* camera;
 

@@ -38,10 +38,12 @@ out vec3 normalWorld;
 out vec3 vertexPositionWorld;
 out vec3 vertexToFragmentColor;
 out vec4 fColor;
+out vec4 fPosition;
+out float fTime;
 
 uniform mat4 modelToProjectionMatrix;
 uniform mat4 modelToWorldMatrix;
-//uniform mat3 rotation;
+uniform float time;
 uniform vec4 translation;
 uniform vec3 axis;
 uniform float angle;
@@ -59,15 +61,22 @@ mat4 rotationMatrix(vec3 axis, float angle)
                 0.0,                                0.0,                                0.0,                                1.0);
 }
 
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
+}
+
 //! [0]
 void main()
 {
     vec4 pos = position + translation;
     pos = pos * rotationMatrix(axis,angle);
     gl_Position = modelToProjectionMatrix * pos;
+    fPosition = gl_Position;
+    fTime = time;
     normalWorld = vec3(modelToWorldMatrix * vec4(normal, 0));
     vertexPositionWorld = vec3(modelToWorldMatrix * pos);
     vertexToFragmentColor = color;
+    //fColor = vec4(random((fTime)*fPosition.xy),random((fTime+1.)*fPosition.yz),random((fTime+1.)*fPosition.zy),1.0);
     fColor = vec4(color,1.0);
     // Calculate vertex position in screen space
     /*vec4 pos = vec4(position,1.) + translation;
@@ -92,7 +101,4 @@ void main()
 
 
 
-float random (vec2 st) {
-    return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
-}
 //! [0]

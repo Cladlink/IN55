@@ -53,6 +53,7 @@ private:
 
     //QSlider
     QSlider *sliderHomothetie;
+    QSlider *sliderTesselation;
     QSlider *sliderRouge;
     QSlider *sliderVert;
     QSlider *sliderBleu;
@@ -64,7 +65,6 @@ private:
     QSlider *sliderRotationZ;
 
     //DebugSlider
-
     DebugSlider *sliderLightX;
     DebugSlider *sliderLightY;
     DebugSlider *sliderLightZ;
@@ -77,9 +77,12 @@ private:
     QCheckBox *checkBoxSphere;
     QCheckBox *checkBoxTorus;
     QCheckBox *checkBoxTeapot;
+    QCheckBox *checkBoxNormal;
+    QCheckBox *checkBoxHideShape;
 
     //QLabel
     QLabel *labelHomothetie;
+    QLabel *labelTesselation;
     QLabel *labelRouge;
     QLabel *labelVert;
     QLabel *labelBleu;
@@ -95,6 +98,7 @@ private:
 
     //QHBoxLayout
     QHBoxLayout *layoutHomothetie;
+    QHBoxLayout *layoutTesselation;
     QHBoxLayout *layoutTranslationX;
     QHBoxLayout *layoutTranslationY;
     QHBoxLayout *layoutTranslationZ;
@@ -124,6 +128,7 @@ private:
 
 private slots:
     void changeSize(int value);
+    void changeShapeWithTesselation(int value);
     void createCube();
     void createPyramide();
     void changeTexture();
@@ -136,6 +141,8 @@ private slots:
     void changeRotationZ();
     void changePosition();
     void changeLightPosition();
+    void showNormal();
+    void hideShape();
     void selectShape();
 };
 

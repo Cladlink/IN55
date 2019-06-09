@@ -3,8 +3,7 @@
 flat in int fIsColor;
 in vec4 fColor;
 in vec2 UV;
-in float fTime;
-in vec4 fPosition;
+
 in vec4 fNormal;
 in vec3 n;
 
@@ -24,6 +23,8 @@ uniform vec4 ambientLight;
 uniform vec3 vertexToFragmentColor;*/
 
 in vec4 fColor;
+in float fTime;
+in vec4 fPosition;
 in vec3 normalWorld;
 in vec3 vertexPositionWorld;
 in vec3 vertexToFragmentColor;
@@ -31,6 +32,7 @@ in vec3 vertexToFragmentColor;
 uniform vec3 lightPositionWorld;
 uniform vec3 eyePositionWorld;
 uniform vec4 ambientLight;
+uniform int hideNumber;
 
 out vec4 daColor;
 
@@ -40,6 +42,9 @@ float random (vec2 st) {
 
 void main()
 {
+    if (hideNumber == 1) {
+        discard;
+    }
 
     /*float a = smoothstep(-1.,-0.8,fPosition.y) * (1.0 - smoothstep(-0.6,-0.4,fPosition.y));
     float b = smoothstep(-0.6,-0.4,fPosition.y) * (1.0 - smoothstep(-0.1,0.2,fPosition.y));
@@ -63,7 +68,7 @@ void main()
     float s = clamp(dot(reflectedLightVectorWorld, eyeVectorWorld), 0, 1);
     s = pow(s, 20);
     vec4 specularLight = vec4(s, 0, 0, 1);
-
+    //daColor = fColor;
     daColor = fColor + ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
 
     //daColor = vec4(fColor) /*

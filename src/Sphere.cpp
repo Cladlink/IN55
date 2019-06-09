@@ -6,9 +6,12 @@ Sphere::Sphere(uint _tesselation) {
     initializeOpenGLFunctions();
 
     ShapeData sphere = IGeometryEngine::makeSphere(tesselation);
+    ShapeData sphereNormal = IGeometryEngine::generateNormals(sphere);
 
     verticesSphere = sphere.vertices;
     indicesSphere = sphere.indices;
+    verticesSphereNormal = sphereNormal.vertices;
+    indicesSphereNormal = sphereNormal.indices;
 
     // Generate 2 VBOs
     arrayBuf.create();
@@ -16,6 +19,8 @@ Sphere::Sphere(uint _tesselation) {
     // Initializes cube geometry and transfers it to VBOs
     nbrIndices = sphere.numIndices;
     nbrVertices = sphere.numVertices;
+    nbrIndicesNormal = sphereNormal.numIndices;
+    nbrVerticesNormal = sphereNormal.numVertices;
     initGeometry();
 }
 
@@ -39,7 +44,9 @@ void Sphere::drawGeometry(QOpenGLShaderProgram *program)
 
 void Sphere::update(QOpenGLShaderProgram *program,QVector3D _color,
                   QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                  QVector3D _position, QQuaternion _rotation){
+                  QVector3D _position, QQuaternion _rotation, bool _showNormal, int _hideShapeNumber){
 
-    IGeometryEngine::update(program,verticesSphere,indicesSphere,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position,_rotation);
+    IGeometryEngine::update(program,verticesSphere,indicesSphere,verticesSphereNormal,indicesSphereNormal,
+                            _color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,
+                            _position,_rotation,_showNormal, _hideShapeNumber);
 }

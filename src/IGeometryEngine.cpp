@@ -17,7 +17,7 @@ QVector3D IGeometryEngine::randomColor()
     return ret;
 }
 
-void IGeometryEngine::initGeometry(Vertex *verticesShape, unsigned short *indicesShape)
+void IGeometryEngine::initGeometry(Vertex *verticesShape,unsigned short *indicesShape)
 {
     arrayBuf.bind();
     arrayBuf.allocate(verticesShape, nbrVertices * sizeof(Vertex));
@@ -63,16 +63,23 @@ void IGeometryEngine::drawGeometry(QOpenGLShaderProgram *program)
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
 }
 
-void IGeometryEngine::update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape, QVector3D _color,
+void IGeometryEngine::update(QOpenGLShaderProgram *program,Vertex *verticesShape, unsigned short *indicesShape,
+                             Vertex *verticesNormal, unsigned short *indicesNormal, QVector3D _color,
                              QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                             QVector3D _position, QQuaternion _rotation) {
+                             QVector3D _position, QQuaternion _rotation, bool _showNormal, int _hideShapeNumber) {
     arrayBuf.bind();
+    indexBuf.bind();
+
+    if (_showNormal) {
+        arrayBuf.allocate(verticesNormal, nbrVerticesNormal * sizeof(Vertex));
+        indexBuf.allocate(indicesNormal, nbrIndicesNormal * sizeof(GLushort));
+        glDrawElements(GL_LINES, nbrIndicesNormal, GL_UNSIGNED_SHORT, 0);
+    }
+
     for (int i=0; i<nbrVertices-1; i++) {
         verticesShape[i].color = _color;
     }
     arrayBuf.allocate(verticesShape, nbrVertices * sizeof(Vertex));
-
-    indexBuf.bind();
     indexBuf.allocate(indicesShape, nbrIndices * sizeof(GLushort));
 
     // Offset for position
@@ -106,6 +113,8 @@ void IGeometryEngine::update(QOpenGLShaderProgram *program,Vertex *verticesShape
     program->setUniformValue("axis",_rotation.vector());
 
     program->setUniformValue("angle",_rotation.scalar());
+
+    program->setUniformValue("hideNumber",_hideShapeNumber);
 
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, nbrIndices, GL_UNSIGNED_SHORT, 0);
@@ -875,4 +884,28 @@ void IGeometryEngine::moveLid(int grid, float *v, const QMatrix4x4 &lidTransform
         v[i + 1] = vert.y();
         v[i + 2] = vert.z();
     }
+}
+
+ShapeData IGeometryEngine::generateNormals(const ShapeData& data)
+{
+    ShapeData ret;
+    ret.numVertices = data.numVertices * 2;
+    ret.vertices = new Vertex[ret.numVertices];
+    QVector3D white(1.0f, 1.0f, 1.0f);
+    for (int i = 0; i < data.numVertices; i++)
+    {
+        uint vertIndex = i * 2;
+        Vertex& v1 = ret.vertices[vertIndex];
+        Vertex& v2 = ret.vertices[vertIndex + 1];
+        const Vertex& sourceVertex = data.vertices[i];
+        v1.position = sourceVertex.position;
+        v2.position = sourceVertex.position + sourceVertex.normal;
+        v1.color = v2.color = white;
+    }
+
+    ret.numIndices = ret.numVertices;
+    ret.indices = new GLushort[ret.numIndices];
+    for (int i = 0; i < ret.numIndices; i++)
+        ret.indices[i] = i;
+    return ret;
 }

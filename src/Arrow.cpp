@@ -5,9 +5,11 @@ Arrow::Arrow() {
     initializeOpenGLFunctions();
 
     ShapeData arrow = IGeometryEngine::makeArrow();
-
+    ShapeData arrowNormal = IGeometryEngine::generateNormals(arrow);
     verticesArrow = arrow.vertices;
     indicesArrow = arrow.indices;
+    verticesArrowNormal = arrowNormal.vertices;
+    indicesArrowNormal = arrowNormal.indices;
 
     // Generate 2 VBOs
     arrayBuf.create();
@@ -15,6 +17,8 @@ Arrow::Arrow() {
     // Initializes cube geometry and transfers it to VBOs
     nbrIndices = arrow.numIndices;
     nbrVertices = arrow.numVertices;
+    nbrIndicesNormal = arrowNormal.numIndices;
+    nbrVerticesNormal = arrowNormal.numVertices;
     initGeometry();
 }
 
@@ -38,9 +42,11 @@ void Arrow::drawGeometry(QOpenGLShaderProgram *program)
 
 void Arrow::update(QOpenGLShaderProgram *program,QVector3D _color,
                   QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
-                  QVector3D _position, QQuaternion _rotation){
+                  QVector3D _position, QQuaternion _rotation, bool _showNormal, int _hideShapeNumber){
 
-    IGeometryEngine::update(program,verticesArrow,indicesArrow,_color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,_position, _rotation);
+    IGeometryEngine::update(program,verticesArrow,indicesArrow,verticesArrowNormal, indicesArrowNormal,
+                            _color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,
+                            _position, _rotation, _showNormal, _hideShapeNumber);
 }
 
 //! [2]
