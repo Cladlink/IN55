@@ -39,16 +39,44 @@ Frame::Frame()
     //layoutBoutonsForme->addWidget(checkBoxNormal);
 
     // Homothétie
-    sliderHomothetie = new QSlider(Qt::Horizontal);
-    sliderHomothetie->setMinimum(1);
-    sliderHomothetie->setMaximum(4);
+    labelHomothetieX = new QLabel("X : ");
+    labelHomothetieX->setFixedSize(100,30);
+    sliderHomothetieX = new QSlider(Qt::Horizontal);
+    sliderHomothetieX->setMinimum(1);
+    sliderHomothetieX->setMaximum(4);
+    layoutHomothetieX = new QHBoxLayout;
+    layoutHomothetieX->insertSpacing(0, 10);
+    layoutHomothetieX->addWidget(labelHomothetieX);
+    layoutHomothetieX->addWidget(sliderHomothetieX);
+
+    labelHomothetieY = new QLabel("Y : ");
+    labelHomothetieY->setFixedSize(100,30);
+    sliderHomothetieY = new QSlider(Qt::Horizontal);
+    sliderHomothetieY->setMinimum(1);
+    sliderHomothetieY->setMaximum(4);
+    layoutHomothetieY = new QHBoxLayout;
+    layoutHomothetieY->insertSpacing(0, 10);
+    layoutHomothetieY->addWidget(labelHomothetieY);
+    layoutHomothetieY->addWidget(sliderHomothetieY);
+
+    labelHomothetieZ = new QLabel("Z : ");
+    labelHomothetieZ->setFixedSize(100,30);
+    sliderHomothetieZ = new QSlider(Qt::Horizontal);
+    sliderHomothetieZ->setMinimum(1);
+    sliderHomothetieZ->setMaximum(4);
+    layoutHomothetieZ = new QHBoxLayout;
+    layoutHomothetieZ->insertSpacing(0, 10);
+    layoutHomothetieZ->addWidget(labelHomothetieZ);
+    layoutHomothetieZ->addWidget(sliderHomothetieZ);
 
     labelHomothetie = new QLabel("Taille : ");
     labelHomothetie->setFixedSize(100,30);
 
-    layoutHomothetie = new QHBoxLayout;
+    layoutHomothetie = new QVBoxLayout;
     layoutHomothetie->addWidget(labelHomothetie);
-    layoutHomothetie->addWidget(sliderHomothetie);
+    layoutHomothetie->addLayout(layoutHomothetieX);
+    layoutHomothetie->addLayout(layoutHomothetieY);
+    layoutHomothetie->addLayout(layoutHomothetieZ);
 
     // Tesselation
     sliderTesselation = new QSlider(Qt::Horizontal);
@@ -268,7 +296,9 @@ Frame::Frame()
     this->setLayout(mainLayout);
 
     // Listener des boutons
-    QObject::connect(sliderHomothetie, SIGNAL(valueChanged(int)), this, SLOT(changeSize(int)));
+    QObject::connect(sliderHomothetieX, SIGNAL(valueChanged(int)), this, SLOT(changeSize()));
+    QObject::connect(sliderHomothetieY, SIGNAL(valueChanged(int)), this, SLOT(changeSize()));
+    QObject::connect(sliderHomothetieZ, SIGNAL(valueChanged(int)), this, SLOT(changeSize()));
 
     QObject::connect(sliderTesselation, SIGNAL(valueChanged(int)), this, SLOT(changeShapeWithTesselation(int)));
 
@@ -314,8 +344,11 @@ Frame::Frame()
     //changeTexture();
 }
 
-void Frame::changeSize(int value) {
-    scene3D->setHomotethie(value/2.0f);
+void Frame::changeSize() {
+    float x = (sliderHomothetieX->value());
+    float y = (sliderHomothetieY->value());
+    float z = (sliderHomothetieZ->value());
+    scene3D->setHomothetie(QVector3D(x,y,z));
 };
 
 void Frame::changeShapeWithTesselation(int value) {

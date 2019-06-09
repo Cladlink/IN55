@@ -92,6 +92,13 @@ MainWidget::MainWidget(Light* _myLight, QWidget *parent) :
     itemsMapShape.insert("Sphere","Sphere");
     itemsMapShape.insert("Pyramide","Pyramide");
     itemsMapShape.insert("Teapot","Teapot");
+    itemsMapHideShape = QMap<QString, int>();
+    itemsMapHideShape.insert("Cube",0);
+    itemsMapHideShape.insert("Arrow",0);
+    itemsMapHideShape.insert("Plane",0);
+    itemsMapHideShape.insert("Sphere",0);
+    itemsMapHideShape.insert("Pyramide",0);
+    itemsMapHideShape.insert("Teapot",0);
     //pixmap.append(QPixmap(":/mur.png"));
     //pixmap.append(QPixmap(":/nintendo.png"));
 }
@@ -276,9 +283,9 @@ void MainWidget::paintGL()
 
     program.setUniformValue("modelToWorldMatrix", shapeModelToWorldMatrix);
 
-    QVector4D homotethie = QVector4D(this->getHomotethie(),this->getHomotethie(),this->getHomotethie(),1.);
+    QVector4D homothetie = QVector4D(getHomothetie(),1.);
 
-    program.setUniformValue("homotethie", homotethie);
+    program.setUniformValue("homothetie", homothetie);
 
     //glActiveTexture(GL_TEXTURE0);
     //glBindTexture(GL_TEXTURE_2D, texId[getNumberBufferTexture()]);
@@ -288,32 +295,36 @@ void MainWidget::paintGL()
     program.setUniformValue("time", (launch-beginning)/1000);
     program.setUniformValue("isColor",isColor);
 
-    qDebug() << "Hide Number : " << hideShapeNumber;
-
-    geometriesCube->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Cube"), getRotation("Cube"), normal, hideShapeNumber);
-    //geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Plane"), getRotation("Plane"), normal,hideShapeNumber);
+    geometriesCube->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                           getPosition("Cube"), getRotation("Cube"), normal, itemsMapHideShape.value("Cube"));
+    /*geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                            getPosition("Plane"), getRotation("Plane"), normal, itemsMapHideShape.value("Plane"));
     //geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,0.,0.), getRotation());
-    /*geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,getPosition("Arrow"), getRotation("Arrow"), normal);
+    geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                            getPosition("Arrow"), getRotation("Arrow"), normal, itemsMapHideShape.value("Arrow"));
     //geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(-2.,2.,2.), getRotation());
-    geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Sphere"), getRotation("Sphere"), normal);
+    geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                             getPosition("Sphere"), getRotation("Sphere"), normal, itemsMapHideShape.value("Sphere"));
     //geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(-1.,2.,-1.), getRotation());
-    geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,getPosition("Pyramide"), getRotation("Pyramide"), normal);
+    geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                               getPosition("Pyramide"), getRotation("Pyramide"), normal, itemsMapHideShape.value("Pyramide"));
     //geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(1.,1.,1.), getRotation());
 
     modelToProjectionMatrix.rotate(-90,QVector3D(1.f,0.f,0.f));
-    geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, getPosition("Teapot"), getRotation("Teapot"), normal);
+    geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                             getPosition("Teapot"), getRotation("Teapot"), normal, itemsMapHideShape.value("Teapot"));
     //geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(3.,2.,3.), getRotation());
     modelToProjectionMatrix.rotate(90,QVector3D(1.f,0.f,0.f));*/
 
     //geometriesTorus->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,4.,0.), getRotation());
 }
 
-float MainWidget::getHomotethie(){
-    return homotethie;
+QVector3D MainWidget::getHomothetie(){
+    return homothetie;
 }
 
-void MainWidget::setHomotethie(float _homotethie){
-    homotethie = _homotethie;
+void MainWidget::setHomothetie(QVector3D _homothetie){
+    homothetie = _homothetie;
 }
 
 int MainWidget::getTesselation(){
@@ -378,6 +389,7 @@ void MainWidget::setIsColor(int _isColor) {
     // 1 = couleur choisie par l'utilisateur;
     // 2 = multi color par rapport aux vertices;
     // 3 = multi color par rapport aux fragments;
+    // 4 = multi color par rapport aux normales;
     isColor = _isColor;
 }
 
@@ -394,7 +406,9 @@ void MainWidget::showNormal(bool _showNormal) {
 }
 
 void MainWidget::hideShape(int _hideShapeNumber) {
-    hideShapeNumber = _hideShapeNumber;
+    // 0 = on affiche l'objet;
+    // 1 = on cache l'objet;
+    itemsMapHideShape.insert("Cube",_hideShapeNumber);
 }
 
 bool MainWidget::isShapeInMap(QString name) {

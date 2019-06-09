@@ -90,7 +90,7 @@ public:
     void repaint();
 
     // Getter
-    float getHomotethie();
+    QVector3D getHomothetie();
     int getTesselation();
     string getObject();
     string getPathTexture();
@@ -104,7 +104,7 @@ public:
     bool isShapeInMap(QString name);
 
     // Setter
-    void setHomotethie(float _homotethie);
+    void setHomothetie(QVector3D _homothetie);
     void setTesselation(int _tesselation);
     void setObject(string _object);
     void setPathTexture(string _pathTexture);
@@ -152,14 +152,14 @@ private:
     QMap<QString, QString> itemsMapShape;
 
     int tesselation;
-    float homotethie = 0.5;
     int nbObjects;
     string object;
     float beginning;
     float launch;
     string pathTexture;
     int isColor;
-    int hideShapeNumber;
+    QMap<QString, int> itemsMapHideShape;
+    //int hideShapeNumber;
     int indexBufferArrayTexture;
     int axeRotation;
     bool normal = false;
@@ -171,6 +171,7 @@ private:
     QVector3D rotationAxis;
     QVector3D color;
     QVector3D position;
+    QVector3D homothetie = QVector3D(1.,1.,1.);
 
     Light *myLight;
 

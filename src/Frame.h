@@ -52,7 +52,9 @@ private:
     QRadioButton *zRotation;
 
     //QSlider
-    QSlider *sliderHomothetie;
+    QSlider *sliderHomothetieX;
+    QSlider *sliderHomothetieY;
+    QSlider *sliderHomothetieZ;
     QSlider *sliderTesselation;
     QSlider *sliderRouge;
     QSlider *sliderVert;
@@ -82,6 +84,9 @@ private:
 
     //QLabel
     QLabel *labelHomothetie;
+    QLabel *labelHomothetieX;
+    QLabel *labelHomothetieY;
+    QLabel *labelHomothetieZ;
     QLabel *labelTesselation;
     QLabel *labelRouge;
     QLabel *labelVert;
@@ -97,11 +102,13 @@ private:
     QLabel *labelRotationZ;
 
     //QHBoxLayout
-    QHBoxLayout *layoutHomothetie;
     QHBoxLayout *layoutTesselation;
     QHBoxLayout *layoutTranslationX;
     QHBoxLayout *layoutTranslationY;
     QHBoxLayout *layoutTranslationZ;
+    QHBoxLayout *layoutHomothetieX;
+    QHBoxLayout *layoutHomothetieY;
+    QHBoxLayout *layoutHomothetieZ;
     QHBoxLayout *layoutRotationX;
     QHBoxLayout *layoutRotationY;
     QHBoxLayout *layoutRotationZ;
@@ -113,6 +120,7 @@ private:
     QHBoxLayout *mainLayout;
 
     //QVBoxLayout
+    QVBoxLayout *layoutHomothetie;
     QVBoxLayout *layoutRotation;
     QVBoxLayout *layoutBoutonsForme;
     QVBoxLayout *layoutTranslation;
@@ -127,7 +135,7 @@ private:
     QWidget *lightWidget;
 
 private slots:
-    void changeSize(int value);
+    void changeSize();
     void changeShapeWithTesselation(int value);
     void createCube();
     void createPyramide();
