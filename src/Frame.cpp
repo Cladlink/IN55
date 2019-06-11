@@ -414,6 +414,16 @@ Frame::Frame()
     layoutCamera->addLayout(layoutNear);
     layoutCamera->addLayout(layoutFar);
 
+    labelCameraInclinaison = new QLabel("Camera tilt :");
+    sliderCameraInclinaison = new QSlider(Qt::Horizontal);
+    sliderCameraInclinaison->setFixedWidth(350);
+    sliderCameraInclinaison->setMinimum(100);
+    sliderCameraInclinaison->setMaximum(900);
+    layoutCameraInclinaison = new QHBoxLayout;
+    layoutCameraInclinaison->addWidget(labelCameraInclinaison);
+    layoutCameraInclinaison->addWidget(sliderCameraInclinaison);
+    layoutCamera->addLayout(layoutCameraInclinaison);
+
     // Général
     rbMur->setChecked(true);
     //mouseRotation->setChecked(true);

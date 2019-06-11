@@ -73,6 +73,7 @@ private:
     QSlider *sliderLightColorBlue;
     QSlider *sliderNear;
     QSlider *sliderFar;
+    QSlider *sliderCameraInclinaison;
 
     //QCheckBox
     QCheckBox *checkBoxSelectionCube;
@@ -136,6 +137,7 @@ private:
     QLabel *labelLightPosition;
     QLabel *labelNear;
     QLabel *labelFar;
+    QLabel *labelCameraInclinaison;
 
     //QHBoxLayout
     QHBoxLayout *layoutTesselation;
@@ -161,6 +163,7 @@ private:
     QHBoxLayout *layoutLightColorBlue;
     QHBoxLayout *layoutNear;
     QHBoxLayout *layoutFar;
+    QHBoxLayout *layoutCameraInclinaison;
 
     //QVBoxLayout
     QVBoxLayout *layoutHomothetie;
