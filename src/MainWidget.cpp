@@ -295,18 +295,18 @@ void MainWidget::paintGL()
     program.setUniformValue("time", (launch-beginning)/1000);
     program.setUniformValue("isColor",isColor);
 
-    geometriesCube->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+   /* geometriesCube->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
                            getPosition("Cube"), getRotation("Cube"), normal, itemsMapHideShape.value("Cube"));
-    /*geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+    geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
                             getPosition("Plane"), getRotation("Plane"), normal, itemsMapHideShape.value("Plane"));
     //geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,0.,0.), getRotation());
     geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
                             getPosition("Arrow"), getRotation("Arrow"), normal, itemsMapHideShape.value("Arrow"));
     //geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(-2.,2.,2.), getRotation());
-    geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+   */ geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
                              getPosition("Sphere"), getRotation("Sphere"), normal, itemsMapHideShape.value("Sphere"));
     //geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(-1.,2.,-1.), getRotation());
-    geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
+    /*geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
                                getPosition("Pyramide"), getRotation("Pyramide"), normal, itemsMapHideShape.value("Pyramide"));
     //geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(1.,1.,1.), getRotation());
 

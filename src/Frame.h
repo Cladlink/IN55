@@ -65,24 +65,50 @@ private:
     QSlider *sliderRotationX;
     QSlider *sliderRotationY;
     QSlider *sliderRotationZ;
-
-    //DebugSlider
-    DebugSlider *sliderLightX;
-    DebugSlider *sliderLightY;
-    DebugSlider *sliderLightZ;
+    QSlider *sliderLightX;
+    QSlider *sliderLightY;
+    QSlider *sliderLightZ;
+    QSlider *sliderLightColorRed;
+    QSlider *sliderLightColorGreen;
+    QSlider *sliderLightColorBlue;
+    QSlider *sliderNear;
+    QSlider *sliderFar;
 
     //QCheckBox
-    QCheckBox *checkBoxCube;
-    QCheckBox *checkBoxArrow;
-    QCheckBox *checkBoxPlane;
-    QCheckBox *checkBoxPyramide;
-    QCheckBox *checkBoxSphere;
-    QCheckBox *checkBoxTorus;
-    QCheckBox *checkBoxTeapot;
-    QCheckBox *checkBoxNormal;
-    QCheckBox *checkBoxHideShape;
+    QCheckBox *checkBoxSelectionCube;
+    QCheckBox *checkBoxSelectionArrow;
+    QCheckBox *checkBoxSelectionPlane;
+    QCheckBox *checkBoxSelectionPyramide;
+    QCheckBox *checkBoxSelectionSphere;
+    QCheckBox *checkBoxSelectionTorus;
+    QCheckBox *checkBoxSelectionTeapot;
+    QCheckBox *checkBoxShowCube;
+    QCheckBox *checkBoxShowArrow;
+    QCheckBox *checkBoxShowPlane;
+    QCheckBox *checkBoxShowPyramide;
+    QCheckBox *checkBoxShowSphere;
+    QCheckBox *checkBoxShowTorus;
+    QCheckBox *checkBoxShowTeapot;
+    QCheckBox *checkBoxNormalsCube;
+    QCheckBox *checkBoxNormalsArrow;
+    QCheckBox *checkBoxNormalsPlane;
+    QCheckBox *checkBoxNormalsPyramide;
+    QCheckBox *checkBoxNormalsSphere;
+    QCheckBox *checkBoxNormalsTorus;
+    QCheckBox *checkBoxNormalsTeapot;
 
     //QLabel
+    QLabel *labelSelectionForms;
+    QLabel *labelForms;
+    QLabel *labelCube;
+    QLabel *labelArrow;
+    QLabel *labelPlane;
+    QLabel *labelPyramide;
+    QLabel *labelSphere;
+    QLabel *labelTorus;
+    QLabel *labelTeapot;
+    QLabel *labelNormal;
+    QLabel *labelHideShape;
     QLabel *labelHomothetie;
     QLabel *labelHomothetieX;
     QLabel *labelHomothetieY;
@@ -100,6 +126,16 @@ private:
     QLabel *labelRotationX;
     QLabel *labelRotationY;
     QLabel *labelRotationZ;
+    QLabel *labelLightX;
+    QLabel *labelLightY;
+    QLabel *labelLightZ;
+    QLabel *labelLightColorRed;
+    QLabel *labelLightColorBlue;
+    QLabel *labelLightColorGreen;
+    QLabel *labelLightColor;
+    QLabel *labelLightPosition;
+    QLabel *labelNear;
+    QLabel *labelFar;
 
     //QHBoxLayout
     QHBoxLayout *layoutTesselation;
@@ -116,23 +152,35 @@ private:
     QHBoxLayout *layoutVert;
     QHBoxLayout *layoutBleu;
     QHBoxLayout *lightPositionLayout;
-    QHBoxLayout *layoutLight;
     QHBoxLayout *mainLayout;
+    QHBoxLayout *layoutLightX;
+    QHBoxLayout *layoutLightY;
+    QHBoxLayout *layoutLightZ;
+    QHBoxLayout *layoutLightColorRed;
+    QHBoxLayout *layoutLightColorGreen;
+    QHBoxLayout *layoutLightColorBlue;
+    QHBoxLayout *layoutNear;
+    QHBoxLayout *layoutFar;
 
     //QVBoxLayout
     QVBoxLayout *layoutHomothetie;
     QVBoxLayout *layoutRotation;
-    QVBoxLayout *layoutBoutonsForme;
     QVBoxLayout *layoutTranslation;
     QVBoxLayout *layoutCouleur;
     QVBoxLayout *layoutVisuel;
     QVBoxLayout *paramsLayout;
+    QVBoxLayout *layoutLight;
+    QVBoxLayout *layoutCamera;
+
+    //QGridLayout
+    QGridLayout *layoutShapes;
 
     //QWidget
     QWidget *colorWidget;
     QWidget *formeWidget;
     QWidget *visualisationWidget;
     QWidget *lightWidget;
+    QWidget *cameraWidget;
 
 private slots:
     void changeSize();

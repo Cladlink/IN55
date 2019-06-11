@@ -10,33 +10,90 @@ Frame::Frame()
     // Tab
     optionsTab = new QTabWidget();
 
-    // Formes
-    checkBoxCube = new QCheckBox("Cube");
-    checkBoxCube->setCheckState(Qt::Checked);
-    checkBoxArrow = new QCheckBox("Arrow");
-    checkBoxArrow->setCheckState(Qt::Checked);
-    checkBoxPlane = new QCheckBox("Plane");
-    checkBoxPlane->setCheckState(Qt::Checked);
-    checkBoxPyramide = new QCheckBox("Pyramide");
-    checkBoxPyramide->setCheckState(Qt::Checked);
-    checkBoxSphere = new QCheckBox("Sphere");
-    checkBoxSphere->setCheckState(Qt::Checked);
-    checkBoxTeapot = new QCheckBox("Teapot");
-    checkBoxTeapot->setCheckState(Qt::Checked);
-    checkBoxNormal = new QCheckBox("Normal");
-    checkBoxNormal->setCheckState(Qt::Unchecked);
-    checkBoxHideShape = new QCheckBox("Hide Shape");
-    checkBoxHideShape->setCheckState(Qt::Unchecked);
+    // Shapes
+    labelCube = new QLabel("Cube");
+    labelArrow = new QLabel("Arrow");
+    labelPlane = new QLabel("Plane");
+    labelPyramide = new QLabel("Pyramide");
+    labelSphere = new QLabel("Sphere");
+    labelTeapot = new QLabel("Teapot");
+    labelNormal = new QLabel("Show normals");
+    labelHideShape = new QLabel("Show Shape");
+    labelForms = new QLabel("Shape");
+    labelSelectionForms = new QLabel("Shape selected");
+    checkBoxSelectionCube = new QCheckBox;
+    checkBoxSelectionCube->setCheckState(Qt::Checked);
+    checkBoxSelectionArrow = new QCheckBox;
+    checkBoxSelectionArrow->setCheckState(Qt::Unchecked);
+    checkBoxSelectionPlane = new QCheckBox;
+    checkBoxSelectionPlane->setCheckState(Qt::Unchecked);
+    checkBoxSelectionPyramide = new QCheckBox;
+    checkBoxSelectionPyramide->setCheckState(Qt::Unchecked);
+    checkBoxSelectionSphere = new QCheckBox;
+    checkBoxSelectionSphere->setCheckState(Qt::Unchecked);
+    checkBoxSelectionTeapot = new QCheckBox;
+    checkBoxSelectionTeapot->setCheckState(Qt::Unchecked);
+    checkBoxNormalsCube = new QCheckBox;
+    checkBoxNormalsCube->setCheckState(Qt::Unchecked);
+    checkBoxNormalsArrow = new QCheckBox;
+    checkBoxNormalsArrow->setCheckState(Qt::Unchecked);
+    checkBoxNormalsPlane = new QCheckBox;
+    checkBoxNormalsPlane->setCheckState(Qt::Unchecked);
+    checkBoxNormalsPyramide = new QCheckBox;
+    checkBoxNormalsPyramide->setCheckState(Qt::Unchecked);
+    checkBoxNormalsSphere = new QCheckBox;
+    checkBoxNormalsSphere->setCheckState(Qt::Unchecked);
+    checkBoxNormalsTeapot = new QCheckBox;
+    checkBoxNormalsTeapot->setCheckState(Qt::Unchecked);
+    checkBoxShowCube= new QCheckBox;
+    checkBoxShowCube->setCheckState(Qt::Checked);
+    checkBoxShowArrow= new QCheckBox;
+    checkBoxShowArrow->setCheckState(Qt::Checked);
+    checkBoxShowPlane= new QCheckBox;
+    checkBoxShowPlane->setCheckState(Qt::Checked);
+    checkBoxShowPyramide= new QCheckBox;
+    checkBoxShowPyramide->setCheckState(Qt::Checked);
+    checkBoxShowSphere= new QCheckBox;
+    checkBoxShowSphere->setCheckState(Qt::Checked);
+    checkBoxShowTeapot= new QCheckBox;
+    checkBoxShowTeapot->setCheckState(Qt::Checked);
 
-    layoutBoutonsForme = new QVBoxLayout;
-    layoutBoutonsForme->addWidget(checkBoxCube);
-    layoutBoutonsForme->addWidget(checkBoxArrow);
-    layoutBoutonsForme->addWidget(checkBoxPlane);
-    layoutBoutonsForme->addWidget(checkBoxPyramide);
-    layoutBoutonsForme->addWidget(checkBoxSphere);
-    layoutBoutonsForme->addWidget(checkBoxTeapot);
-    layoutBoutonsForme->addWidget(checkBoxHideShape);
-    //layoutBoutonsForme->addWidget(checkBoxNormal);
+    layoutShapes = new QGridLayout;
+    // Colonne 1
+    layoutShapes->addWidget(labelForms,0,0);
+    layoutShapes->addWidget(labelCube,1,0);
+    layoutShapes->addWidget(labelArrow,2,0);
+    layoutShapes->addWidget(labelPlane,3,0);
+    layoutShapes->addWidget(labelPyramide,4,0);
+    layoutShapes->addWidget(labelSphere,5,0);
+    layoutShapes->addWidget(labelTeapot,6,0);
+
+    // Colonne 2
+    layoutShapes->addWidget(labelSelectionForms,0,1);
+    layoutShapes->addWidget(checkBoxSelectionCube,1,1);
+    layoutShapes->addWidget(checkBoxSelectionArrow,2,1);
+    layoutShapes->addWidget(checkBoxSelectionPlane,3,1);
+    layoutShapes->addWidget(checkBoxSelectionPyramide,4,1);
+    layoutShapes->addWidget(checkBoxSelectionSphere,5,1);
+    layoutShapes->addWidget(checkBoxSelectionTeapot,6,1);
+
+    // Colonne 3
+    layoutShapes->addWidget(labelNormal,0,2);
+    layoutShapes->addWidget(checkBoxNormalsCube,1,2);
+    layoutShapes->addWidget(checkBoxNormalsArrow,2,2);
+    layoutShapes->addWidget(checkBoxNormalsPlane,3,2);
+    layoutShapes->addWidget(checkBoxNormalsPyramide,4,2);
+    layoutShapes->addWidget(checkBoxNormalsSphere,5,2);
+    layoutShapes->addWidget(checkBoxNormalsTeapot,6,2);
+
+    // Colonne 4
+    layoutShapes->addWidget(labelHideShape,0,3);
+    layoutShapes->addWidget(checkBoxShowCube,1,3);
+    layoutShapes->addWidget(checkBoxShowArrow,2,3);
+    layoutShapes->addWidget(checkBoxShowPlane,3,3);
+    layoutShapes->addWidget(checkBoxShowPyramide,4,3);
+    layoutShapes->addWidget(checkBoxShowSphere,5,3);
+    layoutShapes->addWidget(checkBoxShowTeapot,6,3);
 
     // Homothétie
     labelHomothetieX = new QLabel("X : ");
@@ -267,27 +324,118 @@ Frame::Frame()
     layoutVisuel->addLayout(layoutRotation);
 
     //Lumière
-    layoutLight = new QHBoxLayout;
-    layoutLight->addLayout(lightPositionLayout = new QHBoxLayout);
-    lightPositionLayout->addWidget(sliderLightX = new DebugSlider);
-    lightPositionLayout->addWidget(sliderLightY = new DebugSlider);
-    lightPositionLayout->addWidget(sliderLightZ = new DebugSlider);
+    labelLightPosition = new QLabel("Light position :");
+    labelLightX = new QLabel("X : ");
+    labelLightY = new QLabel("Y : ");
+    labelLightZ = new QLabel("Z : ");
+    layoutLightX = new QHBoxLayout;
+    layoutLightY = new QHBoxLayout;
+    layoutLightZ = new QHBoxLayout;
+    sliderLightX = new QSlider(Qt::Horizontal);
+    sliderLightX->setMaximum(5);
+    sliderLightX->setMinimum(-5);
+    sliderLightX->setValue(0);
+    sliderLightX->setFixedWidth(400);
+    sliderLightY = new QSlider(Qt::Horizontal);
+    sliderLightY->setMaximum(5);
+    sliderLightY->setMinimum(-5);
+    sliderLightY->setValue(0);
+    sliderLightY->setFixedWidth(400);
+    sliderLightZ = new QSlider(Qt::Horizontal);
+    sliderLightZ->setMaximum(5);
+    sliderLightZ->setMinimum(-5);
+    sliderLightZ->setValue(0);
+    sliderLightZ->setFixedWidth(400);
+    layoutLightX->addWidget(labelLightX);
+    layoutLightX->addWidget(sliderLightX);
+    layoutLightY->addWidget(labelLightY);
+    layoutLightY->addWidget(sliderLightY);
+    layoutLightZ->addWidget(labelLightZ);
+    layoutLightZ->addWidget(sliderLightZ);
+    layoutLight = new QVBoxLayout;
+    layoutLight->addWidget(labelLightPosition);
+    layoutLight->addLayout(layoutLightX);
+    layoutLight->addLayout(layoutLightY);
+    layoutLight->addLayout(layoutLightZ);
+
+    labelLightColor = new QLabel("Light color :");
+    labelLightColorRed = new QLabel("Red :");
+    labelLightColorGreen = new QLabel("Green :");
+    labelLightColorBlue = new QLabel("Blue :");
+    sliderLightColorRed = new QSlider(Qt::Horizontal);
+    sliderLightColorRed->setMinimum(0);
+    sliderLightColorRed->setMaximum(255);
+    sliderLightColorRed->setValue(255);
+    sliderLightColorRed->setFixedWidth(400);
+    sliderLightColorGreen = new QSlider(Qt::Horizontal);
+    sliderLightColorGreen->setMinimum(0);
+    sliderLightColorGreen->setMaximum(255);
+    sliderLightColorGreen->setValue(255);
+    sliderLightColorGreen->setFixedWidth(400);
+    sliderLightColorBlue = new QSlider(Qt::Horizontal);
+    sliderLightColorBlue->setMinimum(0);
+    sliderLightColorBlue->setMaximum(255);
+    sliderLightColorBlue->setValue(255);
+    sliderLightColorBlue->setFixedWidth(400);
+    layoutLightColorRed = new QHBoxLayout;
+    layoutLightColorRed->addWidget(labelLightColorRed);
+    layoutLightColorRed->addWidget(sliderLightColorRed);
+    layoutLightColorGreen = new QHBoxLayout;
+    layoutLightColorGreen->addWidget(labelLightColorGreen);
+    layoutLightColorGreen->addWidget(sliderLightColorGreen);
+    layoutLightColorBlue = new QHBoxLayout;
+    layoutLightColorBlue->addWidget(labelLightColorBlue);
+    layoutLightColorBlue->addWidget(sliderLightColorBlue);
+
+    layoutLight->addSpacing(20);
+    layoutLight->addWidget(labelLightColor);
+    layoutLight->addLayout(layoutLightColorRed);
+    layoutLight->addLayout(layoutLightColorGreen);
+    layoutLight->addLayout(layoutLightColorBlue);
+
+    //Camera
+    sliderNear = new QSlider(Qt::Horizontal);
+    sliderNear->setFixedWidth(350);
+    sliderNear->setMinimum(0);
+    sliderNear->setMaximum(200);
+    sliderFar = new QSlider(Qt::Horizontal);
+    sliderFar->setFixedWidth(350);
+    sliderFar->setMinimum(0);
+    sliderFar->setMaximum(200);
+    labelNear = new QLabel("'Near' distance :");
+    labelFar = new QLabel("'Far' distance :");
+    layoutNear = new QHBoxLayout;
+    layoutNear->addWidget(labelNear);
+    layoutNear->addWidget(sliderNear);
+    layoutFar = new QHBoxLayout;
+    layoutFar->addWidget(labelFar);
+    layoutFar->addWidget(sliderFar);
+    layoutCamera = new QVBoxLayout;
+    layoutCamera->addLayout(layoutNear);
+    layoutCamera->addLayout(layoutFar);
 
     // Général
     rbMur->setChecked(true);
     //mouseRotation->setChecked(true);
     colorWidget = new QWidget;
+    cameraWidget = new QWidget;
+    cameraWidget->setFixedHeight(350);
     formeWidget = new QWidget;
+    formeWidget->setFixedHeight(230);
     lightWidget = new QWidget;
+    lightWidget->setFixedHeight(350);
     visualisationWidget = new QWidget;
-    formeWidget->setLayout(layoutBoutonsForme);
+    formeWidget->setLayout(layoutShapes);
     colorWidget->setLayout(layoutCouleur);
+    cameraWidget->setLayout(layoutCamera);
     visualisationWidget->setLayout(layoutVisuel);
     lightWidget->setLayout(layoutLight);
     optionsTab->addTab(colorWidget, "Couleur");
+    optionsTab->setTabPosition(QTabWidget::North);
     optionsTab->addTab(formeWidget, "Formes");
     optionsTab->addTab(visualisationWidget, "Visuel");
     optionsTab->addTab(lightWidget, "Lumière");
+    optionsTab->addTab(cameraWidget, "Camera");
 
     mainLayout = new QHBoxLayout;
     mainLayout->addWidget(scene3D);
@@ -302,14 +450,12 @@ Frame::Frame()
 
     QObject::connect(sliderTesselation, SIGNAL(valueChanged(int)), this, SLOT(changeShapeWithTesselation(int)));
 
-    QObject::connect(checkBoxCube, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
-    QObject::connect(checkBoxArrow, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
-    QObject::connect(checkBoxPlane, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
-    QObject::connect(checkBoxPyramide, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
-    QObject::connect(checkBoxSphere, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
-    QObject::connect(checkBoxTeapot, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
-    QObject::connect(checkBoxNormal, SIGNAL(stateChanged(int)), this, SLOT(showNormal()));
-    QObject::connect(checkBoxHideShape, SIGNAL(stateChanged(int)), this, SLOT(hideShape()));
+    QObject::connect(checkBoxSelectionCube, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxSelectionArrow, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxSelectionPlane, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxSelectionPyramide, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxSelectionSphere, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
+    QObject::connect(checkBoxSelectionTeapot, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
 
     QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTexture()));
     QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTexture()));
@@ -335,9 +481,9 @@ Frame::Frame()
     //QObject::connect(yRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
     //QObject::connect(zRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
 
-    QObject::connect(sliderLightX, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
-    QObject::connect(sliderLightY, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
-    QObject::connect(sliderLightZ, SIGNAL(valueChanged(float)),this, SLOT(changeLightPosition()));
+    QObject::connect(sliderLightX, SIGNAL(valueChanged(int)),this, SLOT(changeLightPosition()));
+    QObject::connect(sliderLightY, SIGNAL(valueChanged(int)),this, SLOT(changeLightPosition()));
+    QObject::connect(sliderLightZ, SIGNAL(valueChanged(int)),this, SLOT(changeLightPosition()));
 
     // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
     //createCube();
@@ -356,45 +502,45 @@ void Frame::changeShapeWithTesselation(int value) {
 };
 
 void Frame::selectShape() {
-    if ((!checkBoxCube->isChecked() && scene3D->isShapeInMap("Cube")) || (checkBoxCube->isChecked() && !scene3D->isShapeInMap("Cube"))) {
+    if ((!checkBoxSelectionCube->isChecked() && scene3D->isShapeInMap("Cube")) || (checkBoxSelectionCube->isChecked() && !scene3D->isShapeInMap("Cube"))) {
         scene3D->selectShape("Cube");
     }
 
-    if ((!checkBoxPyramide->isChecked() && scene3D->isShapeInMap("Pyramide")) || (checkBoxPyramide->isChecked() && !scene3D->isShapeInMap("Pyramide"))) {
+    if ((!checkBoxSelectionPyramide->isChecked() && scene3D->isShapeInMap("Pyramide")) || (checkBoxSelectionPyramide->isChecked() && !scene3D->isShapeInMap("Pyramide"))) {
         scene3D->selectShape("Pyramide");
     }
 
-    if ((!checkBoxPlane->isChecked() && scene3D->isShapeInMap("Plane")) || (checkBoxPlane->isChecked() && !scene3D->isShapeInMap("Plane"))) {
+    if ((!checkBoxSelectionPlane->isChecked() && scene3D->isShapeInMap("Plane")) || (checkBoxSelectionPlane->isChecked() && !scene3D->isShapeInMap("Plane"))) {
         scene3D->selectShape("Plane");
     }
 
-    if ((!checkBoxSphere->isChecked() && scene3D->isShapeInMap("Sphere")) || (checkBoxSphere->isChecked() && !scene3D->isShapeInMap("Sphere"))) {
+    if ((!checkBoxSelectionSphere->isChecked() && scene3D->isShapeInMap("Sphere")) || (checkBoxSelectionSphere->isChecked() && !scene3D->isShapeInMap("Sphere"))) {
         scene3D->selectShape("Sphere");
     }
 
-    if ((!checkBoxTeapot->isChecked() && scene3D->isShapeInMap("Teapot")) || (checkBoxTeapot->isChecked() && !scene3D->isShapeInMap("Teapot"))) {
+    if ((!checkBoxSelectionTeapot->isChecked() && scene3D->isShapeInMap("Teapot")) || (checkBoxSelectionTeapot->isChecked() && !scene3D->isShapeInMap("Teapot"))) {
         scene3D->selectShape("Teapot");
     }
 
-    if ((!checkBoxArrow->isChecked() && scene3D->isShapeInMap("Arrow")) || (checkBoxArrow->isChecked() && !scene3D->isShapeInMap("Arrow"))) {
+    if ((!checkBoxSelectionArrow->isChecked() && scene3D->isShapeInMap("Arrow")) || (checkBoxSelectionArrow->isChecked() && !scene3D->isShapeInMap("Arrow"))) {
         scene3D->selectShape("Arrow");
     }
 }
 
 void Frame::showNormal() {
-    if (checkBoxNormal->isChecked()) {
-        scene3D->showNormal(true);
-    } else {
-        scene3D->showNormal(false);
-    }
+    //if (checkBoxNormal->isChecked()) {
+    //    scene3D->showNormal(true);
+    //} else {
+    //    scene3D->showNormal(false);
+    //}
 }
 
 void Frame::hideShape() {
-    if (checkBoxHideShape->isChecked()) {
-        scene3D->hideShape(1);
-    } else {
-        scene3D->hideShape(0);
-    }
+    //if (checkBoxHideShape->isChecked()) {
+    //    scene3D->hideShape(1);
+    //} else {
+    //    scene3D->hideShape(0);
+    //}
 }
 
 void Frame::createCube() {
