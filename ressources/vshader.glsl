@@ -1,33 +1,4 @@
 #version 330
-/*layout(location=0) vec4 vertexPositionModel;
-layout(location=1) vec3 vertexColor;
-layout(location=2) vec3 normalModel;
-layout(location = 1) in vec2 vertexUV;
-uniform mat4 mvp;
-
-uniform float time;
-uniform int isColor;
-//uniform vec3 normal;
-
-
-in vec3 position;
-in vec3 color;
-
-out vec4 fColor;
-out vec4 fPosition;
-out vec2 UV;
-out vec3 n;
-out float norme;
-out vec4 vecNormal;
-
-out float fTime;
-
-uniform mat4 modelToProjectionMatrix;
-uniform mat4 modelToWorldMatrix;
-
-out vec3 normalWorld;
-out vec3 vertexPositionWorld;*/
-
 in vec4 position;
 in vec3 color;
 in vec3 normal;
@@ -38,10 +9,12 @@ out vec3 vertexToFragmentColor;
 out vec4 fColor;
 out vec4 fPosition;
 out float fTime;
+out vec3 V;
 flat out int fIsColor;
 
 uniform mat4 modelToProjectionMatrix;
 uniform mat4 modelToWorldMatrix;
+uniform mat4 worldToViewMatrix;
 uniform float time;
 uniform vec4 translation;
 uniform vec3 axis;
@@ -69,41 +42,27 @@ float random (vec2 st) {
 //! [0]
 void main()
 {
+    V = vec3(position);
     vec4 pos = position + translation;
+    vec4 temp = pos;
+    pos = pos - translation;
     pos = pos * rotationMatrix(axis,angle);
+    pos = pos + translation;
     pos = pos * homothetie;
     gl_Position = modelToProjectionMatrix * pos;
     fPosition = gl_Position;
     fTime = time;
     normalWorld = vec3(modelToWorldMatrix * vec4(normal, 0));
     vertexPositionWorld = vec3(modelToWorldMatrix * pos);
-    //vertexToFragmentColor = color;
     fIsColor = isColor;
-    if (fIsColor == 1) {
+    if (fIsColor == 0) {
         fColor = vec4(color,1.0);
-    } else if (fIsColor == 2) {
+    } else if (fIsColor == 1) {
         fColor = vec4(random((fTime)*fPosition.xy),random((fTime+1.)*fPosition.yz),random((fTime+1.)*fPosition.zy),1.0);
-    } else if (fIsColor == 4) {
-        //fColor = normalize(normal * vecNormal);
+    } else if (fIsColor == 2) {
+        fColor = normalize(worldToViewMatrix * (vec4(normal,1.0)/2.0)+0.5);
     }
 }
 
-
-//! [0]
-    //fColor = vec4(random((fTime)*fPosition.xy),random((fTime+1.)*fPosition.yz),random((fTime+1.)*fPosition.zy),1.0);
-    //fColor = vec4(color,1.0);
-    // Calculate vertex position in screen space
-    /*vec4 pos = vec4(position,1.) + translation;
-    pos = pos * homotethie;
-    gl_Position = mvp * pos;
-
-    UV = vertexUV;
-    n = normal;
-
-    fTime = time;
-    norme = sqrt(pow(gl_Position.x,2)+pow(gl_Position.y,2)+pow(gl_Position.z,2));
-    vecNormal = gl_Position / norme;
-
-}*/
 
 

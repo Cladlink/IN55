@@ -74,6 +74,8 @@ void IGeometryEngine::update(QOpenGLShaderProgram *program,Vertex *verticesShape
         arrayBuf.allocate(verticesNormal, nbrVerticesNormal * sizeof(Vertex));
         indexBuf.allocate(indicesNormal, nbrIndicesNormal * sizeof(GLushort));
         glDrawElements(GL_LINES, nbrIndicesNormal, GL_UNSIGNED_SHORT, 0);
+        //arrayBuf.release();
+        //indexBuf.release();
     }
 
     for (int i=0; i<nbrVertices-1; i++) {
@@ -113,6 +115,8 @@ void IGeometryEngine::update(QOpenGLShaderProgram *program,Vertex *verticesShape
     program->setUniformValue("axis",_rotation.vector());
 
     program->setUniformValue("angle",_rotation.scalar());
+
+    //qDebug() << _hideShapeNumber;
 
     program->setUniformValue("hideNumber",_hideShapeNumber);
 

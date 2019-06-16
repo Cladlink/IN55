@@ -184,10 +184,11 @@ Frame::Frame()
     layoutBleu->addWidget(sliderBleu);
 
     rbMulticolorVertices = new QRadioButton("Multicolor vertices", this);
-    rbMulticolorFragments = new QRadioButton("Multicolor fragments", this);
     rbColorNormal = new QRadioButton("Couleur en fonction des normales", this);
-    rbMur = new QRadioButton("Mur en briques", this);
-    rbNintendo = new QRadioButton("Nintendo", this);
+    rbDamier = new QRadioButton("Damier", this);
+    rbBallonEtoile = new QRadioButton("Etoile", this);
+    rbBallonPlage = new QRadioButton("Ballon de plage", this);
+    rbBandeNoireBlanche = new QRadioButton("Bandes noires et blanches", this);
     labelCouleur = new QLabel("Couleurs et textures :");
     labelCouleur->setFixedSize(150,30);
 
@@ -198,10 +199,11 @@ Frame::Frame()
     layoutCouleur->addLayout(layoutVert);
     layoutCouleur->addLayout(layoutBleu);
     layoutCouleur->addWidget(rbMulticolorVertices);
-    layoutCouleur->addWidget(rbMulticolorFragments);
     layoutCouleur->addWidget(rbColorNormal);
-    layoutCouleur->addWidget(rbMur);
-    layoutCouleur->addWidget(rbNintendo);
+    layoutCouleur->addWidget(rbDamier);
+    layoutCouleur->addWidget(rbBallonEtoile);
+    layoutCouleur->addWidget(rbBallonPlage);
+    layoutCouleur->addWidget(rbBandeNoireBlanche);
 
     // Translation
     layoutTranslation = new QVBoxLayout;
@@ -297,26 +299,6 @@ Frame::Frame()
     layoutRotation->addLayout(layoutRotationY);
     layoutRotation->addLayout(layoutRotationZ);
 
-    /*layoutRotation->addWidget(labelRotation);
-    layoutRotation->addWidget(mouseRotation);
-    layoutRotation->addWidget(xRotation);
-    layoutRotation->addWidget(yRotation);
-    layoutRotation->addWidget(zRotation);*/
-
-    /*mouseRotation = new QRadioButton("Mouse");
-    xRotation = new QRadioButton("X");
-    yRotation = new QRadioButton("Y");
-    zRotation = new QRadioButton("Z");
-
-    labelRotation = new QLabel("Rotation :");
-    labelRotation->setFixedSize(150,30);
-
-    layoutRotation->addWidget(labelRotation);
-    layoutRotation->addWidget(mouseRotation);
-    layoutRotation->addWidget(xRotation);
-    layoutRotation->addWidget(yRotation);
-    layoutRotation->addWidget(zRotation);*/
-
     layoutVisuel = new QVBoxLayout;
     layoutVisuel->addLayout(layoutTesselation);
     layoutVisuel->addLayout(layoutHomothetie);
@@ -397,11 +379,11 @@ Frame::Frame()
     sliderNear = new QSlider(Qt::Horizontal);
     sliderNear->setFixedWidth(350);
     sliderNear->setMinimum(0);
-    sliderNear->setMaximum(200);
+    sliderNear->setMaximum(10);
     sliderFar = new QSlider(Qt::Horizontal);
     sliderFar->setFixedWidth(350);
     sliderFar->setMinimum(0);
-    sliderFar->setMaximum(200);
+    sliderFar->setMaximum(100);
     labelNear = new QLabel("'Near' distance :");
     labelFar = new QLabel("'Far' distance :");
     layoutNear = new QHBoxLayout;
@@ -417,16 +399,14 @@ Frame::Frame()
     labelCameraInclinaison = new QLabel("Camera tilt :");
     sliderCameraInclinaison = new QSlider(Qt::Horizontal);
     sliderCameraInclinaison->setFixedWidth(350);
-    sliderCameraInclinaison->setMinimum(100);
-    sliderCameraInclinaison->setMaximum(900);
+    sliderCameraInclinaison->setMinimum(0);
+    sliderCameraInclinaison->setMaximum(360);
     layoutCameraInclinaison = new QHBoxLayout;
     layoutCameraInclinaison->addWidget(labelCameraInclinaison);
     layoutCameraInclinaison->addWidget(sliderCameraInclinaison);
     layoutCamera->addLayout(layoutCameraInclinaison);
 
     // Général
-    rbMur->setChecked(true);
-    //mouseRotation->setChecked(true);
     colorWidget = new QWidget;
     cameraWidget = new QWidget;
     cameraWidget->setFixedHeight(350);
@@ -467,16 +447,38 @@ Frame::Frame()
     QObject::connect(checkBoxSelectionSphere, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
     QObject::connect(checkBoxSelectionTeapot, SIGNAL(stateChanged(int)), this, SLOT(selectShape()));
 
-    QObject::connect(rbNintendo, SIGNAL(clicked()), this, SLOT(changeTexture()));
-    QObject::connect(rbMur, SIGNAL(clicked()), this, SLOT(changeTexture()));
+    QObject::connect(checkBoxNormalsCube, SIGNAL(stateChanged(int)), this, SLOT(showNormal()));
+    QObject::connect(checkBoxNormalsArrow, SIGNAL(stateChanged(int)), this, SLOT(showNormal()));
+    QObject::connect(checkBoxNormalsPlane, SIGNAL(stateChanged(int)), this, SLOT(showNormal()));
+    QObject::connect(checkBoxNormalsPyramide, SIGNAL(stateChanged(int)), this, SLOT(showNormal()));
+    QObject::connect(checkBoxNormalsSphere, SIGNAL(stateChanged(int)), this, SLOT(showNormal()));
+    QObject::connect(checkBoxNormalsTeapot, SIGNAL(stateChanged(int)), this, SLOT(showNormal()));
+
+    QObject::connect(checkBoxShowCube, SIGNAL(stateChanged(int)), this, SLOT(hideShape()));
+    QObject::connect(checkBoxShowArrow, SIGNAL(stateChanged(int)), this, SLOT(hideShape()));
+    QObject::connect(checkBoxShowPlane, SIGNAL(stateChanged(int)), this, SLOT(hideShape()));
+    QObject::connect(checkBoxShowPyramide, SIGNAL(stateChanged(int)), this, SLOT(hideShape()));
+    QObject::connect(checkBoxShowSphere, SIGNAL(stateChanged(int)), this, SLOT(hideShape()));
+    QObject::connect(checkBoxShowTeapot, SIGNAL(stateChanged(int)), this, SLOT(hideShape()));
 
     QObject::connect(rbMulticolorVertices, SIGNAL(clicked()), this, SLOT(changeColor()));
-    QObject::connect(rbMulticolorFragments, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbColorNormal, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(rbColor, SIGNAL(clicked()), this, SLOT(changeColor()));
+    QObject::connect(rbDamier, SIGNAL(clicked()), this, SLOT(changeColor()));
+    QObject::connect(rbBallonPlage, SIGNAL(clicked()), this, SLOT(changeColor()));
+    QObject::connect(rbBallonEtoile, SIGNAL(clicked()), this, SLOT(changeColor()));
+    QObject::connect(rbBandeNoireBlanche, SIGNAL(clicked()), this, SLOT(changeColor()));
     QObject::connect(sliderRouge, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
     QObject::connect(sliderVert, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
     QObject::connect(sliderBleu, SIGNAL(valueChanged(int)), this, SLOT(changeColor()));
+
+    QObject::connect(sliderLightColorRed, SIGNAL(valueChanged(int)), this, SLOT(changeAmbientColor()));
+    QObject::connect(sliderLightColorGreen, SIGNAL(valueChanged(int)), this, SLOT(changeAmbientColor()));
+    QObject::connect(sliderLightColorBlue, SIGNAL(valueChanged(int)), this, SLOT(changeAmbientColor()));
+
+    QObject::connect(sliderNear, SIGNAL(valueChanged(int)), this, SLOT(changeCameraPositionNear()));
+    QObject::connect(sliderFar, SIGNAL(valueChanged(int)), this, SLOT(changeCameraPositionFar()));
+    QObject::connect(sliderCameraInclinaison, SIGNAL(valueChanged(int)), this, SLOT(changeCameraPositionFov()));
 
     QObject::connect(sliderTranslationX, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
     QObject::connect(sliderTranslationY, SIGNAL(valueChanged(int)), this, SLOT(changePosition()));
@@ -486,18 +488,9 @@ Frame::Frame()
     QObject::connect(sliderRotationY, SIGNAL(valueChanged(int)), this, SLOT(changeRotationY()));
     QObject::connect(sliderRotationZ, SIGNAL(valueChanged(int)), this, SLOT(changeRotationZ()));
 
-    //QObject::connect(mouseRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
-    //QObject::connect(xRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
-    //QObject::connect(yRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
-    //QObject::connect(zRotation, SIGNAL(clicked()), this, SLOT(changeRotation()));
-
     QObject::connect(sliderLightX, SIGNAL(valueChanged(int)),this, SLOT(changeLightPosition()));
     QObject::connect(sliderLightY, SIGNAL(valueChanged(int)),this, SLOT(changeLightPosition()));
     QObject::connect(sliderLightZ, SIGNAL(valueChanged(int)),this, SLOT(changeLightPosition()));
-
-    // Affiche un cube avec la texture 'mur' par défault au lancement de l'application
-    //createCube();
-    //changeTexture();
 }
 
 void Frame::changeSize() {
@@ -507,105 +500,166 @@ void Frame::changeSize() {
     scene3D->setHomothetie(QVector3D(x,y,z));
 };
 
+void Frame::changeCameraPositionNear() {
+    float n = sliderNear->value()/10.;
+    scene3D->setCameraPositionNear(n);
+}
+
+void Frame::changeCameraPositionFar() {
+    float f = sliderFar->value();
+    scene3D->setCameraPositionFar(f);
+}
+
+void Frame::changeCameraPositionFov() {
+    float fov = sliderCameraInclinaison->value();
+    scene3D->setCameraPositionFov(fov);
+}
+
 void Frame::changeShapeWithTesselation(int value) {
     scene3D->setTesselation(value);
 };
 
 void Frame::selectShape() {
-    if ((!checkBoxSelectionCube->isChecked() && scene3D->isShapeInMap("Cube")) || (checkBoxSelectionCube->isChecked() && !scene3D->isShapeInMap("Cube"))) {
-        scene3D->selectShape("Cube");
+    if ((checkBoxSelectionCube->isChecked())) {
+        scene3D->selectShape("Cube", true);
+    } else {
+        scene3D->selectShape("Cube", false);
     }
 
-    if ((!checkBoxSelectionPyramide->isChecked() && scene3D->isShapeInMap("Pyramide")) || (checkBoxSelectionPyramide->isChecked() && !scene3D->isShapeInMap("Pyramide"))) {
-        scene3D->selectShape("Pyramide");
+    if ((checkBoxSelectionPyramide->isChecked())) {
+        scene3D->selectShape("Pyramide", true);
+    } else {
+        scene3D->selectShape("Pyramide", false);
     }
 
-    if ((!checkBoxSelectionPlane->isChecked() && scene3D->isShapeInMap("Plane")) || (checkBoxSelectionPlane->isChecked() && !scene3D->isShapeInMap("Plane"))) {
-        scene3D->selectShape("Plane");
+    if ((checkBoxSelectionPlane->isChecked())) {
+        scene3D->selectShape("Plane", true);
+    } else {
+        scene3D->selectShape("Plane", false);
     }
 
-    if ((!checkBoxSelectionSphere->isChecked() && scene3D->isShapeInMap("Sphere")) || (checkBoxSelectionSphere->isChecked() && !scene3D->isShapeInMap("Sphere"))) {
-        scene3D->selectShape("Sphere");
+    if ((checkBoxSelectionSphere->isChecked())) {
+        scene3D->selectShape("Sphere", true);
+    } else {
+        scene3D->selectShape("Sphere", false);
     }
 
-    if ((!checkBoxSelectionTeapot->isChecked() && scene3D->isShapeInMap("Teapot")) || (checkBoxSelectionTeapot->isChecked() && !scene3D->isShapeInMap("Teapot"))) {
-        scene3D->selectShape("Teapot");
+    if ((checkBoxSelectionTeapot->isChecked())) {
+        scene3D->selectShape("Teapot", true);
+    } else {
+        scene3D->selectShape("Teapot", false);
     }
 
-    if ((!checkBoxSelectionArrow->isChecked() && scene3D->isShapeInMap("Arrow")) || (checkBoxSelectionArrow->isChecked() && !scene3D->isShapeInMap("Arrow"))) {
-        scene3D->selectShape("Arrow");
+    if ((checkBoxSelectionArrow->isChecked())) {
+        scene3D->selectShape("Arrow", true);
+    } else {
+        scene3D->selectShape("Arrow", false);
     }
 }
 
 void Frame::showNormal() {
-    //if (checkBoxNormal->isChecked()) {
-    //    scene3D->showNormal(true);
-    //} else {
-    //    scene3D->showNormal(false);
-    //}
+    if ((checkBoxNormalsCube->isChecked())) {
+        scene3D->showNormal("Cube", true);
+    } else {
+        scene3D->showNormal("Cube", false);
+    }
+
+    if ((checkBoxNormalsPyramide->isChecked())) {
+        scene3D->showNormal("Pyramide", true);
+    } else {
+        scene3D->showNormal("Pyramide", false);
+    }
+
+    if ((checkBoxNormalsPlane->isChecked())) {
+        scene3D->showNormal("Plane", true);
+    } else {
+        scene3D->showNormal("Plane", false);
+    }
+
+    if ((checkBoxNormalsSphere->isChecked())) {
+        scene3D->showNormal("Sphere", true);
+    } else {
+        scene3D->showNormal("Sphere", false);
+    }
+
+    if ((checkBoxNormalsTeapot->isChecked())) {
+        scene3D->showNormal("Teapot", true);
+    } else {
+        scene3D->showNormal("Teapot", false);
+    }
+
+    if ((checkBoxNormalsArrow->isChecked())) {
+        scene3D->showNormal("Arrow", true);
+    } else {
+        scene3D->showNormal("Arrow", false);
+    }
 }
 
 void Frame::hideShape() {
-    //if (checkBoxHideShape->isChecked()) {
-    //    scene3D->hideShape(1);
-    //} else {
-    //    scene3D->hideShape(0);
-    //}
-}
-
-void Frame::createCube() {
-    scene3D->setObject("cube");
-    scene3D->setNbObjects(1);
-};
-
-void Frame::createPyramide() {
-    scene3D->setObject("pyramide");
-    scene3D->setNbObjects(1);
-};
-
-void Frame::createSphere() {
-    scene3D->setObject("sphere");
-    scene3D->setNbObjects(1);
-};
-
-void Frame::createTorus() {
-    scene3D->setObject("torus");
-    scene3D->setNbObjects(1);
-};
-
-void Frame::createSuzanne() {
-    scene3D->setObject("suzanne");
-    scene3D->setNbObjects(1);
-};
-
-void Frame::changeTexture() {
-    scene3D->setIsColor(0);
-    if (rbMur->isChecked()) {
-        scene3D->setNumberBufferTexture(0);
-        scene3D->setPathTexture(":/mur.png");
-    } else if(rbNintendo->isChecked()) {
-        scene3D->setNumberBufferTexture(1);
-        scene3D->setPathTexture(":/nintendo.png");
+    if (checkBoxShowCube->isChecked()) {
+        scene3D->hideShape("Cube",1);
     } else {
-        scene3D->setNumberBufferTexture(0);
-        scene3D->setPathTexture(":/mur.png");
+        scene3D->hideShape("Cube",0);
     }
-};
+
+    if (checkBoxShowArrow->isChecked()) {
+        scene3D->hideShape("Arrow",1);
+    } else {
+        scene3D->hideShape("Arrow",0);
+    }
+
+    if (checkBoxShowSphere->isChecked()) {
+        scene3D->hideShape("Sphere",1);
+    } else {
+        scene3D->hideShape("Sphere",0);
+    }
+
+    if (checkBoxShowPlane->isChecked()) {
+        scene3D->hideShape("Plane",1);
+    } else {
+        scene3D->hideShape("Plane",0);
+    }
+
+    if (checkBoxShowTeapot->isChecked()) {
+        scene3D->hideShape("Teapot",1);
+    } else {
+        scene3D->hideShape("Teapot",0);
+    }
+
+    if (checkBoxShowPyramide->isChecked()) {
+        scene3D->hideShape("Pyramide",1);
+    } else {
+        scene3D->hideShape("Pyramide",0);
+    }
+}
 
 void Frame::changeColor() {
     if(rbColor->isChecked()){
-        scene3D->setIsColor(1);
+        scene3D->setIsColor(0);
         float r = sliderRouge->value() / 255.0f;
         float g = sliderVert->value() / 255.0f;
         float b = sliderBleu->value() / 255.0f;
         scene3D->setColor(QVector3D(r,g,b));
     } else if(rbMulticolorVertices->isChecked()) {
-        scene3D->setIsColor(2);
-    } else if(rbMulticolorFragments->isChecked()) {
-        scene3D->setIsColor(3);
+        scene3D->setIsColor(1);
     } else if(rbColorNormal->isChecked()) {
+        scene3D->setIsColor(2);
+    } else if(rbDamier->isChecked()) {
+        scene3D->setIsColor(3);
+    } else if(rbBallonPlage->isChecked()) {
         scene3D->setIsColor(4);
+    } else if(rbBallonEtoile->isChecked()) {
+        scene3D->setIsColor(5);
+    } else if(rbBandeNoireBlanche->isChecked()) {
+        scene3D->setIsColor(6);
     }
+}
+
+void Frame::changeAmbientColor() {
+    float r = sliderLightColorRed->value() / 255.0f;
+    float g = sliderLightColorGreen->value() / 255.0f;
+    float b = sliderLightColorBlue->value() / 255.0f;
+    scene3D->setAmbientColor(QVector4D(r,g,b,1.));
 }
 
 void Frame::changePosition() {
@@ -616,30 +670,19 @@ void Frame::changePosition() {
 }
 
 void Frame::changeRotationX() {
-    float angle = (sliderRotationX->value()/360.0f);
-    scene3D->setRotation(QQuaternion(angle,QVector3D(1.,0.,0.).normalized()));
+    float angle = (sliderRotationX->value());
+    scene3D->setRotation(QQuaternion(qDegreesToRadians(angle),QVector3D(1.,0.,0.).normalized()));
 }
 
 void Frame::changeRotationY() {
-    float angle = (sliderRotationY->value()/360.f);
-    scene3D->setRotation(QQuaternion(angle,QVector3D(0.,1.,0.).normalized()));
+    float angle = (sliderRotationY->value());
+    scene3D->setRotation(QQuaternion(qDegreesToRadians(angle),QVector3D(0.,1.,0.).normalized()));
 }
 
 void Frame::changeRotationZ() {
-    float angle = (sliderRotationZ->value()/360.f);
-    scene3D->setRotation(QQuaternion(angle,QVector3D(0.,0.,1.).normalized()));
+    float angle = (sliderRotationZ->value());
+    scene3D->setRotation(QQuaternion(qDegreesToRadians(angle),QVector3D(0.,0.,1.).normalized()));
 }
-
-
-/*if(mouseRotation->isChecked()){
-    scene3D->setAxeRotation(0);
-} else if(xRotation->isChecked()){
-    scene3D->setAxeRotation(1);
-} else if(yRotation->isChecked()){
-    scene3D->setAxeRotation(2);
-} else if(zRotation->isChecked()){
-    scene3D->setAxeRotation(3);
-}*/
 
 void Frame::changeLightPosition()
 {

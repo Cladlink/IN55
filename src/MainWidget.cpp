@@ -72,8 +72,6 @@ MainWidget::MainWidget(QWidget *parent) :
     angularSpeed(0)
 {
     beginning = QDateTime::currentMSecsSinceEpoch();
-    pixmap.append(QPixmap(":/mur.png"));
-    pixmap.append(QPixmap(":/nintendo.png"));
 }
 
 MainWidget::MainWidget(Light* _myLight, QWidget *parent) :
@@ -85,22 +83,27 @@ MainWidget::MainWidget(Light* _myLight, QWidget *parent) :
 {
     beginning = QDateTime::currentMSecsSinceEpoch();
     rotation = QQuaternion(0,QVector3D(1.,0.,0.));
-    itemsMapShape = QMap<QString, QString>();
-    itemsMapShape.insert("Cube","Cube");
-    itemsMapShape.insert("Arrow","Arrow");
-    itemsMapShape.insert("Plane","Plane");
-    itemsMapShape.insert("Sphere","Sphere");
-    itemsMapShape.insert("Pyramide","Pyramide");
-    itemsMapShape.insert("Teapot","Teapot");
+    itemsMapShape = QMap<QString, bool>();
+    itemsMapShape.insert("Cube",false);
+    itemsMapShape.insert("Arrow",false);
+    itemsMapShape.insert("Plane",false);
+    itemsMapShape.insert("Sphere",false);
+    itemsMapShape.insert("Pyramide",false);
+    itemsMapShape.insert("Teapot",false);
+    itemsMapNormal = QMap<QString, bool>();
+    itemsMapNormal.insert("Cube",false);
+    itemsMapNormal.insert("Arrow",false);
+    itemsMapNormal.insert("Plane",false);
+    itemsMapNormal.insert("Sphere",false);
+    itemsMapNormal.insert("Pyramide",false);
+    itemsMapNormal.insert("Teapot",false);
     itemsMapHideShape = QMap<QString, int>();
-    itemsMapHideShape.insert("Cube",0);
-    itemsMapHideShape.insert("Arrow",0);
-    itemsMapHideShape.insert("Plane",0);
-    itemsMapHideShape.insert("Sphere",0);
-    itemsMapHideShape.insert("Pyramide",0);
-    itemsMapHideShape.insert("Teapot",0);
-    //pixmap.append(QPixmap(":/mur.png"));
-    //pixmap.append(QPixmap(":/nintendo.png"));
+    itemsMapHideShape.insert("Cube",1);
+    itemsMapHideShape.insert("Arrow",1);
+    itemsMapHideShape.insert("Plane",1);
+    itemsMapHideShape.insert("Sphere",1);
+    itemsMapHideShape.insert("Pyramide",1);
+    itemsMapHideShape.insert("Teapot",1);
 }
 
 MainWidget::~MainWidget()
@@ -144,7 +147,7 @@ void MainWidget::mouseReleaseEvent(QMouseEvent *e)
 //! [1]
 void MainWidget::timerEvent(QTimerEvent *)
 {
-    if(getAxeRotation() == 1){
+    /*if(getAxeRotation() == 1){
         rotationAxis = QVector3D(1.0, 0.0, 0.0).normalized();
     } else if(getAxeRotation() == 2){
         rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
@@ -166,7 +169,7 @@ void MainWidget::timerEvent(QTimerEvent *)
         // Update rotation
         rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
         // Request an update
-    }
+    }*/
 
     update();
 }
@@ -189,18 +192,12 @@ void MainWidget::initializeGL()
 //! [2]
 
     geometriesCube = new Cube;
-    cubeNormal = new Cube;
-    geometriesLight = new Cube;
     //geometriesTorus = new Torus;
     geometriesPyramide = new Pyramide;
     geometriesArrow = new Arrow;
     geometriesTeapot = new Teapot;
     geometriesPlane = new Plane;
     geometriesSphere = new Sphere;
-    /*geometriesPyramide = new Pyramide;
-    geometriesSphere = new Shape("IN55/ressources/sphere.obj");
-    geometriesTorus = new Shape("IN55/ressources/torus.obj");
-    geometriesSuzanne = new Shape("IN55/ressources/suzanne.obj");*/
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);
@@ -256,8 +253,7 @@ void MainWidget::paintGL()
 
     QVector3D lightPositionWorld = myLight->lightPosition;
 
-    QVector4D ambientLight(0.05f, 0.05f, 0.05f, 1.0f);
-    program.setUniformValue("ambientLight", ambientLight);
+    program.setUniformValue("ambientLight", getAmbientColor());
 
     QVector3D eyePosition = camera->getPosition();
     program.setUniformValue("eyePosition", eyePosition);
@@ -269,7 +265,9 @@ void MainWidget::paintGL()
     // Calculate aspect ratio
     float aspect = width() / height();
     // Set near plane to 0.1, far plane to 50.0, field of view 60 degrees
-    float zNear = 0.1f, zFar = 50.0f, fov = 60.0f;
+    zNear = getCameraPositionNear();
+    zFar = getCameraPositionFar();
+    fov = getCameraPositionFov();
 
     viewToProjectionMatrix.perspective(fov, aspect, zNear, zFar);
 
@@ -279,6 +277,13 @@ void MainWidget::paintGL()
 
     QMatrix4x4 shapeModelToWorldMatrix;
     modelToProjectionMatrix = worldToProjectionMatrix * shapeModelToWorldMatrix;
+    /*if (itemsMapShape.value("Teapot")) {
+        shapeModelToWorldMatrix.rotate(-90,QVector3D(1.f,0.f,0.f));
+        modelToProjectionMatrix = worldToProjectionMatrix * shapeModelToWorldMatrix;
+    }*/
+
+    program.setUniformValue("worldToViewMatrix", worldToViewMatrix);
+
     program.setUniformValue("modelToProjectionMatrix", modelToProjectionMatrix);
 
     program.setUniformValue("modelToWorldMatrix", shapeModelToWorldMatrix);
@@ -295,26 +300,23 @@ void MainWidget::paintGL()
     program.setUniformValue("time", (launch-beginning)/1000);
     program.setUniformValue("isColor",isColor);
 
-   /* geometriesCube->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
-                           getPosition("Cube"), getRotation("Cube"), normal, itemsMapHideShape.value("Cube"));
-    geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
-                            getPosition("Plane"), getRotation("Plane"), normal, itemsMapHideShape.value("Plane"));
-    //geometriesPlane->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,0.,0.), getRotation());
-    geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
-                            getPosition("Arrow"), getRotation("Arrow"), normal, itemsMapHideShape.value("Arrow"));
-    //geometriesArrow->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(-2.,2.,2.), getRotation());
-   */ geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
-                             getPosition("Sphere"), getRotation("Sphere"), normal, itemsMapHideShape.value("Sphere"));
-    //geometriesSphere->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(-1.,2.,-1.), getRotation());
-    /*geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
-                               getPosition("Pyramide"), getRotation("Pyramide"), normal, itemsMapHideShape.value("Pyramide"));
-    //geometriesPyramide->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,QVector3D(1.,1.,1.), getRotation());
+    geometriesCube->update(&program,getColor("Cube"),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                           getPosition("Cube"), getRotation("Cube"), itemsMapNormal.value("Cube"), itemsMapHideShape.value("Cube"));
 
-    modelToProjectionMatrix.rotate(-90,QVector3D(1.f,0.f,0.f));
-    geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix,
-                             getPosition("Teapot"), getRotation("Teapot"), normal, itemsMapHideShape.value("Teapot"));
-    //geometriesTeapot->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(3.,2.,3.), getRotation());
-    modelToProjectionMatrix.rotate(90,QVector3D(1.f,0.f,0.f));*/
+    geometriesPlane->update(&program,getColor("Plane"),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                            getPosition("Plane"), getRotation("Plane"), itemsMapNormal.value("Plane"), itemsMapHideShape.value("Plane"));
+
+    geometriesArrow->update(&program,getColor("Arrow"),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                            getPosition("Arrow"), getRotation("Arrow"), itemsMapNormal.value("Arrow"), itemsMapHideShape.value("Arrow"));
+
+    geometriesSphere->update(&program,getColor("Sphere"),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                             getPosition("Sphere"), getRotation("Sphere"), itemsMapNormal.value("Sphere"), itemsMapHideShape.value("Sphere"));
+
+    geometriesPyramide->update(&program,getColor("Pyramide"),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                               getPosition("Pyramide"), getRotation("Pyramide"), itemsMapNormal.value("Pyramide"), itemsMapHideShape.value("Pyramide"));
+
+    geometriesTeapot->update(&program,getColor("Teapot"),modelToProjectionMatrix,shapeModelToWorldMatrix,
+                             getPosition("Teapot"), getRotation("Teapot"), itemsMapNormal.value("Teapot"), itemsMapHideShape.value("Teapot"));
 
     //geometriesTorus->update(&program,getColor(),modelToProjectionMatrix,shapeModelToWorldMatrix, QVector3D(0.,4.,0.), getRotation());
 }
@@ -332,52 +334,64 @@ int MainWidget::getTesselation(){
 }
 
 void MainWidget::setTesselation(int _tesselation){
-    if (itemsMapShape.contains("Sphere")) {
+    if (itemsMapShape.value("Sphere")) {
         geometriesSphere->~Sphere();
         geometriesSphere = new Sphere(_tesselation);
     }
 
-    if (itemsMapShape.contains("Plane")) {
+    if (itemsMapShape.value("Plane")) {
         geometriesPlane->~Plane();
         geometriesPlane = new Plane(_tesselation);
     }
 
-    if (itemsMapShape.contains("Teapot")) {
+    if (itemsMapShape.value("Teapot")) {
         geometriesTeapot->~Teapot();
         geometriesTeapot = new Teapot(_tesselation);
     }
 }
 
-string MainWidget::getObject(){
-    return object;
+float MainWidget::getCameraPositionNear() {
+    return zNear;
 }
 
-void MainWidget::setObject(string _object){
-    object = _object;
+float MainWidget::getCameraPositionFar() {
+    return zFar;
 }
 
-int MainWidget::getNbObjects(){
-    return nbObjects;
+float MainWidget::getCameraPositionFov() {
+    return fov;
 }
 
-void MainWidget::setNbObjects(int _nbObject){
-    nbObjects = _nbObject;
+void MainWidget::setCameraPositionNear(float _near){
+    zNear = _near;
 }
 
-string MainWidget::getPathTexture(){
-    return pathTexture;
+void MainWidget::setCameraPositionFar(float _far){
+    zFar = _far;
 }
 
-void MainWidget::setPathTexture(string _pathTexture){
-    pathTexture = _pathTexture;
+void MainWidget::setCameraPositionFov(float _fov){
+    fov = _fov;
 }
 
-QVector3D MainWidget::getColor() {
-    return color;
+QVector3D MainWidget::getColor(QString _name) {
+    if (itemsMapShape.value(_name)){
+        return color;
+    } else {
+        return QVector3D(0.f,0.f,0.f);
+    }
 }
 
 void MainWidget::setColor(QVector3D _color) {
     color = _color;
+}
+
+QVector4D MainWidget::getAmbientColor() {
+    return ambientColor;
+}
+
+void MainWidget::setAmbientColor(QVector4D _ambientColor) {
+    ambientColor = _ambientColor;
 }
 
 int MainWidget::getIsColor() {
@@ -385,42 +399,32 @@ int MainWidget::getIsColor() {
 }
 
 void MainWidget::setIsColor(int _isColor) {
-    // 0 = texture;
-    // 1 = couleur choisie par l'utilisateur;
-    // 2 = multi color par rapport aux vertices;
-    // 3 = multi color par rapport aux fragments;
-    // 4 = multi color par rapport aux normales;
+    // 0 = couleur choisie par l'utilisateur;
+    // 1 = multi color par rapport aux vertices;
+    // 2 = multi color par rapport aux normales;
+    // 3 = damier;
+    // 4 = ballon de plage;
+    // 5 = ballon etoilé;
+    // 6 = bande noire et blanche;
     isColor = _isColor;
 }
 
-void MainWidget::selectShape(QString name) {
-    if (itemsMapShape.contains(name)) {
-        itemsMapShape.remove(name);
-    } else {
-        itemsMapShape.insert(name,name);
-    }
+void MainWidget::selectShape(QString _name, bool _isSelected) {
+    itemsMapShape.insert(_name,_isSelected);
 }
 
-void MainWidget::showNormal(bool _showNormal) {
-    normal = _showNormal;
+void MainWidget::showNormal(QString _name, bool _showNormal) {
+    itemsMapNormal.insert(_name,_showNormal);
 }
 
-void MainWidget::hideShape(int _hideShapeNumber) {
-    // 0 = on affiche l'objet;
-    // 1 = on cache l'objet;
-    itemsMapHideShape.insert("Cube",_hideShapeNumber);
+void MainWidget::hideShape(QString _shape, int _hideShapeNumber) {
+    // 0 = on cache l'objet;
+    // 1 = on affiche l'objet;
+    itemsMapHideShape.insert(_shape,_hideShapeNumber);
 }
 
 bool MainWidget::isShapeInMap(QString name) {
     return itemsMapShape.contains(name);
-}
-
-int MainWidget::getNumberBufferTexture() {
-    return indexBufferArrayTexture;
-}
-
-void MainWidget::setNumberBufferTexture(int _index) {
-    indexBufferArrayTexture = _index;
 }
 
 int MainWidget::getAxeRotation() {
@@ -431,11 +435,8 @@ void MainWidget::setAxeRotation(int _axeRotation) {
     axeRotation = _axeRotation;
 }
 
-QVector3D MainWidget::getPosition(QString name) {
-    if (itemsMapShape.contains(name)){
-        /*if (name == "Teapot") {
-            return position = QVector3D(position.y(),position.z(),position.x());
-        }*/
+QVector3D MainWidget::getPosition(QString _name) {
+    if (itemsMapShape.value(_name)){
         return position;
     } else {
         return QVector3D(0.f,0.f,0.f);
@@ -446,8 +447,8 @@ void MainWidget::setPosition(QVector3D _position) {
     position = _position;
 }
 
-QQuaternion MainWidget::getRotation(QString name) {
-    if (itemsMapShape.contains(name)){
+QQuaternion MainWidget::getRotation(QString _name) {
+    if (itemsMapShape.value(_name)){
         return rotation;
     } else {
         return QQuaternion(0.f,QVector3D(1.f,0.f,0.f));

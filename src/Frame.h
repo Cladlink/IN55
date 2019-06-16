@@ -16,10 +16,9 @@
 #include <iostream>
 #include <QDebug>
 #include <QQuaternion>
+#include <QtMath>
 
 #include "MainWidget.h"
-#include "Colortextedit.h"
-#include "DebugSlider.h"
 #include "Light.h"
 
 using namespace std;
@@ -42,14 +41,11 @@ private:
     //QRadiotButton
     QRadioButton *rbColor;
     QRadioButton *rbMulticolorVertices;
-    QRadioButton *rbMulticolorFragments;
     QRadioButton *rbColorNormal;
-    QRadioButton *rbMur;
-    QRadioButton *rbNintendo;
-    QRadioButton *mouseRotation;
-    QRadioButton *xRotation;
-    QRadioButton *yRotation;
-    QRadioButton *zRotation;
+    QRadioButton *rbBandeNoireBlanche;
+    QRadioButton *rbDamier;
+    QRadioButton *rbBallonPlage;
+    QRadioButton *rbBallonEtoile;
 
     //QSlider
     QSlider *sliderHomothetieX;
@@ -188,18 +184,16 @@ private:
 private slots:
     void changeSize();
     void changeShapeWithTesselation(int value);
-    void createCube();
-    void createPyramide();
-    void changeTexture();
-    void createSphere();
-    void createTorus();
-    void createSuzanne();
     void changeColor();
     void changeRotationX();
     void changeRotationY();
     void changeRotationZ();
     void changePosition();
     void changeLightPosition();
+    void changeAmbientColor();
+    void changeCameraPositionNear();
+    void changeCameraPositionFar();
+    void changeCameraPositionFov();
     void showNormal();
     void hideShape();
     void selectShape();

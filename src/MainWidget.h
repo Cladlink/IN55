@@ -63,7 +63,6 @@
 #include "Torus.h"
 #include "Sphere.h"
 #include "ShapeData.h"
-#include "ShapeGenerator.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -92,34 +91,35 @@ public:
     // Getter
     QVector3D getHomothetie();
     int getTesselation();
-    string getObject();
-    string getPathTexture();
-    int getNbObjects();
-    QVector3D getColor();
+    QVector3D getColor(QString _name);
+    QVector4D getAmbientColor();
+    float getCameraPositionNear();
+    float getCameraPositionFar();
+    float getCameraPositionFov();
     int getIsColor();
-    int getNumberBufferTexture();
     int getAxeRotation();
-    QVector3D getPosition(QString name);
-    QQuaternion getRotation(QString name);
-    bool isShapeInMap(QString name);
+    QVector3D getPosition(QString _name);
+    QQuaternion getRotation(QString _name);
 
     // Setter
     void setHomothetie(QVector3D _homothetie);
     void setTesselation(int _tesselation);
-    void setObject(string _object);
-    void setPathTexture(string _pathTexture);
     void setNbObjects(int _nbObject);
     void setColor(QVector3D _color);
     void setIsColor(int _isColor);
-    void setNumberBufferTexture(int _index);
     void setAxeRotation(int _axeRotation);
     void setPosition(QVector3D _position);
     void setRotation(QQuaternion _rotation);
+    void setAmbientColor(QVector4D _ambientColor);
+    void setCameraPositionNear(float _near);
+    void setCameraPositionFar(float _far);
+    void setCameraPositionFov(float _fov);
 
     // Others methods
-    void selectShape(QString name);
-    void showNormal(bool _showNormal);
-    void hideShape(int _hideShapeNumber);
+    void selectShape(QString _name, bool _isSelected);
+    void showNormal(QString _shape, bool _showNormal);
+    void hideShape(QString _shape, int _hideShapeNumber);
+    bool isShapeInMap(QString name);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -138,10 +138,7 @@ protected:
 private:
     QBasicTimer timer;
     QOpenGLShaderProgram program;
-    QVector<QPixmap> pixmap;
     Cube *geometriesCube;
-    Cube *cubeNormal;
-    Cube *geometriesLight;
     Pyramide *geometriesPyramide;
     Plane *geometriesPlane;
     Arrow *geometriesArrow;
@@ -149,18 +146,17 @@ private:
     Sphere *geometriesSphere;
     Torus *geometriesTorus;
     Shape *geometriesSuzanne;
-    QMap<QString, QString> itemsMapShape;
+    QMap<QString, bool> itemsMapShape;
+    QMap<QString, bool> itemsMapNormal;
+    QMap<QString, int> itemsMapHideShape;
 
     int tesselation;
-    int nbObjects;
-    string object;
     float beginning;
     float launch;
-    string pathTexture;
+    float zNear;
+    float zFar;
+    float fov;
     int isColor;
-    QMap<QString, int> itemsMapHideShape;
-    //int hideShapeNumber;
-    int indexBufferArrayTexture;
     int axeRotation;
     bool normal = false;
 
@@ -170,6 +166,7 @@ private:
     QVector2D mousePressPosition;
     QVector3D rotationAxis;
     QVector3D color;
+    QVector4D ambientColor;
     QVector3D position;
     QVector3D homothetie = QVector3D(1.,1.,1.);
 
