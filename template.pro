@@ -35,7 +35,6 @@ HEADERS += \
     src/TeapotData.h \
     src/Torus.h \
     src/Vertex.h \
-    colortextedit.h
 
 RESOURCES += \
     ressources/shaders.qrc \

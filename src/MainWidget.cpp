@@ -57,23 +57,6 @@
 #include <QWindow>
 #include <QOpenGLVertexArrayObject>
 
-
-const int NBR_TEXTURES = 10;
-GLuint texId[NBR_TEXTURES];
-
-const uint NUM_VERTICES_PER_TRI = 3;
-const uint NUM_FLOATS_PER_VERTICE = 9;
-const uint VERTEX_BYTE_SIZE = NUM_FLOATS_PER_VERTICE * sizeof(float);
-
-MainWidget::MainWidget(QWidget *parent) :
-    QOpenGLWidget(parent),
-    geometriesCube(0),
-    camera(new Camera()),
-    angularSpeed(0)
-{
-    beginning = QDateTime::currentMSecsSinceEpoch();
-}
-
 MainWidget::MainWidget(Light* _myLight, QWidget *parent) :
     QOpenGLWidget(parent),
     geometriesCube(0),
@@ -118,59 +101,16 @@ MainWidget::~MainWidget()
 //! [0]
 void MainWidget::mousePressEvent(QMouseEvent *e)
 {
-    // Save mouse press position
-    //mousePressPosition = QVector2D(e->localPos());
 }
 
 void MainWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    /*if(getAxeRotation() == 0){
-        // Mouse release position - mouse press position
-        QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
-
-        // Rotation axis is perpendicular to the mouse position difference
-        // vector
-        QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
-
-        // Accelerate angular speed relative to the length of the mouse sweep
-        qreal acc = diff.length() / 100.0;
-
-        // Calculate new rotation axis as weighted sum
-        rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
-
-        // Increase angular speed
-        angularSpeed += acc;
-    }*/
 }
 //! [0]
 
 //! [1]
 void MainWidget::timerEvent(QTimerEvent *)
 {
-    /*if(getAxeRotation() == 1){
-        rotationAxis = QVector3D(1.0, 0.0, 0.0).normalized();
-    } else if(getAxeRotation() == 2){
-        rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
-    } else if(getAxeRotation() == 3){
-        rotationAxis = QVector3D(0.0, 0.0, 1.0).normalized();
-    }
-
-    if(getAxeRotation() != 0){
-        angularSpeed = 5;
-    } else {
-        // Decrease angular speed (friction)
-        angularSpeed *= 0.99;
-    }
-
-    // Stop rotation when speed goes below threshold
-    if (angularSpeed < 0.01) {
-        angularSpeed = 0.0;
-    } else {
-        // Update rotation
-        rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
-        // Request an update
-    }*/
-
     update();
 }
 //! [1]
@@ -206,14 +146,6 @@ void MainWidget::initializeGL()
 //! [3]
 void MainWidget::initShaders()
 {
-    /*glGenTextures(NBR_TEXTURES, texId);
-    for (int i = 0; i < pixmap.size(); ++i) {
-        glBindTexture(GL_TEXTURE_2D, texId[i]);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixmap[i].width(), pixmap[i].height(),0,GL_RGBA, GL_UNSIGNED_BYTE, pixmap[i].toImage().bits());
-    }*/
-
     // Compile vertex shader
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
         close();
@@ -253,6 +185,7 @@ void MainWidget::paintGL()
 
     QVector3D lightPositionWorld = myLight->lightPosition;
 
+    // Valeurs uniformes pour la caméra
     program.setUniformValue("ambientLight", getAmbientColor());
 
     QVector3D eyePosition = camera->getPosition();
@@ -264,7 +197,6 @@ void MainWidget::paintGL()
     QMatrix4x4 viewToProjectionMatrix;
     // Calculate aspect ratio
     float aspect = width() / height();
-    // Set near plane to 0.1, far plane to 50.0, field of view 60 degrees
     zNear = getCameraPositionNear();
     zFar = getCameraPositionFar();
     fov = getCameraPositionFov();
@@ -277,11 +209,8 @@ void MainWidget::paintGL()
 
     QMatrix4x4 shapeModelToWorldMatrix;
     modelToProjectionMatrix = worldToProjectionMatrix * shapeModelToWorldMatrix;
-    /*if (itemsMapShape.value("Teapot")) {
-        shapeModelToWorldMatrix.rotate(-90,QVector3D(1.f,0.f,0.f));
-        modelToProjectionMatrix = worldToProjectionMatrix * shapeModelToWorldMatrix;
-    }*/
 
+    // Valeurs uniformes pour la matrice MVP
     program.setUniformValue("worldToViewMatrix", worldToViewMatrix);
 
     program.setUniformValue("modelToProjectionMatrix", modelToProjectionMatrix);
@@ -291,9 +220,6 @@ void MainWidget::paintGL()
     QVector4D homothetie = QVector4D(getHomothetie(),1.);
 
     program.setUniformValue("homothetie", homothetie);
-
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, texId[getNumberBufferTexture()]);
 
     launch = QDateTime::currentMSecsSinceEpoch();
 

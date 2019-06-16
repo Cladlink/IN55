@@ -7,8 +7,6 @@ out vec3 normalWorld;
 out vec3 vertexPositionWorld;
 out vec3 vertexToFragmentColor;
 out vec4 fColor;
-out vec4 fPosition;
-out float fTime;
 out vec3 V;
 flat out int fIsColor;
 
@@ -42,24 +40,30 @@ float random (vec2 st) {
 //! [0]
 void main()
 {
+    // Nécessaire pour la construction des formes (ballon de plage, damier, etc.) dans le fragment shader
     V = vec3(position);
+    // Calcul des transformations géométriques
     vec4 pos = position + translation;
     vec4 temp = pos;
     pos = pos - translation;
     pos = pos * rotationMatrix(axis,angle);
     pos = pos + translation;
     pos = pos * homothetie;
+    // Calcul de la matrice MVP
     gl_Position = modelToProjectionMatrix * pos;
-    fPosition = gl_Position;
-    fTime = time;
+    // Normalisation de la matrice MVP
     normalWorld = vec3(modelToWorldMatrix * vec4(normal, 0));
     vertexPositionWorld = vec3(modelToWorldMatrix * pos);
+    // Permet de modifier le rendu de la couleur en fonction des choix de l'utilisateur
     fIsColor = isColor;
     if (fIsColor == 0) {
+        // Couleur classique
         fColor = vec4(color,1.0);
     } else if (fIsColor == 1) {
-        fColor = vec4(random((fTime)*fPosition.xy),random((fTime+1.)*fPosition.yz),random((fTime+1.)*fPosition.zy),1.0);
+        // Couleur aléatoire en fonction du temps et de la position
+        fColor = vec4(random((time)*gl_Position.xy),random((time+1.)*gl_Position.yz),random((time+1.)*gl_Position.zy),1.0);
     } else if (fIsColor == 2) {
+        // Couleur en fonction des normales
         fColor = normalize(worldToViewMatrix * (vec4(normal,1.0)/2.0)+0.5);
     }
 }

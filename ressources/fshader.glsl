@@ -19,8 +19,6 @@ const float smoothEdgeTol = 0.005;
 
 in vec4 fColor;
 flat in int fIsColor;
-in float fTime;
-in vec4 fPosition;
 in vec3 normalWorld;
 in vec3 vertexPositionWorld;
 in vec3 vertexToFragmentColor;
@@ -34,6 +32,7 @@ out vec4 daColor;
 
 void main()
 {
+    // Permet de cacher l'objet
     if (hideNumber == 0) {
         discard;
     }
@@ -51,6 +50,7 @@ void main()
     vec4 specularLight = vec4(s, s, s, 1);
 
     if (fIsColor == 3) {
+        // Rendu type Damier
         vec3 NV = normalize(V);
         // Map -1,1 to 0,numSquaresPerSide
         vec3 onOrOff = ((NV + 1.0) * float(numSquaresPerSide)) / 2.0;
@@ -61,6 +61,7 @@ void main()
         daColor = vec4(mix(offColor, onColor, onOrOff.x),1.);
 
     } else if (fIsColor == 4) {
+        // Rendu type ballon de plage
         vec3 myRed = vec3(1.0, 0.0, 0.0);
         vec3 myYellow = vec3(1.0, 1.0, 0.0);
         vec3 myGreen = vec3(0.0, 1.0, 0.0);
@@ -92,6 +93,7 @@ void main()
         // white caps on top and bottom
         daColor = vec4(mix(surfColor, myWhite, distance.w),1.);
     } else if (fIsColor == 5) {
+        // Rendu type ballon etoilé
         vec4 distVector;
         float distScalar;
         vec3 NV = normalize(V);
@@ -119,6 +121,7 @@ void main()
         myInOut = smoothstep(0.0, smoothEdgeTol, abs(NV.z) - stripeThickness);
         daColor = vec4(mix(myBlue, surfColor, myInOut),1.);
     } else if (fIsColor == 6) {
+        // Rendu type bandes noires et blanches;
         vec3 NV = normalize(V);
         // Map -1,1 to 0,numSquaresPerSide
         float onOrOff = ((NV.z + 1.0) * float(numSquaresPerSide)) / 2.0;
@@ -129,5 +132,6 @@ void main()
     } else {
         daColor = vec4(fColor);
     }
+    // Application de la couleur ambiante + lumière diffuse + lumière spéculaire
     daColor = daColor + ambientLight + clamp(diffuseLight, 0, 1) + specularLight;
 }

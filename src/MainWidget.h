@@ -82,7 +82,6 @@ class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions
     Q_OBJECT
 
 public:
-    explicit MainWidget(QWidget *parent = 0);
     explicit MainWidget(Light* _myLight, QWidget *parent = 0);
 
     ~MainWidget();

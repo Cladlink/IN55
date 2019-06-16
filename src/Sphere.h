@@ -14,8 +14,6 @@ public:
     void initGeometry();
     void drawGeometry(QOpenGLShaderProgram *program);
 
-
-
 private :
     uint tesselation;
     Vertex *verticesSphere;
