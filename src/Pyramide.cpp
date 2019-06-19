@@ -41,6 +41,9 @@ void Pyramide::update(QOpenGLShaderProgram *program,QVector3D _color,
                       QMatrix4x4 _modelToProjectionMatrix, QMatrix4x4 _shapeModelToWorldMatrix,
                       QVector3D _position, QQuaternion _rotation, bool _showNormal, int _hideShapeNumber){
 
+    if (_position == QVector3D()) {
+        _position = QVector3D(1.,2.,3.);
+    }
     IGeometryEngine::update(program,verticesPyramide,indicesPyramide,verticesPyramideNormal,indicesPyramideNormal,
                             _color,_modelToProjectionMatrix,_shapeModelToWorldMatrix,
                             _position,_rotation, false,_hideShapeNumber);

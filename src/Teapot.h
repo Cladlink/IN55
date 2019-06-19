@@ -2,6 +2,7 @@
 #define TEAPOT_H
 
 #include "IGeometryEngine.h"
+#include <QtMath>
 
 class Teapot : public IGeometryEngine
 {

@@ -671,16 +671,19 @@ void Frame::changePosition() {
 
 void Frame::changeRotationX() {
     float angle = (sliderRotationX->value());
+    qDebug() << "X : " << angle;
     scene3D->setRotation(QQuaternion(qDegreesToRadians(angle),QVector3D(1.,0.,0.).normalized()));
 }
 
 void Frame::changeRotationY() {
     float angle = (sliderRotationY->value());
+    qDebug() << "Y : " << angle;
     scene3D->setRotation(QQuaternion(qDegreesToRadians(angle),QVector3D(0.,1.,0.).normalized()));
 }
 
 void Frame::changeRotationZ() {
     float angle = (sliderRotationZ->value());
+    qDebug() << "Z : " << angle;
     scene3D->setRotation(QQuaternion(qDegreesToRadians(angle),QVector3D(0.,0.,1.).normalized()));
 }
 
